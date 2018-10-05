@@ -1,0 +1,7 @@
+{
+  "ignore": [".git", "node_modules", "tmp", "generated", "scripts", "test", "*.test.js"],
+  "watch": ["package.json", "app/**/*.js", "app-*.js", ".env"],
+  "ext": "js json",
+  "delay": "3000",
+  "verbose": true
+}

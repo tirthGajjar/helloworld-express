@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "script"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "strict": ["error", "global"],
+    "no-undef": "error",
+    "no-redeclare": "error",
+    "no-unused-vars": "warn",
+    "no-invalid-this": "error"
+  },
+  "globals": {
+    "$filepath": true
+  }
+}
