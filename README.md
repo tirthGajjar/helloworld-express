@@ -2,6 +2,11 @@
 
 ...
 
+## Requirements
+
+- MongoDB v3.6
+- Redis v4
+
 ## Usage
 
 ```sh
@@ -19,8 +24,6 @@ npm run format
 
 # run tests
 npm run test
-npm run test:unit
-npm run test:integration
 
 # run api worker
 npm run app:api

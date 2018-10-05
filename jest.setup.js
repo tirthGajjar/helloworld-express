@@ -1,5 +1,5 @@
 'use strict';
 
-require('whatwg-fetch');
+require('isomorphic-fetch');
 
 require('@/common/bootstrap');
