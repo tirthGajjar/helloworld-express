@@ -4,14 +4,16 @@ process.env.INSTANCE_ID = process.env.INSTANCE_ID || `console-${process.env.NODE
 
 require('@/common/bootstrap');
 
-require('@/common/orm');
-
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
+
+require('@/common/orm');
 
 // open the repl session
 const repl = require('repl').start({
   prompt: '~> ',
 });
+
+repl.context.fetch = global.fetch;
 
 repl.context.uuid = require('uuid');
 

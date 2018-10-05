@@ -1,10 +1,10 @@
 {
   "apps": [
     {
-      "name": "HelloWorld-job",
-      "script": "./app-job.js",
+      "name": "HelloWorld-core",
+      "script": "./app-core.js",
       "watch": true,
-      "instances": 2,
+      "instances": 1,
       "exec_mode": "cluster"
     },
     {
@@ -12,6 +12,13 @@
       "script": "./app-api.js",
       "watch": true,
       "instances": 3,
+      "exec_mode": "cluster"
+    },
+    {
+      "name": "HelloWorld-job",
+      "script": "./app-job.js",
+      "watch": true,
+      "instances": 2,
       "exec_mode": "cluster"
     }
   ]
