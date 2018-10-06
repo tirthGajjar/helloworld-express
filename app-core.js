@@ -2,7 +2,7 @@
 
 process.env.INSTANCE_ID = process.env.INSTANCE_ID || `core-${process.env.NODE_APP_INSTANCE || '0'}`;
 
-require('@/common/bootstrap');
+require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -13,11 +13,21 @@ const path = require('path');
 
 const EVENT = require('@/common/events');
 
-EVENT.on('orm-ready', () => {
+EVENT.once('orm-ready', (ORM) => {
   glob.sync('app/**/*.core.js').forEach((filename) => {
     Logger.debug('loading', filename);
     require(path.resolve(filename));
   });
-});
 
-Logger.debug('Core runner started');
+  process.nextTick(() => {
+    Logger.debug('ready');
+    EVENT.emit('core-ready');
+  });
+
+  EVENT.once('shutdown', () => {
+    Logger.debug('Waterline teardown ...');
+    ORM.teardown((err) => {
+      Logger.debug('Waterline teardown done.', err || '');
+    });
+  });
+});

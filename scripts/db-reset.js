@@ -8,7 +8,7 @@ process.env.INSTANCE_ID = 'script';
 
 process.env.DB_MIGRATE = 'drop';
 
-require('@/common/bootstrap');
+require('@/common/init');
 
 require('@/common/orm');
 

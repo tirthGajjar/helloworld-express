@@ -1,3 +1,3 @@
 'use strict';
 
-require('@/common/bootstrap');
+require('@/common/init');

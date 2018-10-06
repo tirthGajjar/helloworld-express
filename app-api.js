@@ -2,7 +2,7 @@
 
 process.env.INSTANCE_ID = process.env.INSTANCE_ID || `api-${process.env.NODE_APP_INSTANCE || '0'}`;
 
-require('@/common/bootstrap');
+require('@/common/init');
 
 require('@/common/orm');
 
@@ -20,8 +20,8 @@ EVENT.once('orm-ready', (ORM) => {
   const http = app.listen(CONFIG.API_PORT);
 
   process.nextTick(() => {
-    Logger.debug('App ready.');
-    EVENT.emit('ready');
+    Logger.debug(`ready on port ${CONFIG.API_PORT}`);
+    EVENT.emit('api-ready');
   });
 
   EVENT.once('shutdown', () => {
@@ -35,10 +35,3 @@ EVENT.once('orm-ready', (ORM) => {
     });
   });
 });
-
-// Expose app
-
-exports.app = app;
-
-// Logging initialization
-Logger.debug(`started on port ${CONFIG.API_PORT}`);

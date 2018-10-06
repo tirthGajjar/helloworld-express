@@ -2,7 +2,7 @@
 
 process.env.INSTANCE_ID = process.env.INSTANCE_ID || `console-${process.env.NODE_APP_INSTANCE || '0'}`;
 
-require('@/common/bootstrap');
+require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 

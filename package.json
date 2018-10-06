@@ -11,11 +11,11 @@
     "format:js": "eslint --ext .js --fix ./ ; exit 0",
     "test": "jest",
     "start": "pm2-dev pm2.json",
-    "app:console": "nodemon ./app-console.js",
-    "app:console:debug": "nodemon --inspect --inspect-port=5999 ./app-console.js",
     "app:core": "nodemon --inspect --inspect-port=5900 ./app-core.js",
     "app:api": "nodemon --inspect --inspect-port=5901 ./app-api.js",
     "app:job": "nodemon --inspect --inspect-port=5902 ./app-job.js",
+    "app:console": "nodemon ./app-console.js",
+    "app:console:debug": "nodemon --inspect --inspect-port=5999 ./app-console.js",
     "db:reset": "node ./scripts/db-reset.js;",
     "db:seed": "node ./scripts/db-seed.js;"
   },
@@ -39,6 +39,7 @@
     "intl-locales-supported": "1.0.0",
     "jest": "~23.6.0",
     "nodemon": "~1.18.4",
+    "pm2": "~3.2.2",
     "prettier": "~1.14.3"
   }
 }
