@@ -16,7 +16,7 @@ install:
   tags:
     - docker
   script:
-    - npm install
+    - npm install --unsafe-perm
 
 lint:critical:
   stage: lint
