@@ -4,6 +4,6 @@
 
 ### Response
 
-- Response should be JSON, even for errors.
-- Some routes could respond with redirects instead.
-- Response should be entity-prefixed.
+- response should be json, even for errors.
+- some particular routes could respond with redirects instead.
+- response should be entity-prefixed.

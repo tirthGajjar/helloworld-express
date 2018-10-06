@@ -2,7 +2,7 @@
 
 const EVENT = require('@/common/events');
 
-const CONFIG = require('./config');
+const CONFIG = require('@/common/config');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -18,7 +18,7 @@ glob.sync('app/**/*.model.js').forEach((filename) => {
   Logger.debug('loading', filename);
   const model = require(path.resolve(filename));
   if (model.definition) {
-    models[model.definition.identity] = model.definition;
+    models[model.definition.identity] = model;
   }
 });
 
@@ -34,7 +34,7 @@ const config = {
     },
   },
 
-  models,
+  models: Object.entries(models).reduce((acc, [identity, model]) => ({ ...acc, [identity]: model.definition }), {}),
 
   defaultModelSettings: {
     datastore: 'mongo',
@@ -46,20 +46,22 @@ const config = {
   },
 };
 
-Waterline.start(config, (err, ORM) => {
+Waterline.start(config, (err, DAL) => {
   if (err) {
     throw err;
   }
 
-  ORM.models = {};
-
-  Object.entries(ORM.collections).forEach(([identity, model]) => {
+  Object.entries(DAL.collections).forEach(([identity, collection]) => {
     if (!models[identity]) {
       return;
     }
-    models[identity].model = model;
-    ORM.models[model.tableName] = model;
+    models[identity].collection = collection;
   });
 
-  EVENT.emit('orm-ready', ORM);
+  DAL.models = Object.entries(models).reduce(
+    (acc, [identity, model]) => ({ ...acc, [model.definition.tableName]: model }),
+    {},
+  );
+
+  EVENT.emit('dal-ready', DAL);
 });

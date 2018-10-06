@@ -6,31 +6,51 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-require('@/common/orm');
+require('@/common/dal');
 
-// open the repl session
-const repl = require('repl').start({
-  prompt: '~> ',
+const EVENT = require('@/common/events');
+
+const context = {};
+
+EVENT.once('dal-ready', (DAL) => {
+  const repl = require('repl').start({
+    prompt: '~> ',
+  });
+
+  context.DAL = DAL;
+
+  Object.assign(context, DAL.models);
+
+  context.$globalize = (...args) => {
+    context.$outcome = args;
+  };
+
+  context.$callback = (err, result) => {
+    context.$err = err;
+    context.$result = result;
+  };
+
+  context.$promiseResult = (result) => {
+    context.$result = result;
+  };
+
+  context.$promiseError = (error) => {
+    context.$error = error;
+  };
+
+  Object.assign(repl.context, context);
 });
 
-repl.context.fetch = global.fetch;
+context.fetch = global.fetch;
 
-repl.context.uuid = require('uuid');
+context.uuid = require('uuid');
 
-repl.context.Logger = Logger;
+context.Logger = Logger;
 
-repl.context.app = require('@/common/express');
+context.app = require('@/common/express');
 
-repl.context.CONFIG = require('@/common/config');
-repl.context.EVENT = require('@/common/events');
-repl.context.CONST = require('@/common/const');
+context.CONFIG = require('@/common/config');
 
-repl.context.EVENT.once('orm-ready', (ORM) => {
-  repl.context.ORM = ORM;
-  Object.assign(repl.context, ORM.models);
-});
+context.EVENT = EVENT;
 
-repl.context.globalize = function globalize(err, result) {
-  repl.context.err = err;
-  repl.context.result = result;
-};
+context.CONST = require('@/common/const');

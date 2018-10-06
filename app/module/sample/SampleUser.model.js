@@ -19,5 +19,5 @@ const definition = {
 
 module.exports = {
   definition,
-  model: null,
+  collection: {},
 };

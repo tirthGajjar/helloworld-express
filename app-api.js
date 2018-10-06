@@ -4,7 +4,7 @@ process.env.INSTANCE_ID = process.env.INSTANCE_ID || `api-${process.env.NODE_APP
 
 require('@/common/init');
 
-require('@/common/orm');
+require('@/common/dal');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -15,7 +15,7 @@ const CONFIG = require('@/common/config');
 // Init the express application
 const app = require('@/common/express');
 
-EVENT.once('orm-ready', (ORM) => {
+EVENT.once('dal-ready', (DAL) => {
   // Start the app by listening on <port>
   const http = app.listen(CONFIG.API_PORT);
 
@@ -33,7 +33,7 @@ EVENT.once('orm-ready', (ORM) => {
       }
       Logger.debug('Express shutdown done.');
       Logger.debug('Waterline teardown ...');
-      ORM.teardown((err) => {
+      DAL.teardown((err) => {
         Logger.debug('Waterline teardown done.', err || '');
         if (err) {
           process.exit(1);

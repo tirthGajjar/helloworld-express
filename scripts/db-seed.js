@@ -6,18 +6,16 @@ if (process.env.NODE_ENV === 'production') {
 
 process.env.INSTANCE_ID = 'script';
 
-process.env.DB_MIGRATE = 'drop';
-
 require('@/common/init');
-
-require('@/common/orm');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
+require('@/common/dal');
+
 const EVENT = require('@/common/events');
 
-EVENT.once('orm-ready', async (ORM) => {
-  Logger.debug('Database initialization');
+EVENT.once('dal-ready', async (DAL) => {
+  Logger.debug('Database seeding');
 
   const glob = require('glob');
   const path = require('path');
@@ -25,11 +23,11 @@ EVENT.once('orm-ready', async (ORM) => {
   await Promise.all(
     glob.sync('app/**/*.seed.js').map(async (filename) => {
       const seed = require(path.resolve(filename));
-      await seed(ORM);
+      await seed(DAL);
     }),
   );
 
-  Logger.debug('Database initialization done');
+  Logger.debug('Database seeding done');
 
   process.exit(0);
 });

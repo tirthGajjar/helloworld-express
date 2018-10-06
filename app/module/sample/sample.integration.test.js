@@ -2,7 +2,7 @@
 
 /* eslint-env jest */
 
-const { setup } = require('@/test/integration');
+const { setupWithRunningApp } = require('@/test/setup');
 
 const CONFIG = require('@/common/config');
 
@@ -10,7 +10,7 @@ const CONFIG = require('@/common/config');
 
 describe('Sample integration test', () => {
   describe('/', () => {
-    setup();
+    setupWithRunningApp();
 
     test('GET /', async () => {
       const response = await fetch(`${CONFIG.API_ENDPOINT}/?a=1&b[c]=2&d[]=3`);
@@ -42,7 +42,7 @@ describe('Sample integration test', () => {
   });
 
   describe('/...', () => {
-    setup();
+    setupWithRunningApp();
 
     test('GET /', async () => {});
   });

@@ -14,17 +14,10 @@ require('@/common/dal');
 
 const EVENT = require('@/common/events');
 
-Logger.debug('Database reset');
+EVENT.once('dal-ready', async (DAL) => {
+  /**
+   * @PLACEHOLDER for custom scripts
+   */
 
-// @TODO
-
-process.exit(0);
-
-// dataUtils.reset(() => {
-//   require('@/common/dal');
-// });
-
-// EVENT.once('dal-ready', async () => {
-//   Logger.debug('Database reset done');
-//   process.exit(0);
-// });
+  process.exit(0);
+});

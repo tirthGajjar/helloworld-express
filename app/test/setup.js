@@ -6,7 +6,21 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawn, spawnSync } = require('child_process');
 
-function setup() {
+const EVENT = require('@/common/events');
+
+function setupWithDAL() {
+  beforeAll((next) => {
+    require('@/common/dal');
+    EVENT.on('dal-ready', () => next());
+  });
+
+  afterAll((next) => {
+    EVENT.emit('shutdown');
+    setTimeout(() => next(), 3000);
+  });
+}
+
+function setupWithRunningApp() {
   let cluster = null;
 
   beforeAll((next) => {
@@ -38,5 +52,6 @@ function setup() {
 }
 
 module.exports = {
-  setup,
+  setupWithDAL,
+  setupWithRunningApp,
 };

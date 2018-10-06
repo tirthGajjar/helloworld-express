@@ -6,14 +6,14 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-require('@/common/orm');
+require('@/common/dal');
 
 const glob = require('glob');
 const path = require('path');
 
 const EVENT = require('@/common/events');
 
-EVENT.once('orm-ready', (ORM) => {
+EVENT.once('dal-ready', (DAL) => {
   glob.sync('app/**/*.job.js').forEach((filename) => {
     Logger.debug('loading', filename);
     require(path.resolve(filename));
@@ -26,7 +26,7 @@ EVENT.once('orm-ready', (ORM) => {
 
   EVENT.once('shutdown', () => {
     Logger.debug('Waterline teardown ...');
-    ORM.teardown((err) => {
+    DAL.teardown((err) => {
       Logger.debug('Waterline teardown done.', err || '');
     });
   });
