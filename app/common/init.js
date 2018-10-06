@@ -55,7 +55,7 @@ if (process.env.NODE_ENV === 'test') {
  * Load global event bus
  */
 
-require('@/common/events');
+const EVENT = require('@/common/events');
 
 /**
  * Load configurations
@@ -66,3 +66,16 @@ const CONFIG = require('@/common/config');
 if (process.env.NODE_ENV === 'development') {
   Logger.debug('CONFIG', JSON.stringify(CONFIG, null, 2));
 }
+
+/**
+ * Shutdown handling
+ */
+
+process.on('SIGINT', () => {
+  Logger.debug('Shutdown initiated ...');
+  EVENT.emit('shutdown');
+  setTimeout(() => {
+    Logger.debug('Exiting.');
+    process.nextTick(() => process.exit(0));
+  }, 1000);
+});

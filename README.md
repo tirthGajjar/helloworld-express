@@ -22,8 +22,26 @@ npm run lint
 # format code
 npm run format
 
-# run tests
+# run all tests
 npm run test
+
+# run unit tests
+npm run test:unit
+
+# run integration tests
+npm run test:integration
+
+# run unit tests for specific module
+npm run test:any -- '/sample/*.unit.test.'
+
+# run integration tests for specific module
+npm run test:any -- '/sample/*.integration.test.'
+
+# run specific test
+npm run test:any -- app/modules/sample/sample.unit.test.js
+
+# run app in cluster mode (all components)
+npm run cluster
 
 # run api worker
 npm run app:api

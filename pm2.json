@@ -3,23 +3,23 @@
     {
       "name": "HelloWorld-core",
       "script": "./app-core.js",
-      "watch": true,
+      "exec_mode": "fork",
       "instances": 1,
-      "exec_mode": "cluster"
+      "watch": true
     },
     {
       "name": "HelloWorld-api",
       "script": "./app-api.js",
-      "watch": true,
+      "exec_mode": "cluster",
       "instances": 3,
-      "exec_mode": "cluster"
+      "watch": true
     },
     {
       "name": "HelloWorld-job",
       "script": "./app-job.js",
-      "watch": true,
+      "exec_mode": "cluster",
       "instances": 2,
-      "exec_mode": "cluster"
+      "watch": true
     }
   ]
 }

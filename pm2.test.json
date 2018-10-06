@@ -1,0 +1,25 @@
+{
+  "apps": [
+    {
+      "name": "HelloWorldTest-core",
+      "script": "./app-core.js",
+      "instances": 1,
+      "exec_mode": "fork",
+      "autorestart": false
+    },
+    {
+      "name": "HelloWorldTest-api",
+      "script": "./app-api.js",
+      "instances": 1,
+      "exec_mode": "cluster",
+      "autorestart": false
+    },
+    {
+      "name": "HelloWorldTest-job",
+      "script": "./app-job.js",
+      "instances": 1,
+      "exec_mode": "cluster",
+      "autorestart": false
+    }
+  ]
+}

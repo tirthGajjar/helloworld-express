@@ -26,7 +26,11 @@ EVENT.once('orm-ready', (ORM) => {
 
   EVENT.once('shutdown', () => {
     Logger.debug('Express shutdown ...');
-    http.close(() => {
+    http.close((err) => {
+      if (err) {
+        Logger.debug('Express shutdown done.', err || '');
+        process.exit(1);
+      }
       Logger.debug('Express shutdown done.');
       Logger.debug('Waterline teardown ...');
       ORM.teardown((err) => {

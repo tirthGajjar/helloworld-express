@@ -2,7 +2,7 @@
 
 const { RELEASE_VERSION, RELEASE_DATE } = require('./release');
 
-const INSTANCE_ID = process.env.INSTANCE_ID || '';
+const INSTANCE_ID = process.env.INSTANCE_ID || '?';
 
 const CORE_PORT = process.env.CORE_PORT || 4999;
 

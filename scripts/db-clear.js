@@ -18,6 +18,10 @@ const EVENT = require('@/common/events');
 
 Logger.debug('Database reset');
 
+// @TODO
+
+process.exit(0);
+
 // dataUtils.reset(() => {
 //   require('@/common/orm');
 // });

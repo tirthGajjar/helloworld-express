@@ -37,7 +37,21 @@ lint:
     - npm run lint
   allow_failure: true
 
-test:
+test:unit:
+  stage: test
+  tags:
+    - docker
+  services:
+    - name: mongo:3.6
+      alias: mongo
+    - name: redis:4.0
+      alias: redis
+  before_script:
+  - npm install
+  script:
+    - npm run test:unit
+
+test:integration:
   stage: test
   tags:
     - docker
@@ -51,4 +65,4 @@ test:
   script:
     - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
     - export REDIS_URI=redis://redis:6379/10
-    - npm run test
+    - npm run test:integration
