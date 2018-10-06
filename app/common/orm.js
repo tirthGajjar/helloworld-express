@@ -30,7 +30,7 @@ const config = {
   datastores: {
     mongo: {
       adapter: 'sails-mongo',
-      url: CONFIG.MONGODB_URL,
+      url: CONFIG.MONGODB_URI,
     },
   },
 
