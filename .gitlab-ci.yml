@@ -49,6 +49,8 @@ test:unit:
   before_script:
   - npm install
   script:
+    - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
+    - export REDIS_URI=redis://redis:6379/10
     - npm run test:unit
 
 test:integration:
