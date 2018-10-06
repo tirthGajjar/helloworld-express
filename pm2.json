@@ -1,21 +1,21 @@
 {
   "apps": [
     {
-      "name": "HelloWorld-core",
+      "name": "app-core",
       "script": "./app-core.js",
       "exec_mode": "fork",
       "instances": 1,
       "watch": true
     },
     {
-      "name": "HelloWorld-api",
+      "name": "app-api",
       "script": "./app-api.js",
       "exec_mode": "cluster",
       "instances": 3,
       "watch": true
     },
     {
-      "name": "HelloWorld-job",
+      "name": "app-job",
       "script": "./app-job.js",
       "exec_mode": "cluster",
       "instances": 2,

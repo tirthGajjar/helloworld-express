@@ -1,25 +1,22 @@
 {
   "apps": [
     {
-      "name": "HelloWorldTest-core",
+      "name": "app-test-core",
       "script": "./app-core.js",
       "instances": 1,
-      "exec_mode": "fork",
-      "autorestart": false
+      "exec_mode": "fork"
     },
     {
-      "name": "HelloWorldTest-api",
+      "name": "app-test-api",
       "script": "./app-api.js",
       "instances": 1,
-      "exec_mode": "cluster",
-      "autorestart": false
+      "exec_mode": "cluster"
     },
     {
-      "name": "HelloWorldTest-job",
+      "name": "app-test-job",
       "script": "./app-job.js",
       "instances": 1,
-      "exec_mode": "cluster",
-      "autorestart": false
+      "exec_mode": "cluster"
     }
   ]
 }
