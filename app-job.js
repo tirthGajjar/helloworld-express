@@ -26,7 +26,7 @@ EVENT.once('dal-ready', (DAL) => {
 
   EVENT.once('shutdown', () => {
     Logger.debug('Waterline teardown ...');
-    DAL.teardown((err) => {
+    DAL.waterline.teardown((err) => {
       Logger.debug('Waterline teardown done.', err || '');
     });
   });
