@@ -3,8 +3,8 @@
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 module.exports = async (DAL) => {
-  const User = DAL.models.SampleUser;
-  const Pet = DAL.models.SamplePet;
+  const User = DAL.waterline.models.SampleUser;
+  const Pet = DAL.waterline.models.SamplePet;
 
   const user = await User.collection
     .create({

@@ -33,7 +33,7 @@ EVENT.once('dal-ready', (DAL) => {
       }
       Logger.debug('Express shutdown done.');
       Logger.debug('Waterline teardown ...');
-      DAL.teardown((err) => {
+      DAL.waterline.teardown((err) => {
         Logger.debug('Waterline teardown done.', err || '');
         if (err) {
           process.exit(1);

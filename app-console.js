@@ -19,7 +19,7 @@ EVENT.once('dal-ready', (DAL) => {
 
   context.DAL = DAL;
 
-  Object.assign(context, DAL.models);
+  Object.assign(context, DAL.waterline.models);
 
   context.$globalize = (...args) => {
     context.$outcome = args;
