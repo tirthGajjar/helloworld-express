@@ -2,29 +2,34 @@
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-module.exports = async (DAL) => {
-  const User = DAL.waterline.models.SampleUser;
-  const Pet = DAL.waterline.models.SamplePet;
+const SamplePerson = require('./SamplePerson.model');
+const SamplePet = require('./SamplePet.model');
 
-  const user = await User.collection
+module.exports = async (DAL) => {
+  // const SamplePerson = DAL.waterline.models.SamplePerson;
+  // const SamplePet = DAL.waterline.models.SamplePet;
+
+  const person = await SamplePerson.collection
     .create({
+      uid: '7d9e8f30-ca83-11e8-a539-61e221c8d07e',
       firstName: 'Neil',
       lastName: 'Armstrong',
     })
     .fetch();
 
-  const pet = await Pet.collection
+  const pet = await SamplePet.collection
     .create({
+      uid: '7dc68990-ca83-11e8-a539-61e221c8d07e',
       breed: 'beagle',
       type: 'dog',
       name: 'Astro',
-      _owner: user.id,
+      _person: person.id,
     })
     .fetch();
 
   Logger.debug(pet);
 
-  const users = await User.collection.find().populate('_pets');
+  const persons = await SamplePerson.collection.find().populate('_pets');
 
-  Logger.debug(users);
+  Logger.debug(persons);
 };

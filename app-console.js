@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.INSTANCE_ID = process.env.INSTANCE_ID || `console-${process.env.NODE_APP_INSTANCE || '0'}`;
+process.env.INSTANCE_ID = 'console';
 
 require('@/common/init');
 
@@ -22,28 +22,28 @@ EVENT.once('dal-ready', (DAL) => {
   Object.assign(context, DAL.waterline.models);
 
   context.$globalize = (...args) => {
-    context.$outcome = args;
+    repl.context.$outcome = args;
   };
 
   context.$callback = (err, result) => {
-    context.$err = err;
-    context.$result = result;
+    repl.context.$err = err;
+    repl.context.$result = result;
   };
 
   context.$promiseResult = (result) => {
-    context.$result = result;
+    repl.context.$result = result;
+    repl.context.$error = null;
   };
 
   context.$promiseError = (error) => {
-    context.$error = error;
+    repl.context.$result = null;
+    repl.context.$error = error;
   };
 
   Object.assign(repl.context, context);
 });
 
 context.fetch = global.fetch;
-
-context.uuid = require('uuid');
 
 context.Logger = Logger;
 

@@ -4,6 +4,8 @@ const { RELEASE_VERSION, RELEASE_DATE } = require('./release');
 
 const INSTANCE_ID = process.env.INSTANCE_ID || '?';
 
+const DAL_MIGRATE = process.env.DAL_MIGRATE || 'safe';
+
 const CORE_PORT = process.env.CORE_PORT || 4999;
 
 const API_PORT = process.env.API_PORT || 5000;
@@ -18,6 +20,7 @@ module.exports = {
   RELEASE_VERSION,
   RELEASE_DATE,
   INSTANCE_ID,
+  DAL_MIGRATE,
   CORE_PORT,
   API_PORT,
   API_ENDPOINT,

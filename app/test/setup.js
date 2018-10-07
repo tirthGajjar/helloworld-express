@@ -24,11 +24,6 @@ function setupWithRunningApp() {
   let cluster = null;
 
   beforeAll((next) => {
-    Logger.debug('running db:clear');
-    spawnSync('npm', ['run', 'db:clear'], {
-      stdio: 'ignore',
-    });
-
     Logger.debug('running db:seed');
     spawnSync('npm', ['run', 'db:seed'], {
       stdio: 'ignore',

@@ -6,18 +6,15 @@
 
 const { setupWithDAL } = require('@/test/setup');
 
-const SampleUser = require('@/module/sample/SampleUser.model');
+const SamplePerson = require('@/module/sample/SamplePerson.model');
 
 describe('Sample unit test with DAL', () => {
-  describe('SampleUser', () => {
+  describe('SamplePerson', () => {
     setupWithDAL();
 
     test('find', async () => {
-      const users = await SampleUser.collection.find();
-
-      console.log(users);
-
-      expect(users).toBeInstanceOf(Array);
+      const persons = await SamplePerson.collection.find();
+      expect(persons).toBeInstanceOf(Array);
     });
   });
 });

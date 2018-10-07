@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.INSTANCE_ID = process.env.INSTANCE_ID || `core-${process.env.NODE_APP_INSTANCE || '0'}`;
+process.env.INSTANCE_ID = 'core';
 
 require('@/common/init');
 

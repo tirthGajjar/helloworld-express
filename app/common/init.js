@@ -33,6 +33,10 @@ const fs = require('fs');
   }
 });
 
+if (process.env.INSTANCE_ID !== 'core') {
+  process.env.DAL_MIGRATE = 'safe';
+}
+
 /**
  * Setup Logger
  */

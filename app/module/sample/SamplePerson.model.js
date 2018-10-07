@@ -1,9 +1,9 @@
 'use strict';
 
 const definition = {
-  identity: 'sample_user',
+  identity: 'sample_person',
 
-  tableName: 'SampleUser',
+  tableName: 'SamplePerson',
 
   attributes: {
     firstName: { type: 'string' },
@@ -12,7 +12,7 @@ const definition = {
 
     _pets: {
       collection: 'sample_pet',
-      via: '_owner',
+      via: '_person',
     },
   },
 };

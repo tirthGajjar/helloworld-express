@@ -14,10 +14,20 @@ require('@/common/dal');
 
 const EVENT = require('@/common/events');
 
-EVENT.once('dal-ready', async (DAL) => {
-  /**
-   * @PLACEHOLDER for custom scripts
-   */
+(async () => {
+  try {
+    Logger.debug('processing ...');
 
-  process.exit(0);
-});
+    await EVENT.toPromise('dal-ready');
+
+    /**
+     * @PLACEHOLDER for custom scripts
+     */
+
+    Logger.debug('done');
+    process.exit(0);
+  } catch (error) {
+    Logger.error(error);
+    process.exit(1);
+  }
+})();

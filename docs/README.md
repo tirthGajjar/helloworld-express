@@ -11,10 +11,11 @@ app
 ├── data
 ├── module
 │   ├── sample
-│   │   ├── SampleUser.model.js
-│   │   ├── SamplePet.model.js
-│   │   ├── sample.seed.js
 │   │   ├── router.js
+│   │   ├── SamplePerson.model.js
+│   │   ├── SamplePet.model.js
+│   │   ├── sample.script.js
+│   │   ├── sample.seed.js
 │   │   ├── sample.unit.test.js
 │   │   ├── sample.integration.test.js
 │   │   └── utils.js

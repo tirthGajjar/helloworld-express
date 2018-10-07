@@ -8,23 +8,26 @@ process.env.INSTANCE_ID = 'script';
 
 require('@/common/init');
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+process.env.DAL_MIGRATE = 'drop';
 
 require('@/common/dal');
 
+const Logger = require('@/common/logger').createLogger($filepath(__filename));
+
 const EVENT = require('@/common/events');
 
-Logger.debug('Database reset');
+(async () => {
+  try {
+    Logger.debug('processing ...');
 
-// @TODO
+    await EVENT.toPromise('dal-ready');
 
-process.exit(0);
+    // do nothing since handled by DAL_MIGRATE
 
-// dataUtils.reset(() => {
-//   require('@/common/dal');
-// });
-
-// EVENT.once('dal-ready', async () => {
-//   Logger.debug('Database reset done');
-//   process.exit(0);
-// });
+    Logger.debug('done');
+    process.exit(0);
+  } catch (error) {
+    Logger.error(error);
+    process.exit(1);
+  }
+})();

@@ -7,8 +7,11 @@ const CONFIG = require('@/common/config');
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const Waterline = require('waterline');
+const WaterlineUtils = require('waterline-utils');
+const MongoAdapter = require('sails-mongo');
+const RedisAdapter = require('sails-redis');
 
-const MongodbAdapter = require('sails-mongo');
+const utils = require('./dal.utils');
 
 const glob = require('glob');
 const path = require('path');
@@ -24,7 +27,8 @@ glob.sync('app/**/*.model.js').forEach((filename) => {
 
 const config = {
   adapters: {
-    'sails-mongo': MongodbAdapter,
+    'sails-mongo': MongoAdapter,
+    'sails-redis': RedisAdapter,
   },
 
   datastores: {
@@ -32,16 +36,62 @@ const config = {
       adapter: 'sails-mongo',
       url: CONFIG.MONGODB_URI,
     },
+    // 'mongo-secondary': {
+    //   adapter: 'sails-mongo',
+    //   url: CONFIG.MONGODB_SECONDARY_URI,
+    // },
+    redis: {
+      adapter: 'sails-redis',
+      url: CONFIG.REDIS_URI,
+    },
+    // 'redis-cache': {
+    //   adapter: 'sails-redis',
+    //   url: CONFIG.REDIS_CACHE_URI,
+    // },
   },
 
   models: Object.entries(models).reduce((acc, [identity, model]) => ({ ...acc, [identity]: model.definition }), {}),
 
   defaultModelSettings: {
     datastore: 'mongo',
+    migrate: process.env.DAL_MIGRATE || 'safe',
     schema: true,
     primaryKey: 'id',
     attributes: {
-      id: { type: 'string', columnName: '_id' },
+      id: {
+        type: 'string',
+        columnName: '_id',
+        autoMigrations: {},
+      },
+      uid: {
+        type: 'string',
+        // defaultsTo() { return utils.uniqueId(); },
+        allowNull: false,
+        // required: true,
+        // index: true,
+        // unique: true,
+      },
+    },
+    beforeCreate(record, next) {
+      record.uid = record.uid || utils.uniqueId();
+      next();
+    },
+    customToJSON() {
+      return Object.entries(this).reduce(
+        (acc, [key, value]) => {
+          if (key === 'id' || key === 'uid') {
+            return acc;
+          }
+          if (key.startsWith('_')) {
+            if (typeof value === 'object' && value) {
+              return { ...acc, [key.substr(1)]: value };
+            }
+            return acc;
+          }
+          return { ...acc, [key]: value };
+        },
+        { id: this.uid },
+      );
     },
   },
 };
@@ -65,7 +115,7 @@ Waterline.start(config, (err, waterline) => {
 
   module.exports.waterline = waterline;
 
-  EVENT.emit('waterline-ready', waterline);
+  WaterlineUtils.autoMigrations('drop', waterline, () => EVENT.emit('waterline-ready', waterline));
 });
 
 module.exports = {};

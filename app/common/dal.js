@@ -4,20 +4,17 @@ const EVENT = require('@/common/events');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-module.exports = {};
+module.exports = {
+  utils: require('./dal.utils'),
+};
 
-require('./dal.redis');
-require('./dal.mongo');
+// require('./dal.redis');
+// require('./dal.mongo');
 require('./dal.waterline');
 
 Promise.all([
-  new Promise((resolve) => {
-    EVENT.once('waterline-ready', (waterline) => {
-      Logger.debug('waterline ready');
-      module.exports.waterline = waterline;
-      resolve();
-    });
+  EVENT.toPromise('waterline-ready').then((waterline) => {
+    Logger.debug('waterline ready');
+    module.exports.waterline = waterline;
   }),
-]).then(() => {
-  EVENT.emit('dal-ready', module.exports);
-});
+]).then(() => EVENT.emit('dal-ready', module.exports));

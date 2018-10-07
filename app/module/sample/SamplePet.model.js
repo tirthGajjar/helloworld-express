@@ -10,8 +10,8 @@ const definition = {
     type: { type: 'string' },
     name: { type: 'string' },
 
-    _owner: {
-      model: 'sample_user',
+    _person: {
+      model: 'sample_person',
     },
   },
 };
