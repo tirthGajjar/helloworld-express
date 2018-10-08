@@ -8,10 +8,15 @@ const { spawn, spawnSync } = require('child_process');
 
 const EVENT = require('@/common/events');
 
-function setupWithDAL() {
-  beforeAll((next) => {
+function setupWithData() {
+  beforeAll(() => {
+    Logger.debug('running db:clear');
+    spawnSync('npm', ['run', 'db:clear'], {
+      stdio: 'ignore',
+    });
+
     require('@/common/dal');
-    EVENT.on('dal-ready', () => next());
+    return EVENT.toPromise('dal-ready');
   });
 
   afterAll((next) => {
@@ -47,6 +52,6 @@ function setupWithRunningApp() {
 }
 
 module.exports = {
-  setupWithDAL,
+  setupWithData,
   setupWithRunningApp,
 };
