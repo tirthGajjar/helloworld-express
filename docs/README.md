@@ -58,12 +58,31 @@ A console to access and communicate with other application components
 
 ## Data (DAL/ORM)
 
-...
+Data is managed by [waterline](http://waterlinejs.org/).
 
 - data models are defined in `*.model.js` files within their respective modules or under `app/data`
 - every reference field must be prefixed with `_`
 
+**References**
+
+- [waterline](http://waterlinejs.org/)
+- [waterline' repository](https://github.com/balderdashy/waterline)
+- [Waterline Docs](https://sailsjs.com/documentation/concepts/models-and-orm)
+- [Waterline Reference](https://sailsjs.com/documentation/reference/waterline-orm)
+- [sails-mongo ](https://github.com/balderdashy/sails-mongo)
+- [sails-redis](https://github.com/balderdashy/sails-redis)
+
+## Jobs
+
+...
+
 ## Testing
+
+Both unit and integration testing use [Jest](https://jestjs.io/).
 
 - unit tests are defined in `*.unit.test.js` files within their respective modules
 - integration tests are defined in `*.integration.test.js` files within their respective modules
+
+**References**
+
+- [Jest](https://jestjs.io/)
