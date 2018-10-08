@@ -9,21 +9,20 @@ app
 ├── common
 ├── lib
 ├── data
+├── job
 ├── module
-│   ├── sample
-│   │   ├── router.js
-│   │   ├── SamplePerson.model.js
-│   │   ├── SamplePet.model.js
-│   │   ├── sample_task.jon.js
-│   │   ├── sample.script.js
-│   │   ├── sample.seed.js
-│   │   ├── sample.unit.test.js
-│   │   ├── sample.integration.test.js
-│   │   └── utils.js
-│   └── user
-│       └── router.js
+│   └── sample
+│       ├── router.js
+│       ├── SamplePerson.model.js
+│       ├── SamplePet.model.js
+│       ├── sample_task.job.js
+│       ├── sample.script.js
+│       ├── sample.seed.js
+│       ├── sample.unit.test.js
+│       ├── sample.integration.test.js
+│       └── utils.js
 └── test
-    └── integration.js
+    └── setup.js
 ```
 
 - `app/common/` : contains shared configurations and utilities
