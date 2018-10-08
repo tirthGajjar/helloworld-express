@@ -8,27 +8,27 @@ process.env.INSTANCE_ID = 'script';
 
 require('@/common/init');
 
-process.env.DAL_MIGRATE = 'drop';
-
-require('@/common/dal');
+process.env.MIGRATE = 'drop';
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const EVENT = require('@/common/events');
+const Data = require('@/common/data');
 
 const glob = require('glob');
 const path = require('path');
 
 (async () => {
   try {
-    Logger.debug('processing ...');
+    Logger.debug('initiating ...');
 
-    const DAL = await EVENT.toPromise('dal-ready');
+    await Data.setup();
+
+    Logger.debug('processing ...');
 
     await Promise.all(
       glob.sync('app/**/*.seed.js').map(async (filename) => {
         const seed = require(path.resolve(filename));
-        await seed(DAL);
+        await seed();
       }),
     );
 

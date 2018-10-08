@@ -6,28 +6,32 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-require('@/common/dal');
-
 const glob = require('glob');
 const path = require('path');
 
 const EVENT = require('@/common/events');
 
-EVENT.once('dal-ready', (DAL) => {
-  glob.sync('app/**/*.core.js').forEach((filename) => {
-    Logger.debug('loading', filename);
-    require(path.resolve(filename));
-  });
+const Data = require('@/common/data');
 
-  process.nextTick(() => {
-    Logger.debug('ready');
-    EVENT.emit('core-ready');
-  });
+(async () => {
+  try {
+    Logger.debug('initiating ...');
 
-  EVENT.once('shutdown', () => {
-    Logger.debug('Waterline teardown ...');
-    DAL.waterline.teardown((err) => {
-      Logger.debug('Waterline teardown done.', err || '');
+    await Data.setup();
+
+    glob.sync('app/**/*.core.js').forEach((filename) => {
+      Logger.debug('loading', filename);
+      require(path.resolve(filename));
     });
-  });
+
+    Logger.debug('ready');
+    process.nextTick(() => EVENT.emit('core-ready'));
+  } catch (error) {
+    Logger.error(error);
+    process.exit(1);
+  }
+})();
+
+EVENT.once('shutdown', async () => {
+  await Data.teardown();
 });

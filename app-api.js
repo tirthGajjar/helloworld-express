@@ -4,41 +4,31 @@ process.env.INSTANCE_ID = process.env.INSTANCE_ID || `api-${process.env.NODE_APP
 
 require('@/common/init');
 
-require('@/common/dal');
-
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const EVENT = require('@/common/events');
 
-const CONFIG = require('@/common/config');
+const Data = require('@/common/data');
 
-// Init the express application
-const app = require('@/common/express');
+const Express = require('@/common/express');
 
-EVENT.once('dal-ready', (DAL) => {
-  // Start the app by listening on <port>
-  const http = app.listen(CONFIG.API_PORT);
+(async () => {
+  try {
+    Logger.debug('initiating ...');
 
-  process.nextTick(() => {
-    Logger.debug(`ready on port ${CONFIG.API_PORT}`);
-    EVENT.emit('api-ready');
-  });
+    await Data.setup();
 
-  EVENT.once('shutdown', () => {
-    Logger.debug('Express shutdown ...');
-    http.close((err) => {
-      Logger.debug('Express shutdown done.', err || '');
-      if (err) {
-        process.exit(1);
-      }
-      Logger.debug('Express shutdown done.');
-      Logger.debug('Waterline teardown ...');
-      DAL.waterline.teardown((err) => {
-        Logger.debug('Waterline teardown done.', err || '');
-        if (err) {
-          process.exit(1);
-        }
-      });
-    });
-  });
+    await Express.setup();
+
+    Logger.debug('ready');
+    process.nextTick(() => EVENT.emit('api-ready'));
+  } catch (error) {
+    Logger.error(error);
+    process.exit(1);
+  }
+})();
+
+EVENT.once('shutdown', async () => {
+  await Express.teardown();
+  await Data.teardown();
 });

@@ -34,7 +34,9 @@ const fs = require('fs');
 });
 
 if (process.env.INSTANCE_ID !== 'core') {
-  process.env.DAL_MIGRATE = 'safe';
+  process.env.MIGRATE = 'safe';
+} else {
+  process.env.MIGRATE = process.env.MIGRATE || 'safe';
 }
 
 /**
@@ -76,10 +78,10 @@ if (process.env.NODE_ENV === 'development') {
  */
 
 process.on('SIGINT', () => {
-  Logger.debug('Shutdown initiated ...');
-  EVENT.emit('shutdown');
+  Logger.debug('shutdown initiated ...');
+  process.nextTick(() => EVENT.emit('shutdown'));
   setTimeout(() => {
-    Logger.debug('Exiting.');
+    Logger.debug('exiting.');
     process.nextTick(() => process.exit(0));
   }, 1000);
 });

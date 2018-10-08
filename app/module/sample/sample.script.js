@@ -10,18 +10,18 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-require('@/common/dal');
-
-const EVENT = require('@/common/events');
+const Data = require('@/common/data');
 
 const SamplePerson = require('./SamplePerson.model');
 const SamplePet = require('./SamplePet.model');
 
 (async () => {
   try {
-    Logger.debug('processing ...');
+    Logger.debug('initiating ...');
 
-    await EVENT.toPromise('dal-ready');
+    await Data.setup();
+
+    Logger.debug('processing ...');
 
     const persons = await SamplePerson.collection.find({}).populate('_pets');
 

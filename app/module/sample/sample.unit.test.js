@@ -7,7 +7,7 @@
 const SampleUtils = require('./utils');
 
 describe('Sample unit test', () => {
-  describe('utils', () => {
+  describe('SampleUtils', () => {
     test('sum', async () => {
       expect(SampleUtils.sum(1, 2)).toBe(3);
     });

@@ -10,15 +10,15 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-require('@/common/dal');
-
-const EVENT = require('@/common/events');
+const Data = require('@/common/data');
 
 (async () => {
   try {
-    Logger.debug('processing ...');
+    Logger.debug('initiating ...');
 
-    await EVENT.toPromise('dal-ready');
+    await Data.setup();
+
+    Logger.debug('processing ...');
 
     /**
      * @PLACEHOLDER for custom scripts

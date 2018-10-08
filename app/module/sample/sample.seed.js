@@ -5,10 +5,7 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const SamplePerson = require('./SamplePerson.model');
 const SamplePet = require('./SamplePet.model');
 
-module.exports = async (DAL) => {
-  // const SamplePerson = DAL.waterline.models.SamplePerson;
-  // const SamplePet = DAL.waterline.models.SamplePet;
-
+module.exports = async () => {
   const person = await SamplePerson.collection
     .create({
       uid: '7d9e8f30-ca83-11e8-a539-61e221c8d07e',

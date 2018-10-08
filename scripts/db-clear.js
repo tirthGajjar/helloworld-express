@@ -8,21 +8,21 @@ process.env.INSTANCE_ID = 'script';
 
 require('@/common/init');
 
-process.env.DAL_MIGRATE = 'drop';
-
-require('@/common/dal');
+process.env.MIGRATE = 'drop';
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const EVENT = require('@/common/events');
+const Data = require('@/common/data');
 
 (async () => {
   try {
+    Logger.debug('initiating ...');
+
+    await Data.setup();
+
     Logger.debug('processing ...');
 
-    await EVENT.toPromise('dal-ready');
-
-    // do nothing since handled by DAL_MIGRATE
+    // do nothing since handled by MIGRATE
 
     Logger.debug('done');
     process.exit(0);

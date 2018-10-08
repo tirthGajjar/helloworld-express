@@ -4,23 +4,20 @@
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const { spawn, spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 
 const EVENT = require('@/common/events');
 
-function setupWithData() {
-  beforeAll(() => {
-    Logger.debug('running db:clear');
-    spawnSync('npm', ['run', 'db:clear'], {
-      stdio: 'ignore',
-    });
+const Data = require('@/common/data');
 
-    require('@/common/dal');
-    return EVENT.toPromise('dal-ready');
+function setupWithData() {
+  beforeAll(async () => {
+    Data.utils.clear();
+    await Data.setup();
   });
 
   afterAll((next) => {
-    EVENT.emit('shutdown');
+    process.nextTick(() => EVENT.emit('shutdown'));
     setTimeout(() => next(), 3000);
   });
 }
@@ -29,10 +26,7 @@ function setupWithRunningApp() {
   let cluster = null;
 
   beforeAll((next) => {
-    Logger.debug('running db:seed');
-    spawnSync('npm', ['run', 'db:seed'], {
-      stdio: 'ignore',
-    });
+    Data.utils.seed();
 
     Logger.debug('running cluster');
     cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json'], {
