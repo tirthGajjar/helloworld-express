@@ -14,6 +14,7 @@ app
 │   │   ├── router.js
 │   │   ├── SamplePerson.model.js
 │   │   ├── SamplePet.model.js
+│   │   ├── sample_task.jon.js
 │   │   ├── sample.script.js
 │   │   ├── sample.seed.js
 │   │   ├── sample.unit.test.js
@@ -27,8 +28,9 @@ app
 
 - `app/common/` : contains shared configurations and utilities
 - `app/data/` : contains shared data models
+- `app/job/` : contains shared job
 - `app/module/<MODULE>` contains data models, routes, jobs, tests, ... for module
-- `app/test/` contains test utils
+- `app/test/` contains test utils and global tests
 
 ## Components
 
