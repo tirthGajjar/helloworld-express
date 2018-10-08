@@ -10,7 +10,10 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
+const EVENT = require('@/common/events');
+
 const Data = require('@/common/data');
+const Job = require('@/common/job');
 
 const SamplePerson = require('./SamplePerson.model');
 const SamplePet = require('./SamplePet.model');
@@ -20,6 +23,7 @@ const SamplePet = require('./SamplePet.model');
     Logger.debug('initiating ...');
 
     await Data.setup();
+    await Job.setup();
 
     Logger.debug('processing ...');
 
@@ -40,3 +44,8 @@ const SamplePet = require('./SamplePet.model');
     process.exit(1);
   }
 })();
+
+EVENT.once('shutdown', async () => {
+  await Job.teardown();
+  await Data.teardown();
+});

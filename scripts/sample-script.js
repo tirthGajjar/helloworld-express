@@ -10,13 +10,17 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
+const EVENT = require('@/common/events');
+
 const Data = require('@/common/data');
+const Job = require('@/common/job');
 
 (async () => {
   try {
     Logger.debug('initiating ...');
 
     await Data.setup();
+    await Job.setup();
 
     Logger.debug('processing ...');
 
@@ -31,3 +35,8 @@ const Data = require('@/common/data');
     process.exit(1);
   }
 })();
+
+EVENT.once('shutdown', async () => {
+  await Job.teardown();
+  await Data.teardown();
+});

@@ -6,8 +6,6 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawn } = require('child_process');
 
-const EVENT = require('@/common/events');
-
 const Data = require('@/common/data');
 
 function setupWithData() {
@@ -16,8 +14,8 @@ function setupWithData() {
     await Data.setup();
   });
 
-  afterAll((next) => {
-    process.nextTick(() => EVENT.emit('shutdown'));
+  afterAll(async (next) => {
+    await Data.teardown();
     setTimeout(() => next(), 3000);
   });
 }

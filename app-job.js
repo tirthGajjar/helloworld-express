@@ -12,16 +12,18 @@ const path = require('path');
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
+const Job = require('@/common/job');
 
 (async () => {
   try {
     Logger.debug('initiating ...');
 
     await Data.setup();
+    await Job.setup();
 
-    glob.sync('app/**/*.job.js').forEach((filename) => {
-      Logger.debug('loading', filename);
-      require(path.resolve(filename));
+    glob.sync('app/**/*.job.js').forEach(async (filename) => {
+      const job = require(path.resolve(filename));
+      job.queue.process(job.worker);
     });
 
     Logger.debug('ready');
@@ -33,5 +35,6 @@ const Data = require('@/common/data');
 })();
 
 EVENT.once('shutdown', async () => {
+  await Job.teardown();
   await Data.teardown();
 });

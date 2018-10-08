@@ -11,6 +11,7 @@ const repl = require('repl');
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
+const Job = require('@/common/job');
 
 const context = {};
 
@@ -31,12 +32,15 @@ context.CONST = require('@/common/const');
     Logger.debug('initiating ...');
 
     await Data.setup();
+    await Job.setup();
 
     let appConsole = null;
 
     context.Data = Data;
 
     Object.assign(context, Data.waterline.models);
+
+    context.Job = Job;
 
     context.$globalize = (...args) => {
       appConsole.context.$outcome = args;
@@ -71,5 +75,6 @@ context.CONST = require('@/common/const');
 })();
 
 EVENT.once('shutdown', async () => {
+  await Job.teardown();
   await Data.teardown();
 });

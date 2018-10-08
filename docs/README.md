@@ -60,7 +60,7 @@ A console to access and communicate with other application components
 
 Data is managed by [waterline](http://waterlinejs.org/).
 
-- data models are defined in `*.model.js` files within their respective modules or under `app/data`
+- a data models is defined in `*.model.js` file within a module or under `app/data`
 - every reference field must be prefixed with `_`
 
 **References**
@@ -72,16 +72,24 @@ Data is managed by [waterline](http://waterlinejs.org/).
 - [sails-mongo ](https://github.com/balderdashy/sails-mongo)
 - [sails-redis](https://github.com/balderdashy/sails-redis)
 
-## Jobs
+## Jobs / Queues
 
-...
+Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
+
+- a job is defined in a `*.job.js` file within a module or under `app/job`
+- a job runs within `app-job` component
+- a job is initiated from any components using `Job.queues.JOB_NAME.add({ /* job payload */ })`
+
+**References**
+
+- [Bull](https://github.com/OptimalBits/bull)
 
 ## Testing
 
 Both unit and integration testing use [Jest](https://jestjs.io/).
 
-- unit tests are defined in `*.unit.test.js` files within their respective modules
-- integration tests are defined in `*.integration.test.js` files within their respective modules
+- a unit test suite id defined in a `*.unit.test.js` file within a module
+- an integration test suite id defined in a `*.integration.test.js` file within a module
 
 **References**
 

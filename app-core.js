@@ -12,12 +12,14 @@ const path = require('path');
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
+const Job = require('@/common/job');
 
 (async () => {
   try {
     Logger.debug('initiating ...');
 
     await Data.setup();
+    await Job.setup();
 
     glob.sync('app/**/*.core.js').forEach((filename) => {
       Logger.debug('loading', filename);
@@ -33,5 +35,6 @@ const Data = require('@/common/data');
 })();
 
 EVENT.once('shutdown', async () => {
+  await Job.teardown();
   await Data.teardown();
 });

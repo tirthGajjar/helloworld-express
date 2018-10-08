@@ -9,7 +9,7 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
-
+const Job = require('@/common/job');
 const Express = require('@/common/express');
 
 (async () => {
@@ -17,7 +17,7 @@ const Express = require('@/common/express');
     Logger.debug('initiating ...');
 
     await Data.setup();
-
+    await Job.setup();
     await Express.setup();
 
     Logger.debug('ready');
@@ -30,5 +30,6 @@ const Express = require('@/common/express');
 
 EVENT.once('shutdown', async () => {
   await Express.teardown();
+  await Job.teardown();
   await Data.teardown();
 });

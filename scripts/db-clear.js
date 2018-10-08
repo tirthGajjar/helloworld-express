@@ -12,6 +12,8 @@ process.env.MIGRATE = 'drop';
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
+const EVENT = require('@/common/events');
+
 const Data = require('@/common/data');
 
 (async () => {
@@ -31,3 +33,7 @@ const Data = require('@/common/data');
     process.exit(1);
   }
 })();
+
+EVENT.once('shutdown', async () => {
+  await Data.teardown();
+});
