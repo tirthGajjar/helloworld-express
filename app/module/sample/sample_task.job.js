@@ -19,11 +19,3 @@ module.exports = {
   queue,
   worker,
 };
-
-if (process.env.INSTANCE_ID === 'core') {
-  setInterval(() => {
-    Logger.debug('adding sample job');
-
-    queue.add({ data: new Date() });
-  }, 5000);
-}

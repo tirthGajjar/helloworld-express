@@ -84,6 +84,9 @@ Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
 **References**
 
 - [Bull](https://github.com/OptimalBits/bull)
+- [Bull Guide](https://optimalbits.github.io/bull/)
+- [Bull Reference](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md)
+- [Bull Patterns](https://github.com/OptimalBits/bull/blob/master/PATTERNS)
 
 ## Testing
 
