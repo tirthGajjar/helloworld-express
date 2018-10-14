@@ -1,6 +1,6 @@
 # Node.js/Express Starter
 
-A boilerplate and reference implementation for Node.js backend built with Express, Waterline, ...
+A boilerplate and reference implementation for Node.js backend built with Express, Waterline, Bull, ...
 
 ## Requirements
 
