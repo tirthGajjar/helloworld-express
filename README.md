@@ -1,4 +1,4 @@
-# EMIKETIC Express Starter
+# Node.js/Express Starter
 
 A boilerplate and reference implementation for Node.js backend built with Express, Waterline, ...
 
