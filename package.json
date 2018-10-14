@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "bull": "~3.4.8",
-    "dotenv": "~6.0.0",
+    "dotenv": "~6.1.0",
     "emiketic-starter-lib": "git+https://github.com/emiketic/emiketic-starter-lib.git#0.1.0",
-    "express": "~4.16.3",
-    "express-async-errors": "~3.0.0",
+    "express": "~4.16.4",
+    "express-async-errors": "~3.1.1",
     "glob": "~7.1.3",
     "morgan": "~1.9.1",
     "node-schedule": "~1.3.0",
