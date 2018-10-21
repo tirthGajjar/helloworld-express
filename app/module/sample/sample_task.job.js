@@ -10,12 +10,12 @@ const name = 'sample_task';
 
 const queue = new Queue(name, CONFIG.REDIS_URI);
 
-async function worker(job) {
-  Logger.debug('worker', job.id, job.data);
+async function handler(job) {
+  Logger.debug('handler', job.id, job.data);
 }
 
 module.exports = {
   name,
   queue,
-  worker,
+  handler,
 };

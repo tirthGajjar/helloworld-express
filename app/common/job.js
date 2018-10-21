@@ -10,7 +10,7 @@ const queues = {};
 async function setup() {
   Logger.debug('initiating ...');
 
-  glob.sync('app/**/*.job.js').forEach(async (filename) => {
+  glob.sync('app/**/*.job.js').forEach((filename) => {
     Logger.debug('loading', filename);
     const job = require(path.resolve(filename));
     queues[job.name] = job.queue;

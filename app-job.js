@@ -21,9 +21,18 @@ const Job = require('@/common/job');
     await Data.setup();
     await Job.setup();
 
-    glob.sync('app/**/*.job.js').forEach(async (filename) => {
+    let jobs = process.env.JOBS || 'app/**/*.job.js';
+
+    jobs = jobs
+      .split(',')
+      .reduce((acc, item) => [...acc, ...(item.indexOf('*') !== '-1' ? glob.sync(item) : [item])], []);
+
+    jobs = Array.from(new Set(jobs));
+
+    jobs.forEach((filename) => {
+      Logger.debug('loading', filename);
       const job = require(path.resolve(filename));
-      job.queue.process(job.worker);
+      job.queue.process(job.handler);
     });
 
     Logger.debug('ready');
