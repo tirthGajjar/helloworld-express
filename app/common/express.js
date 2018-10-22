@@ -82,7 +82,8 @@ async function teardown() {
 
     if (!http) {
       Logger.debug('teardown done.');
-      return resolve();
+      resolve();
+      return;
     }
 
     http.close((err) => {
@@ -95,6 +96,7 @@ async function teardown() {
         reject(err);
         return;
       }
+
       resolve();
     });
   });

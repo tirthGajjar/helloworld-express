@@ -146,7 +146,8 @@ async function teardown() {
 
     if (!module.exports.waterline) {
       Logger.debug('teardown done.');
-      return resolve();
+      resolve();
+      return;
     }
 
     module.exports.waterline.teardown((err) => {
