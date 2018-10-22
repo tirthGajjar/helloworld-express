@@ -33,11 +33,7 @@ const fs = require('fs');
   }
 });
 
-if (process.env.INSTANCE_ID !== 'core') {
-  process.env.MIGRATE = 'safe';
-} else {
-  process.env.MIGRATE = process.env.MIGRATE || 'safe';
-}
+process.env.MIGRATE = process.env.INSTANCE_ID === 'core' ? process.env.MIGRATE || 'safe' : 'safe';
 
 /**
  * Setup Logger

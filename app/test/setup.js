@@ -28,7 +28,7 @@ function setupWithRunningApp() {
 
     Logger.debug('running cluster');
     cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json'], {
-      stdio: 'ignore',
+      stdio: 'inherit',
     });
 
     setTimeout(() => next(), 3000);
