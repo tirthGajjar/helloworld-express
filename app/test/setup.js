@@ -26,6 +26,8 @@ function setupWithRunningApp() {
   let cluster = null;
 
   beforeAll((next) => {
+    jest.setTimeout(30000);
+
     Data.utils.seed();
 
     Logger.debug('running cluster');
