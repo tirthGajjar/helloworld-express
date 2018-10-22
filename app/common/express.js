@@ -79,6 +79,12 @@ async function setup() {
 async function teardown() {
   return new Promise((resolve, reject) => {
     Logger.debug('teardown ...');
+
+    if (!http) {
+      Logger.debug('teardown done.');
+      return resolve();
+    }
+
     http.close((err) => {
       Logger.debug('teardown done.', err || '');
 

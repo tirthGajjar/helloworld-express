@@ -143,6 +143,12 @@ async function setup() {
 async function teardown() {
   return new Promise((resolve, reject) => {
     Logger.debug('teardown ...');
+
+    if (!module.exports.waterline) {
+      Logger.debug('teardown done.');
+      return resolve();
+    }
+
     module.exports.waterline.teardown((err) => {
       Logger.debug('teardown done.', err || '');
 
@@ -152,6 +158,7 @@ async function teardown() {
         reject(err);
         return;
       }
+
       resolve();
     });
   });
