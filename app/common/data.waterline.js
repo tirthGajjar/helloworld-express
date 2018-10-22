@@ -144,13 +144,13 @@ async function teardown() {
   return new Promise((resolve, reject) => {
     Logger.debug('teardown ...');
 
-    if (!module.exports.waterline) {
+    if (!waterline) {
       Logger.debug('teardown done.');
       resolve();
       return;
     }
 
-    module.exports.waterline.teardown((err) => {
+    waterline.teardown((err) => {
       Logger.debug('teardown done.', err || '');
 
       waterline = null;

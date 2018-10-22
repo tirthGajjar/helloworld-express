@@ -23,7 +23,7 @@ lint:critical:
   tags:
     - docker
   before_script:
-  - npm install
+  - npm install --unsafe-perm
   script:
     - npm run lint:critical
 
@@ -32,7 +32,7 @@ lint:
   tags:
     - docker
   before_script:
-  - npm install
+  - npm install --unsafe-perm
   script:
     - npm run lint
   allow_failure: true
@@ -47,7 +47,7 @@ test:unit:
     - name: redis:4.0
       alias: redis
   before_script:
-  - npm install
+  - npm install --unsafe-perm
   script:
     - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
     - export REDIS_URI=redis://redis:6379/10
@@ -63,7 +63,7 @@ test:integration:
     - name: redis:4.0
       alias: redis
   before_script:
-  - npm install
+  - npm install --unsafe-perm
   script:
     - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
     - export REDIS_URI=redis://redis:6379/10
