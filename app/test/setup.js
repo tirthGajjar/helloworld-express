@@ -20,6 +20,8 @@ function setupWithData() {
   });
 }
 
+const TEST_CLUSTER_TIMEOUT = (process.env.TEST_CLUSTER_TIMEOUT && Number(process.env.TEST_CLUSTER_TIMEOUT)) || 3000;
+
 function setupWithRunningApp() {
   let cluster = null;
 
@@ -31,15 +33,13 @@ function setupWithRunningApp() {
       stdio: 'inherit',
     });
 
-    setTimeout(() => next(), 3000);
+    setTimeout(() => next(), TEST_CLUSTER_TIMEOUT);
   });
 
   afterAll((next) => {
     cluster.kill('SIGINT');
-
     setTimeout(() => cluster.kill('SIGTERM'), 2000);
-
-    setTimeout(() => next(), 3000);
+    cluster.on('exit', () => next());
   });
 }
 
