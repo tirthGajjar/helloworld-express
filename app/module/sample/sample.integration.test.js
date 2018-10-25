@@ -14,8 +14,8 @@ describe('Sample integration test', () => {
 
     test('GET /', async () => {
       const response = await fetch(`${CONFIG.API_ENDPOINT}/?a=1&b[c]=2&d[]=3`);
+      expect(response.ok).toBe(true);
       const result = await response.json();
-
       expect(result.a).toBe('1');
       expect(result.b.c).toBe('2');
       expect(result.d[0]).toBe('3');
@@ -33,8 +33,8 @@ describe('Sample integration test', () => {
           d: [3],
         }),
       });
+      expect(response.ok).toBe(true);
       const result = await response.json();
-
       expect(result.a).toBe(1);
       expect(result.b.c).toBe(2);
       expect(result.d[0]).toBe(3);

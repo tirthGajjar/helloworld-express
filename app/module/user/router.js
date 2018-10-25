@@ -18,18 +18,18 @@ router.get('/:userId/profile', (req, res) => {
   res.send(req.params);
 });
 
-// app.get('/user/:userId/profile', (req, res) => {
+// router.get('/:userId/profile', (req, res) => {
 //   res.send(req.params);
 // });
 
-// app.get('/user/:userId/profile', (req, res, next) => {
+// router.get('/:userId/profile', (req, res, next) => {
 //   User.findOne({ id: req.params.userId })
 //     .fetch()
 //     .then((user) => res.send(user))
 //     .catch(next);
 // });
 
-// app.get('/user/:userId/profile', async (req, res, next) => {
+// router.get('/:userId/profile', async (req, res, next) => {
 //   try {
 //     const user = await User.findOne({ id: req.params.userId }).fetch();
 //     res.send(user);
@@ -40,8 +40,8 @@ router.get('/:userId/profile', (req, res) => {
 
 // const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
-// app.get(
-//   '/user/:userId/profile',
+// router.get(
+//   '/:userId/profile',
 //   asyncHandler(async (req, res) => {
 //     const user = await User.findOne({ id: req.params.userId }).fetch();
 //     res.send(user);

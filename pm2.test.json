@@ -3,20 +3,19 @@
     {
       "name": "app-test-core",
       "script": "./app-core.js",
-      "instances": 1,
       "exec_mode": "fork"
     },
     {
       "name": "app-test-api",
       "script": "./app-api.js",
-      "instances": 1,
-      "exec_mode": "cluster"
+      "exec_mode": "cluster",
+      "instances": 1
     },
     {
       "name": "app-test-job",
       "script": "./app-job.js",
-      "instances": 1,
-      "exec_mode": "cluster"
+      "exec_mode": "cluster",
+      "instances": 1
     }
   ]
 }
