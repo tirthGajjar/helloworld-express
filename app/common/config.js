@@ -15,6 +15,7 @@ const API_ENDPOINT = process.env.API_ENDPOINT || `http://localhost:${API_PORT}`;
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/HelloWorld';
 const REDIS_URI = process.env.REDIS_URI || 'redis://localhost:6379/0';
+const REDIS_JOB_URI = process.env.REDIS_JOB_URI || 'redis://localhost:6379/1';
 
 const CORE_ENDPOINT = process.env.CORE_ENDPOINT || `http://localhost:${CORE_PORT}`;
 
@@ -40,5 +41,6 @@ module.exports = {
   API_ENDPOINT,
   MONGODB_URI,
   REDIS_URI,
+  REDIS_JOB_URI,
   CORE_ENDPOINT,
 };

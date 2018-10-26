@@ -38,7 +38,7 @@ context.CONST = require('@/common/const');
 
     context.Data = Data;
 
-    Object.assign(context, Data.waterline.models);
+    Object.assign(context, Data.models);
 
     context.Job = Job;
 

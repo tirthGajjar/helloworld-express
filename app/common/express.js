@@ -103,8 +103,8 @@ async function teardown() {
 }
 
 module.exports = {
-  app,
-  http,
   setup,
   teardown,
+  app,
+  http,
 };

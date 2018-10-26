@@ -26,7 +26,7 @@ async function teardown() {
 }
 
 module.exports = {
-  queues,
   setup,
   teardown,
+  queues,
 };

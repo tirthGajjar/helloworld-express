@@ -8,14 +8,15 @@ This application is designed with robustness, modularity and salability in mind.
 app
 ├── common
 ├── lib
-├── data
-├── job
+├── shared
+│   └── data
+│   └── job
 ├── module
 │   └── sample
 │       ├── router.js
 │       ├── SamplePerson.model.js
 │       ├── SamplePet.model.js
-│       ├── sample_task.job.js
+│       ├── sample.job.js
 │       ├── sample.script.js
 │       ├── sample.seed.js
 │       ├── sample.unit.test.js
@@ -26,9 +27,9 @@ app
 ```
 
 - `app/common/` : contains shared configurations and utilities
-- `app/data/` : contains shared data models
-- `app/job/` : contains shared job
-- `app/module/<MODULE>` contains data models, routes, jobs, tests, ... for module
+- `app/shared/data/` : contains shared data models
+- `app/shared/job/` : contains shared job
+- `app/module/<MODULE>` contains data models, routes, jobs, tests, ... for a given module
 - `app/test/` contains test utils and global tests
 
 ## Components
@@ -61,7 +62,7 @@ A console to access and communicate with other application components
 
 Data is managed by [waterline](http://waterlinejs.org/).
 
-- a data models is defined in `*.model.js` file within a module or under `app/data`
+- a data models is defined in `*.model.js` file within a module or under `app/shared/data`
 - every reference field must be prefixed with `_`
 
 **References**
@@ -77,16 +78,34 @@ Data is managed by [waterline](http://waterlinejs.org/).
 
 Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
 
-- a job is defined in a `*.job.js` file within a module or under `app/job`
+- a job is defined in a `*.job.js` file within a module or under `app/shared/job`. it should export a `queue` instance, a `processor` function
 - a job runs within `app-job` component
-- a job is initiated from any components using `Job.queues.JOB_NAME.add({ /* job payload */ })`
+- a job is initiated from any components using on of the following methods
+
+  ```javascript
+  const Job = require('@/common/job');
+
+  Job.queues.JOB_NAME.add({
+    /* ... */
+  });
+  ```
+
+  or
+
+  ```javascript
+  const JOB_NAME = require('./JOB_NAME.job');
+
+  JOB_NAME.queue.add({
+    /* ... */
+  });
+  ```
 
 **References**
 
 - [Bull](https://github.com/OptimalBits/bull)
 - [Bull Guide](https://optimalbits.github.io/bull/)
 - [Bull Reference](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md)
-- [Bull Patterns](https://github.com/OptimalBits/bull/blob/master/PATTERNS)
+- [Bull Patterns](https://github.com/OptimalBits/bull/blob/master/PATTERNS.md)
 
 ## Testing
 

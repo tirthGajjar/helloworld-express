@@ -14,6 +14,7 @@
     "arrow-parens": ["warn", "always"]
   },
   "globals": {
-    "$filepath": true
+    "$filepath": true,
+    "$jobname": true
   }
 }

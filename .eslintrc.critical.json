@@ -17,6 +17,7 @@
     "no-invalid-this": "error"
   },
   "globals": {
-    "$filepath": true
+    "$filepath": true,
+    "$jobname": true
   }
 }

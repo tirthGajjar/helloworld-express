@@ -45,6 +45,7 @@ test:unit:
   script:
     - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
     - export REDIS_URI=redis://redis:6379/10
+    - export REDIS_JOB_URI=redis://redis:6379/11
     - npm run test:unit
 
 test:integration:
@@ -58,6 +59,7 @@ test:integration:
       alias: redis
   script:
     - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
-    - export REDIS_URI=redis://redis:6379/=
+    - export REDIS_URI=redis://redis:6379/10
+    - export REDIS_JOB_URI=redis://redis:6379/11
     - export TEST_CLUSTER_TIMEOUT=10000
     - npm run test:integration

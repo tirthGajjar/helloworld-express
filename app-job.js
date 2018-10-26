@@ -32,7 +32,14 @@ const Job = require('@/common/job');
     jobs.forEach((filename) => {
       Logger.debug('loading', filename);
       const job = require(path.resolve(filename));
-      job.queue.process(job.handler);
+      Logger.debug('job', job.name);
+      if (Array.isArray(job.processor)) {
+        job.processor.forEach((processor) => {
+          job.queue.process(processor.name, processor.concurrency || 1, processor.processor);
+        });
+      } else {
+        job.queue.process('*', job.concurrency || 1, job.processor);
+      }
     });
 
     Logger.debug('ready');

@@ -17,17 +17,19 @@ const glob = require('glob');
 const path = require('path');
 
 let waterline = null;
+const models = {};
 
 async function setup() {
   return new Promise((resolve, reject) => {
     Logger.debug('initiating ...');
 
-    const models = {};
+    const modelsByIdentity = {};
     glob.sync('app/**/*.model.js').forEach((filename) => {
       Logger.debug('loading', filename);
       const model = require(path.resolve(filename));
       if (model.definition) {
-        models[model.definition.identity] = model;
+        modelsByIdentity[model.definition.identity] = model;
+        models[model.definition.tableName] = model;
       }
     });
 
@@ -56,7 +58,10 @@ async function setup() {
         // },
       },
 
-      models: Object.entries(models).reduce((acc, [identity, model]) => ({ ...acc, [identity]: model.definition }), {}),
+      models: Object.entries(modelsByIdentity).reduce(
+        (acc, [identity, model]) => ({ ...acc, [identity]: model.definition }),
+        {},
+      ),
 
       defaultModelSettings: {
         datastore: 'mongo',
@@ -71,12 +76,18 @@ async function setup() {
           },
           uid: {
             type: 'string',
-            // defaultsTo() { return utils.uniqueId(); },
             allowNull: false,
-            // required: true,
             // index: true,
             // unique: true,
           },
+          // createdAt: {
+          //   type: 'ref',
+          //   autoCreatedAt: true,
+          // },
+          // updatedAt: {
+          //   type: 'ref',
+          //   autoUpdatedAt: true,
+          // },
         },
         beforeCreate(record, next) {
           record.uid = record.uid || utils.uniqueId();
@@ -111,18 +122,15 @@ async function setup() {
       waterline = ontology;
 
       Object.entries(waterline.collections).forEach(([identity, collection]) => {
-        if (!models[identity]) {
+        if (!modelsByIdentity[identity]) {
           return;
         }
-        models[identity].collection = collection;
+        modelsByIdentity[identity].collection = collection;
       });
 
-      waterline.models = Object.entries(models).reduce(
-        (acc, [identity, model]) => ({ ...acc, [model.definition.tableName]: model }),
-        {},
-      );
-
       module.exports.waterline = waterline;
+
+      module.exports.models = models;
 
       WaterlineUtils.autoMigrations(process.env.MIGRATE, waterline, (err) => {
         if (err) {
@@ -166,7 +174,8 @@ async function teardown() {
 }
 
 module.exports = {
-  waterline,
   setup,
   teardown,
+  waterline,
+  models,
 };

@@ -7,6 +7,10 @@ A boilerplate and reference implementation for Node.js backend built with Expres
 - MongoDB v3.6
 - Redis v4
 
+## References
+
+- [Documentation](./docs/)
+
 ## Usage
 
 ```sh

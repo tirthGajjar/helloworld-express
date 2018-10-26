@@ -17,13 +17,14 @@ async function teardown() {
 }
 
 Promise.all([
-  EVENT.toPromise('waterline-ready').then((waterline) => {
-    module.exports.waterline = waterline;
+  EVENT.toPromise('waterline-ready').then(() => {
+    module.exports.waterline = DataWaterline.waterline;
+    module.exports.models = DataWaterline.models;
   }),
 ]).then(() => EVENT.emit('data-ready', module.exports));
 
 module.exports = {
-  utils: DataUtils,
   setup,
   teardown,
+  utils: DataUtils,
 };

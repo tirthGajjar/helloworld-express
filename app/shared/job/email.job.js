@@ -6,16 +6,16 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const Queue = require('bull');
 
-const name = 'email';
+const name = $jobname(__filename);
 
-const queue = new Queue(name, CONFIG.REDIS_URI);
+const queue = new Queue(name, CONFIG.REDIS_JOB_URI);
 
-async function handler(job) {
+async function processor(job) {
   Logger.debug('sending email', job.id, job.data);
 }
 
 module.exports = {
   name,
   queue,
-  handler,
+  processor,
 };

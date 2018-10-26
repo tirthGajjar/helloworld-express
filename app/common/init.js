@@ -10,10 +10,20 @@ require('@/common/polyfill');
  * Define global relative file path helper
  */
 
-const APP_ROOT = require('path').normalize(`${__dirname}/../..`);
+const FILENAME_PREFIX_LENGTH = require('path').normalize(`${__dirname}/../..`).length + 1;
+
+const JOBNAME_PREFIX_LENGTH = FILENAME_PREFIX_LENGTH + 4;
 
 global.$filepath = function (filename) {
-  return filename.slice(APP_ROOT.length + 1, -3);
+  return filename.slice(FILENAME_PREFIX_LENGTH, -3);
+};
+
+global.$jobname = function (filename) {
+  return filename
+    .slice(JOBNAME_PREFIX_LENGTH, -7)
+    .replace(/^module\//, '')
+    .replace(/^shared\/job\//, 'shared/')
+    .replace(/\//g, '$');
 };
 
 /**
