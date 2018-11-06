@@ -1,7 +1,7 @@
 'use strict';
 
 const CONST = require('@/common/const');
-7
+
 const definition = {
   identity: 'user',
 
@@ -10,7 +10,7 @@ const definition = {
   attributes: {
     role: {
       type: 'string',
-      isIn: CONST.ROLE,
+      // isIn: Object.values(CONST.ROLE),
       required: true,
     },
     email: {

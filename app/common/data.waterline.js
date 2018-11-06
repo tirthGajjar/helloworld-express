@@ -11,7 +11,7 @@ const WaterlineUtils = require('waterline-utils');
 const MongoAdapter = require('sails-mongo');
 const RedisAdapter = require('sails-redis');
 
-const utils = require('./data.utils');
+const DataUtils = require('./data.utils');
 
 const glob = require('glob');
 const path = require('path');
@@ -28,6 +28,7 @@ async function setup() {
       Logger.debug('loading', filename);
       const model = require(path.resolve(filename));
       if (model.definition) {
+        model.definition = DataUtils.prepareModelDefinition(model.definition);
         modelsByIdentity[model.definition.identity] = model;
         models[model.definition.tableName] = model;
       }
@@ -80,18 +81,6 @@ async function setup() {
             // index: true,
             // unique: true,
           },
-          // createdAt: {
-          //   type: 'ref',
-          //   autoCreatedAt: true,
-          // },
-          // updatedAt: {
-          //   type: 'ref',
-          //   autoUpdatedAt: true,
-          // },
-        },
-        beforeCreate(record, next) {
-          record.uid = record.uid || utils.uniqueId();
-          next();
         },
         customToJSON() {
           return Object.entries(this).reduce(
