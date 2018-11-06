@@ -6,9 +6,17 @@ const definition = {
   tableName: 'SamplePet',
 
   attributes: {
-    breed: { type: 'string' },
-    type: { type: 'string' },
-    name: { type: 'string' },
+    breed: {
+      type: 'string',
+    },
+
+    type: {
+      type: 'string',
+    },
+
+    name: {
+      type: 'string',
+    },
 
     _person: {
       model: 'sample_person',

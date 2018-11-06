@@ -1,0 +1,137 @@
+
+# Group Authentication
+
+## Authentication [/auth/*]
+
+### Log in [POST /auth/login]
+
++ Request (application/json)
+
+        {
+          "username": "test@example.com",
+          "password": "testpass"
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "user": {
+                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
+                "name": "Test User",
+                "email": "test@example.com",
+                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+            }
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Invalid credentials"
+        }
+
+### Sign up [POST /auth/signup]
+
++ Request (application/json)
+
+        {
+            "user": {
+                "name": "Test User",
+                "email": "test@example.com",
+                "password": "testpass",
+                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+            }
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "user": {
+                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
+                "name": "Test User",
+                "email": "test@example.com",
+                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+            }
+        }
+
++ Response 400 (application/json)
+
+        {
+            "code": "AccountEmailExists",
+            "message": "An account with the provided email address already exists. Please try password reset."
+        }
+
+
+### Initiate password reset [POST /auth/password-reset/initiate]
+
++ Request (application/json)
+
+        {
+          "email": "test@example.com"
+        }
+
+
++ Response 200 (application/json)
+
+        {
+        }
+
+
+### Continue password reset [POST /auth/password-reset/continue]
+
++ Request (application/json)
+
+        {
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "password": "testpass"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "user": {
+                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
+                "name": "Test User",
+                "email": "test@example.com",
+                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+            }
+        }
+
+
+### Retrieve user account [GET /auth/account]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "user": {
+                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
+                "name": "Test User",
+                "email": "test@example.com",
+                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+            }
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }

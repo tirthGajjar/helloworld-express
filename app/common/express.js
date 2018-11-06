@@ -33,7 +33,7 @@ async function setup() {
       res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
       res.header(
         'Access-Control-Allow-Headers',
-        'DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,X-Scope,X-Version,X-App-Id,X-App-Version,X-App-Platform',
+        'DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization',
       );
 
       if (req.method === 'OPTIONS') {

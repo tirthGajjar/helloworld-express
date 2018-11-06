@@ -9,11 +9,11 @@ const CONFIG = require('@/common/config');
 // const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 describe('Sample integration test', () => {
-  describe('/', () => {
+  describe('/demo', () => {
     setupWithRunningApp();
 
-    test('GET /', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/?a=1&b[c]=2&d[]=3`);
+    test('GET /demo', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/demo?a=1&b[c]=2&d[]=3`);
       expect(response.ok).toBe(true);
       const result = await response.json();
       expect(result.a).toBe('1');
@@ -21,8 +21,8 @@ describe('Sample integration test', () => {
       expect(result.d[0]).toBe('3');
     });
 
-    test('POST /', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/`, {
+    test('POST /demo', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/demo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,9 +41,9 @@ describe('Sample integration test', () => {
     });
   });
 
-  describe('/...', () => {
-    setupWithRunningApp();
+  // describe('/...', () => {
+  //   setupWithRunningApp();
 
-    test('GET /', async () => {});
-  });
+  //   test('GET /', async () => {});
+  // });
 });
