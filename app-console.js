@@ -13,6 +13,8 @@ const EVENT = require('@/common/events');
 const Data = require('@/common/data');
 const Job = require('@/common/job');
 
+const DataUtils = require('@/common/data.utils');
+
 const context = {};
 
 context.fetch = global.fetch;
@@ -27,6 +29,16 @@ context.EVENT = EVENT;
 
 context.CONST = require('@/common/const');
 
+context.ERROR = require('@/common/error');
+
+context.VALIDATE = require('@/common/validate');
+
+context.SANITIZE = require('@/common/sanitize');
+
+context.Data = Data;
+
+context.DataUtils = DataUtils;
+
 (async () => {
   try {
     Logger.debug('initiating ...');
@@ -35,8 +47,6 @@ context.CONST = require('@/common/const');
     await Job.setup();
 
     let appConsole = null;
-
-    context.Data = Data;
 
     Object.assign(context, Data.models);
 

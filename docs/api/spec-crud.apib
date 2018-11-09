@@ -1,0 +1,131 @@
+
+# Group CRUD Specifications
+
+CRUD API.
+
+## Task [/content/task/*]
+
+### Retrieve index [GET /task]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "data": [{
+                "id": "UUID",
+                "label": "something...",
+                "done": false
+            }, {
+                "id": "UUID",
+                "label": "something else ...",
+                "done": false
+            }]
+        }
+
+### Retrieve item [GET /task/{task_id}]
+
++ Parameters
+
+    + task_id: `UUID` (uuid) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "UUID",
+                "label": "do something...",
+                "done": false
+            }
+        }
+
+
+### Create item [POST /task/create]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "label": "do something...",
+                    "done": false
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "UUID",
+                "label": "do something...",
+                "done": false
+            }
+        }
+
+
+### Edit item [POST /task/{task_id}/edit]
+
++ Parameters
+
+    + task_id: `UUID` (uuid) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "label": "do something...",
+                    "done": false
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "UUID",
+                "label": "do something...",
+                "done": false
+            }
+        }
+
+
+### Delete item [POST /task/{task_id}/delete]
+
++ Parameters
+
+    + task_id: `UUID` (uuid) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+        }
+

@@ -6,17 +6,17 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawnSync } = require('child_process');
 
-const DataMixin = require('./data.mixin');
-
 function generateUniqueId() {
   return uuid.v1();
 }
 
-function generateTandomToken() {
+function generateRandomToken() {
   return uuid.v4();
 }
 
 function prepareModelDefinition(definition) {
+  const DataMixin = require('./data.mixin');
+
   const result = {
     ...definition,
   };
@@ -54,11 +54,63 @@ function prepareModelDefinition(definition) {
   }
 
   Object.entries(result).forEach(([key, value]) => {
-    if (typeof value === 'function') {
+    if (typeof value === 'function' && key !== 'customToJSON') {
       result[key] = value.bind(result);
     }
   });
 
+  return result;
+}
+
+function sanitize(model, data, mode = 'edit') {
+  const result = {};
+  if (mode === 'create') {
+    Object.keys(model.definition.attributes).forEach((field) => {
+      if (field === 'id' || field === 'uid') {
+        return;
+      }
+      result[field] = typeof data[field] !== 'undefined' ? data[field] : null;
+    });
+  } else {
+    Object.entries(data).forEach(([field, value]) => {
+      if (field in model.definition.attributes && field !== 'id' && field !== 'uid') {
+        result[field] = value;
+      }
+    });
+  }
+  return result;
+}
+
+function validate(model, data) {
+  const result = [];
+  Object.entries(data).forEach(([field, value]) => {
+    try {
+      // model.collection.validate(field, typeof value === 'undefined' ? null : value);
+      model.collection.validate(field, value);
+    } catch (err) {
+      // console.log(err, JSON.stringify(err, null, 2));
+      // console.log(JSON.stringify({ field, err }, null, 2));
+      if (err.code === 'E_REQUIRED') {
+        result.push({
+          field,
+          issue: 'required',
+          message: err.message,
+        });
+      } else if (err.code === 'E_TYPE') {
+        result.push({
+          field,
+          issue: err.expectedType,
+          message: err.message,
+        });
+      } else {
+        result.push({
+          field,
+          issue: err,
+          message: err.message,
+        });
+      }
+    }
+  });
   return result;
 }
 
@@ -70,16 +122,18 @@ function clear() {
 }
 
 function seed() {
-  Logger.debug('running db:SEED');
-  spawnSync('npm', ['run', 'db:SEED'], {
+  Logger.debug('running db:seed');
+  spawnSync('npm', ['run', 'db:seed'], {
     stdio: 'ignore',
   });
 }
 
 module.exports = {
   generateUniqueId,
-  generateTandomToken,
+  generateRandomToken,
   prepareModelDefinition,
+  sanitize,
+  validate,
   clear,
   seed,
 };

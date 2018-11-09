@@ -37,7 +37,26 @@ const lifecycle = {
   },
 };
 
+function customToJSON(record) {
+  return Object.entries(record).reduce(
+    (acc, [key, value]) => {
+      if (key === 'id' || key === 'uid') {
+        return acc;
+      }
+      if (key.startsWith('_')) {
+        if (typeof value === 'object' && value) {
+          return { ...acc, [key.substr(1)]: value };
+        }
+        return acc;
+      }
+      return { ...acc, [key]: value };
+    },
+    { id: record.uid },
+  );
+}
+
 module.exports = {
   attribute,
   lifecycle,
+  customToJSON,
 };

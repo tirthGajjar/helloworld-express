@@ -1,16 +1,30 @@
 'use strict';
 
+const CONST = require('@/common/const');
+
+const ERROR = require('@/common/error');
+
+const User = require('@/module/auth/User.model');
+
+const AuthService = require('@/module/auth/auth.service');
+
 /**
  * Authenticated Middleware
  */
 
-function authenticatedMiddleware(req, res, next) {
-  req.user = {};
-  // ...
+async function authenticatedMiddleware(req, res, next) {
+  const access_token = req.headers.authorization.substr(7) || req.query.access_token;
+
+  const payload = await AuthService.isAccessTokenValid(access_token);
+
+  req.user = await User.collection.findOne({ uid: payload.id });
+  req.scope = payload.scope;
+
   if (!req.user) {
-    next(new Error('Unauthenticated'));
+    next(new ERROR.UnauthenticatedError());
     return;
   }
+
   next();
 }
 
@@ -18,16 +32,10 @@ function authenticatedMiddleware(req, res, next) {
  * Role-restricted Middleware
  */
 
-const ROLES = {
-  admin: ['admin', 'client'],
-  professional: ['professional', 'client'],
-  client: ['client'],
-};
-
 function roleRestrictedMiddleware(role) {
   return function roleRestrictedMiddleware(req, res, next) {
-    if (ROLES[req.user.role || 'client'].includes(role)) {
-      next(new Error('Unauthorized'));
+    if (!CONST.ROLES_MAPPING[req.user.role].includes(role) || req.scope !== role) {
+      next(new ERROR.UnauthorizedError());
       return;
     }
     next();

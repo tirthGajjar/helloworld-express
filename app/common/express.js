@@ -10,6 +10,8 @@ const path = require('path');
 
 const CONFIG = require('@/common/config');
 
+const ERROR = require('@/common/error');
+
 let app = null;
 let http = null;
 
@@ -58,12 +60,22 @@ async function setup() {
 
   app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500).json({ message: err.message || 'Server error' });
+
+    if (err.name === 'UsageError') {
+      err = ERROR.RequestError.fromWaterlineError(err);
+    }
+
+    res.status(err.status || 500).json({
+      code: err.code || 'Unknown',
+      message: err.message || 'Unknown error',
+      extra: err.extra || undefined,
+    });
   });
 
   app.use((req, res) => {
     res.status(404).send({
-      message: 'Not found',
+      code: 'NotFound',
+      message: 'API not found',
     });
   });
 

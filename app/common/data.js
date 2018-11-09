@@ -4,8 +4,6 @@ const EVENT = require('@/common/events');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const DataUtils = require('./data.utils');
-
 const DataWaterline = require('./data.waterline');
 
 async function setup() {
@@ -26,5 +24,4 @@ Promise.all([
 module.exports = {
   setup,
   teardown,
-  utils: DataUtils,
 };

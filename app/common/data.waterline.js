@@ -12,6 +12,7 @@ const MongoAdapter = require('sails-mongo');
 const RedisAdapter = require('sails-redis');
 
 const DataUtils = require('./data.utils');
+const DataMixin = require('./data.mixin');
 
 const glob = require('glob');
 const path = require('path');
@@ -51,7 +52,7 @@ async function setup() {
         // },
         redis: {
           adapter: 'sails-redis',
-          url: CONFIG.REDIS_URI,
+          url: CONFIG.REDIS_STORAGE_URI,
         },
         // 'redis-cache': {
         //   adapter: 'sails-redis',
@@ -78,26 +79,15 @@ async function setup() {
           uid: {
             type: 'string',
             allowNull: false,
+            validations: {
+              isUUID: true,
+            },
             // index: true,
             // unique: true,
           },
         },
         customToJSON() {
-          return Object.entries(this).reduce(
-            (acc, [key, value]) => {
-              if (key === 'id' || key === 'uid') {
-                return acc;
-              }
-              if (key.startsWith('_')) {
-                if (typeof value === 'object' && value) {
-                  return { ...acc, [key.substr(1)]: value };
-                }
-                return acc;
-              }
-              return { ...acc, [key]: value };
-            },
-            { id: this.uid },
-          );
+          return DataMixin.customToJSON(this);
         },
       },
     };

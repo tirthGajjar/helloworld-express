@@ -1,0 +1,301 @@
+{
+  "globals": [],
+  "headerPresets": [],
+  "version": 1,
+  "collections": [
+    {
+      "folders": [
+        {
+          "description": "",
+          "collection_name": "Indexing Specifications",
+          "id": "c466552e-70a3-403b-93e7-336a702b1587",
+          "collection_id": "e8e96a7a-735b-46b5-bb0f-8665c383c161",
+          "order": ["b94c80a2-0c57-460e-9dfd-ccf6dc062cc7"],
+          "name": "Tasks"
+        }
+      ],
+      "description": "Indexing API with pagination, sorting, and filtering.\n\n",
+      "timestamp": 1541751476,
+      "remote_id": 0,
+      "order": [],
+      "synced": false,
+      "requests": [
+        {
+          "responses": [],
+          "dataMode": "params",
+          "tests": "",
+          "description": "",
+          "collectionId": "e8e96a7a-735b-46b5-bb0f-8665c383c161",
+          "url": "{{HOST}}/task",
+          "method": "GET",
+          "headers": "Accept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "c466552e-70a3-403b-93e7-336a702b1587",
+          "data": [],
+          "id": "b94c80a2-0c57-460e-9dfd-ccf6dc062cc7",
+          "name": "Retrieve tasks"
+        }
+      ],
+      "id": "e8e96a7a-735b-46b5-bb0f-8665c383c161",
+      "name": "Indexing Specifications"
+    },
+    {
+      "folders": [
+        {
+          "description": "",
+          "collection_name": "CRUD Specifications",
+          "id": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "collection_id": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "order": [
+            "715f5b9a-0bdd-4cf4-8216-c27b61572eed",
+            "630fec51-2770-436b-867c-73dfff337366",
+            "08d4d816-b26f-4f3b-b377-7b1d2164426a",
+            "3463be14-5224-42a4-bbad-6aa1ccbcd1ec",
+            "0c265805-a2d2-4802-a026-9b6b7b30a19b"
+          ],
+          "name": "Task"
+        }
+      ],
+      "description": "CRUD API.\n\n",
+      "timestamp": 1541751476,
+      "remote_id": 0,
+      "order": [],
+      "synced": false,
+      "requests": [
+        {
+          "responses": [],
+          "dataMode": "params",
+          "tests": "",
+          "description": "",
+          "collectionId": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "url": "{{HOST}}/content/task/*",
+          "method": "GET",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "data": [],
+          "id": "715f5b9a-0bdd-4cf4-8216-c27b61572eed",
+          "name": "Retrieve index"
+        },
+        {
+          "responses": [],
+          "dataMode": "params",
+          "tests": "",
+          "description": "",
+          "collectionId": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "url": "{{HOST}}/content/task/*",
+          "method": "GET",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "data": [],
+          "id": "630fec51-2770-436b-867c-73dfff337366",
+          "name": "Retrieve item"
+        },
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "url": "{{HOST}}/content/task/*",
+          "method": "POST",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nContent-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "data": "{\n    \"data\": {\n        \"label\": \"do something...\",\n        \"done\": false\n    }\n}\n",
+          "id": "08d4d816-b26f-4f3b-b377-7b1d2164426a",
+          "name": "Create item"
+        },
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "url": "{{HOST}}/content/task/*",
+          "method": "POST",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nContent-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "data": "{\n    \"data\": {\n        \"label\": \"do something...\",\n        \"done\": false\n    }\n}\n",
+          "id": "3463be14-5224-42a4-bbad-6aa1ccbcd1ec",
+          "name": "Edit item"
+        },
+        {
+          "responses": [],
+          "dataMode": "params",
+          "tests": "",
+          "description": "",
+          "collectionId": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+          "url": "{{HOST}}/content/task/*",
+          "method": "POST",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "9491fc40-8c28-4b95-8f6b-5717963aa17a",
+          "data": [],
+          "id": "0c265805-a2d2-4802-a026-9b6b7b30a19b",
+          "name": "Delete item"
+        }
+      ],
+      "id": "2b90eca8-d119-48f2-abfe-3f5bd6102737",
+      "name": "CRUD Specifications"
+    },
+    {
+      "folders": [
+        {
+          "description": "",
+          "collection_name": "Authentication",
+          "id": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "collection_id": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "order": [
+            "92371509-9e9f-4e68-acdb-8fa29bcf79f8",
+            "37882ee5-4800-467a-a353-88aea29ff29a",
+            "71c3cff7-57d7-4b19-8cd1-4edf2b85230e",
+            "f78b4dcc-07c0-44ec-b86a-2e443e2bfb6b",
+            "0834fdb9-b07d-4c3e-bf60-092232c35d48"
+          ],
+          "name": "Authentication"
+        }
+      ],
+      "description": "",
+      "timestamp": 1541751476,
+      "remote_id": 0,
+      "order": [],
+      "synced": false,
+      "requests": [
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "url": "{{HOST}}/auth/*",
+          "method": "POST",
+          "headers": "Content-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "data": "{\n  \"username\": \"test@example.com\",\n  \"password\": \"testpass\"\n}\n",
+          "id": "92371509-9e9f-4e68-acdb-8fa29bcf79f8",
+          "name": "Log in"
+        },
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "url": "{{HOST}}/auth/*",
+          "method": "POST",
+          "headers": "Content-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "data": "{\n    \"user\": {\n        \"name\": \"Test User\",\n        \"email\": \"test@example.com\",\n        \"password\": \"testpass\",\n        \"picture\": \"https://randomuser.me/api/portraits/lego/1.jpg\"\n    }\n}\n",
+          "id": "37882ee5-4800-467a-a353-88aea29ff29a",
+          "name": "Sign up"
+        },
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "url": "{{HOST}}/auth/*",
+          "method": "POST",
+          "headers": "Content-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "data": "{\n  \"email\": \"test@example.com\"\n}\n",
+          "id": "71c3cff7-57d7-4b19-8cd1-4edf2b85230e",
+          "name": "Initiate password reset"
+        },
+        {
+          "responses": [],
+          "dataMode": "raw",
+          "tests": "",
+          "description": "",
+          "collectionId": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "url": "{{HOST}}/auth/*",
+          "method": "POST",
+          "headers": "Content-Type: application/json\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "data": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9\",\n    \"password\": \"testpass\"\n}\n",
+          "id": "f78b4dcc-07c0-44ec-b86a-2e443e2bfb6b",
+          "name": "Continue password reset"
+        },
+        {
+          "responses": [],
+          "dataMode": "params",
+          "tests": "",
+          "description": "",
+          "collectionId": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+          "url": "{{HOST}}/auth/*",
+          "method": "GET",
+          "headers": "Authorization: Bearer {{ACCESS_TOKEN}}\nAccept: application/json",
+          "descriptionFormat": "html",
+          "version": 2,
+          "time": 1541751476,
+          "synced": false,
+          "pathVariables": {},
+          "folder": "bc7a8d50-e1ea-41b3-8fe8-82ca407f914e",
+          "data": [],
+          "id": "0834fdb9-b07d-4c3e-bf60-092232c35d48",
+          "name": "Retrieve user account"
+        }
+      ],
+      "id": "ecf08e62-32fd-4559-a3cd-00495d512ade",
+      "name": "Authentication"
+    }
+  ],
+  "environments": [
+    {
+      "name": "",
+      "timestamp": 1541751476,
+      "syncedFilename": "",
+      "values": [],
+      "synced": false,
+      "id": "35f96b8e-1ebf-41ed-8529-a8ca05da914d"
+    }
+  ]
+}

@@ -28,7 +28,8 @@ const Data = require('@/common/data');
     Logger.debug('processing ...');
 
     await Promise.all(
-      glob.sync('app/**/*.seed.js').map(async (filename) => {
+      glob.sync('app/**/*seed.js').map(async (filename) => {
+        Logger.debug('loading', filename);
         const seed = require(path.resolve(filename));
         await seed();
       }),

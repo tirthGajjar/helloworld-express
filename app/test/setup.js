@@ -7,10 +7,15 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const { spawn } = require('child_process');
 
 const Data = require('@/common/data');
+const DataUtils = require('@/common/data.utils');
 
-function setupWithData() {
+function setupWithData(mode) {
   beforeAll(async () => {
-    Data.utils.clear();
+    if (mode === 'seed') {
+      DataUtils.seed();
+    } else {
+      DataUtils.clear();
+    }
     await Data.setup();
   });
 
@@ -22,13 +27,17 @@ function setupWithData() {
 
 const TEST_CLUSTER_TIMEOUT = (process.env.TEST_CLUSTER_TIMEOUT && Number(process.env.TEST_CLUSTER_TIMEOUT)) || 3000;
 
-function setupWithRunningApp() {
+function setupWithRunningApp(mode) {
   let cluster = null;
 
   beforeAll((next) => {
     jest.setTimeout(30000);
 
-    Data.utils.seed();
+    if (mode === 'seed') {
+      DataUtils.seed();
+    } else {
+      DataUtils.clear();
+    }
 
     Logger.debug('running cluster');
     cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json'], {

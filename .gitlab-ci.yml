@@ -43,9 +43,10 @@ test:unit:
     - name: redis:4.0
       alias: redis
   script:
-    - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
-    - export REDIS_URI=redis://redis:6379/10
-    - export REDIS_JOB_URI=redis://redis:6379/11
+    - export MONGODB_URI=mongodb://mongo:27017/Test
+    - export REDIS_STORAGE_URI=redis://redis:6379/10
+    - export REDIS_CACHE_URI=redis://redis:6379/11
+    - export REDIS_JOB_URI=redis://redis:6379/12
     - npm run test:unit
 
 test:integration:
@@ -58,8 +59,9 @@ test:integration:
     - name: redis:4.0
       alias: redis
   script:
-    - export MONGODB_URI=mongodb://mongo:27017/HelloWorldTest
-    - export REDIS_URI=redis://redis:6379/10
-    - export REDIS_JOB_URI=redis://redis:6379/11
+    - export MONGODB_URI=mongodb://mongo:27017/Test
+    - export REDIS_STORAGE_URI=redis://redis:6379/10
+    - export REDIS_CACHE_URI=redis://redis:6379/11
+    - export REDIS_JOB_URI=redis://redis:6379/12
     - export TEST_CLUSTER_TIMEOUT=10000
     - npm run test:integration

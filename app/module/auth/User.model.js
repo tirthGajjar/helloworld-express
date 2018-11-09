@@ -2,6 +2,8 @@
 
 const CONST = require('@/common/const');
 
+const DataMixin = require('@/common/data.mixin');
+
 const definition = {
   identity: 'user',
 
@@ -10,12 +12,21 @@ const definition = {
   attributes: {
     role: {
       type: 'string',
-      // isIn: Object.values(CONST.ROLE),
+      required: true,
+      validations: {
+        isIn: Object.values(CONST.ROLE),
+      },
+    },
+    password: {
+      type: 'string',
       required: true,
     },
     email: {
       type: 'string',
       required: true,
+      validations: {
+        isEmail: true,
+      },
     },
     name: {
       type: 'string',
@@ -25,6 +36,19 @@ const definition = {
       type: 'string',
       required: true,
     },
+
+    created_at: { ...DataMixin.attribute.created_at },
+
+    updated_at: { ...DataMixin.attribute.updated_at },
+
+    _client: {
+      model: 'client',
+    },
+  },
+
+  customToJSON() {
+    const { password, ...record } = DataMixin.customToJSON(this);
+    return record;
   },
 };
 

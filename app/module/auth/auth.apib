@@ -3,7 +3,11 @@
 
 ## Authentication [/auth/*]
 
-### Log in [POST /auth/login]
+### Log in [POST /auth/login{?scope}]
+
++ Parameters
+
+    + scope: `client` (string) - login scope (`client`, or `admin`).
 
 + Request (application/json)
 
@@ -11,7 +15,6 @@
           "username": "test@example.com",
           "password": "testpass"
         }
-
 
 + Response 200 (application/json)
 
@@ -21,7 +24,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "name": "Test User",
                 "email": "test@example.com",
-                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -41,10 +44,9 @@
                 "name": "Test User",
                 "email": "test@example.com",
                 "password": "testpass",
-                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
-
 
 + Response 200 (application/json)
 
@@ -54,7 +56,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "name": "Test User",
                 "email": "test@example.com",
-                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -73,7 +75,6 @@
         {
           "email": "test@example.com"
         }
-
 
 + Response 200 (application/json)
 
@@ -98,7 +99,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "name": "Test User",
                 "email": "test@example.com",
-                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -118,7 +119,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "name": "Test User",
                 "email": "test@example.com",
-                "picture": "https://randomuser.me/api/portraits/lego/7.jpg"
+                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 

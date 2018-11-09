@@ -13,7 +13,7 @@ app
 │   └── job
 ├── module
 │   └── sample
-│       ├── router.js
+│       ├── sample.router.js
 │       ├── SamplePerson.model.js
 │       ├── SamplePet.model.js
 │       ├── sample.job.js

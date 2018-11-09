@@ -1,6 +1,6 @@
 'use strict';
 
-const { EventEmitter } = require('emiketic-starter-lib/dist/common/events');
+const { EventEmitter } = require('starter-lib/dist/common/events');
 
 const EVENT = new EventEmitter();
 
