@@ -4,13 +4,6 @@ const ERROR = require('starter-lib/dist/common/error');
 
 module.exports = ERROR;
 
-/**
- * RequestError
- *
- * throw new ERROR.RequestError()
- * throw new ERROR.RequestError(400, 'InvalidRequest', 'Invalid request', {})
- */
-
 const WATERLINE_ERRORS = [
   {
     message: 'Could not use specified `label`.  Cannot set "" (empty string) for a required attribute.',
@@ -20,10 +13,17 @@ const WATERLINE_ERRORS = [
   },
 ];
 
-ERROR.RequestError = class RequestError extends ERROR.FailureError {
+/**
+ * InvalidRequestError
+ *
+ * throw new ERROR.InvalidRequestError()
+ * throw new ERROR.InvalidRequestError(400, 'InvalidRequest', 'Invalid request', {})
+ */
+
+ERROR.InvalidRequestError = class InvalidRequestError extends ERROR.FailureError {
   constructor(status, code, message, extra) {
     super(code || 'InvalidRequest', message || 'Invalid request', extra);
-    this.name = 'RequestError';
+    this.name = 'InvalidRequestError';
     this.status = status || 400;
   }
 
@@ -39,7 +39,7 @@ ERROR.RequestError = class RequestError extends ERROR.FailureError {
       message: err.details,
     });
 
-    return new RequestError(null, null, err.details, extra);
+    return new InvalidRequestError(null, null, err.details, extra);
   }
 };
 
@@ -49,10 +49,23 @@ ERROR.RequestError = class RequestError extends ERROR.FailureError {
  * throw new ERROR.NotFoundError()
  */
 
-ERROR.NotFoundError = class NotFoundError extends ERROR.RequestError {
+ERROR.NotFoundError = class NotFoundError extends ERROR.InvalidRequestError {
   constructor(message, extra) {
     super(404, 'NotFound', message || 'Not found', extra);
     this.name = 'NotFoundError';
+  }
+};
+
+/**
+ * InvalidCredentialsError
+ *
+ * throw new ERROR.InvalidCredentialsError()
+ */
+
+ERROR.InvalidCredentialsError = class InvalidCredentialsError extends ERROR.InvalidRequestError {
+  constructor(message, extra) {
+    super(400, 'InvalidCredentials', message || 'Invalid credentials', extra);
+    this.name = 'InvalidCredentialsError';
   }
 };
 
@@ -62,7 +75,7 @@ ERROR.NotFoundError = class NotFoundError extends ERROR.RequestError {
  * throw new ERROR.UnauthenticatedError()
  */
 
-ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.RequestError {
+ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.InvalidRequestError {
   constructor(message, extra) {
     super(401, 'Unauthenticated', message || 'Unauthenticated', extra);
     this.name = 'UnauthenticatedError';
@@ -75,7 +88,7 @@ ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.RequestErr
  * throw new ERROR.UnauthorizedError()
  */
 
-ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.RequestError {
+ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.InvalidRequestError {
   constructor(message, extra) {
     super(403, 'Unauthorized', message || 'Unauthorized', extra);
     this.name = 'UnauthorizedError';
@@ -90,7 +103,7 @@ ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.RequestError {
  * throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
  */
 
-ERROR.ValidationError = class ValidationError extends ERROR.RequestError {
+ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError {
   constructor(code, message, extra) {
     super(400, code || 'InvalidRequest', message || 'Invalid request', extra);
     this.name = 'ValidationError';

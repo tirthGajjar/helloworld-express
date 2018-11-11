@@ -27,19 +27,21 @@ const definition = {
       validations: {
         isEmail: true,
       },
+      // @TODO make unique
     },
     name: {
       type: 'string',
       required: true,
+      // @TODO add index
     },
     picture_uri: {
       type: 'string',
       required: true,
     },
 
-    created_at: { ...DataMixin.attribute.created_at },
+    created_at: { ...DataMixin.attributes.created_at },
 
-    updated_at: { ...DataMixin.attribute.updated_at },
+    updated_at: { ...DataMixin.attributes.updated_at },
 
     _client: {
       model: 'client',
@@ -52,7 +54,10 @@ const definition = {
   },
 };
 
+const helpers = {};
+
 module.exports = {
   definition,
-  collection: {},
+  helpers,
+  collection: null,
 };

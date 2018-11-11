@@ -1,5 +1,7 @@
 'use strict';
 
+const DataMixin = require('@/common/data.mixin');
+
 const definition = {
   identity: 'client',
 
@@ -12,7 +14,10 @@ const definition = {
   },
 };
 
+const helpers = {};
+
 module.exports = {
   definition,
-  collection: {},
+  helpers,
+  collection: null,
 };

@@ -54,7 +54,27 @@ function setupWithRunningApp(mode) {
   });
 }
 
+function testUnauthenticatedFetch(message, fetchPromise) {
+  test(message, async () => {
+    const response = await fetchPromise();
+    expect(response.status).toBe(401);
+    const result = await response.json();
+    expect(result.code).toBe('Unauthenticated');
+  });
+}
+
+function testUnauthorizedFetch(message, fetchPromise) {
+  test(message, async () => {
+    const response = await fetchPromise();
+    expect(response.status).toBe(403);
+    const result = await response.json();
+    expect(result.code).toBe('Unauthorized');
+  });
+}
+
 module.exports = {
   setupWithData,
   setupWithRunningApp,
+  testUnauthenticatedFetch,
+  testUnauthorizedFetch,
 };

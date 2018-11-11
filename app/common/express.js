@@ -62,7 +62,7 @@ async function setup() {
     console.error(err);
 
     if (err.name === 'UsageError') {
-      err = ERROR.RequestError.fromWaterlineError(err);
+      err = ERROR.InvalidRequestError.fromWaterlineError(err);
     }
 
     res.status(err.status || 500).json({

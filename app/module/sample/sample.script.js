@@ -40,7 +40,7 @@ const SamplePet = require('./SamplePet.model');
     Logger.debug('done');
     process.exit(0);
   } catch (error) {
-    Logger.error(error);
+    Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
   }
 })();

@@ -14,17 +14,17 @@ function generateRandomToken() {
   return uuid.v4();
 }
 
-function prepareModelDefinition(definition) {
+function prepareModelDefinition(model) {
   const DataMixin = require('./data.mixin');
 
   const result = {
-    ...definition,
+    ...model.definition,
   };
 
   if (result.beforeCreate) {
     const beforeCreate = result.beforeCreate;
     result.beforeCreate = function (record, next) {
-      DataMixin.lifecycle.beforeCreate.call(this, record, (err) => {
+      DataMixin.lifecycles.beforeCreate.call(this, record, (err) => {
         if (err) {
           next(err);
           return;
@@ -34,13 +34,13 @@ function prepareModelDefinition(definition) {
       });
     };
   } else {
-    result.beforeCreate = DataMixin.lifecycle.beforeCreate;
+    result.beforeCreate = DataMixin.lifecycles.beforeCreate;
   }
 
   if (result.beforeUpdate) {
     const beforeUpdate = result.beforeUpdate;
     result.beforeUpdate = function (record, next) {
-      DataMixin.lifecycle.beforeUpdate.call(this, record, (err) => {
+      DataMixin.lifecycles.beforeUpdate.call(this, record, (err) => {
         if (err) {
           next(err);
           return;
@@ -50,7 +50,7 @@ function prepareModelDefinition(definition) {
       });
     };
   } else {
-    result.beforeUpdate = DataMixin.lifecycle.beforeUpdate;
+    result.beforeUpdate = DataMixin.lifecycles.beforeUpdate;
   }
 
   Object.entries(result).forEach(([key, value]) => {
@@ -59,59 +59,21 @@ function prepareModelDefinition(definition) {
     }
   });
 
-  return result;
+  model.definition = result;
 }
 
-function sanitize(model, data, mode = 'edit') {
-  const result = {};
-  if (mode === 'create') {
-    Object.keys(model.definition.attributes).forEach((field) => {
-      if (field === 'id' || field === 'uid') {
-        return;
-      }
-      result[field] = typeof data[field] !== 'undefined' ? data[field] : null;
-    });
-  } else {
-    Object.entries(data).forEach(([field, value]) => {
-      if (field in model.definition.attributes && field !== 'id' && field !== 'uid') {
-        result[field] = value;
-      }
-    });
-  }
-  return result;
-}
+function prepareModelHelpers(model) {
+  const DataMixin = require('./data.mixin');
 
-function validate(model, data) {
-  const result = [];
-  Object.entries(data).forEach(([field, value]) => {
-    try {
-      // model.collection.validate(field, typeof value === 'undefined' ? null : value);
-      model.collection.validate(field, value);
-    } catch (err) {
-      // console.log(err, JSON.stringify(err, null, 2));
-      // console.log(JSON.stringify({ field, err }, null, 2));
-      if (err.code === 'E_REQUIRED') {
-        result.push({
-          field,
-          issue: 'required',
-          message: err.message,
-        });
-      } else if (err.code === 'E_TYPE') {
-        result.push({
-          field,
-          issue: err.expectedType,
-          message: err.message,
-        });
-      } else {
-        result.push({
-          field,
-          issue: err,
-          message: err.message,
-        });
-      }
-    }
-  });
-  return result;
+  const result = {
+    validate(data, strictMode) {
+      return DataMixin.validate(model, data, strictMode);
+    },
+
+    ...model.helpers,
+  };
+
+  model.helpers = result;
 }
 
 function clear() {
@@ -132,8 +94,7 @@ module.exports = {
   generateUniqueId,
   generateRandomToken,
   prepareModelDefinition,
-  sanitize,
-  validate,
+  prepareModelHelpers,
   clear,
   seed,
 };

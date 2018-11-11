@@ -29,7 +29,7 @@ const Data = require('@/common/data');
     Logger.debug('done');
     process.exit(0);
   } catch (error) {
-    Logger.error(error);
+    Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
   }
 })();

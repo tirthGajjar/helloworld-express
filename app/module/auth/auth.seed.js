@@ -11,13 +11,12 @@ const AuthService = require('./auth.service');
 module.exports = async () => {
   let record;
 
-  record = await AuthService.createAdminAccount({
+  record = await AuthService.createAdministratorAccount({
     user: {
-      uid: '2225b2b0-e1bb-11e8-b9e6-cd0d6397461c',
       email: 'admin@starter.com',
       phone: '10000000',
-      name: 'Starter Administrator',
       password: 'password',
+      name: 'Starter Administrator',
       picture_uri: 'https://randomuser.me/api/portraits/lego/1.jpg',
     },
     client: {},
@@ -27,15 +26,38 @@ module.exports = async () => {
 
   record = await AuthService.createClientAccount({
     user: {
-      uid: '2074a960-e352-11e8-b257-d786ef465a4',
-      email: 'admin@starter.com',
+      email: 'client@starter.com',
       phone: '20000000',
-      name: 'Starter Client',
       password: 'password',
+      name: 'Starter Client',
       picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
     },
     client: {},
   });
 
   Logger.debug(record);
+
+  for (let i = 1; i < 10; i++) {
+    record = await AuthService.createAdministratorAccount({
+      user: {
+        email: `admin+${i}@starter.com`,
+        phone: `1000000${i}`,
+        password: 'password',
+        name: `Starter Administrator ${i}`,
+        picture_uri: `https://randomuser.me/api/portraits/lego/${i}.jpg`,
+      },
+      client: {},
+    });
+
+    record = await AuthService.createClientAccount({
+      user: {
+        email: `client+${i}@starter.com`,
+        phone: `2000000${i}`,
+        password: 'password',
+        name: `Starter Client ${i}`,
+        picture_uri: `https://randomuser.me/api/portraits/men/2${i}.jpg`,
+      },
+      client: {},
+    });
+  }
 };

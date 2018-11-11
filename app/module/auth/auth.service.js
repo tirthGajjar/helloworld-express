@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
 const CONST = require('@/common/const');
-const CONFIG = require('@/common/config');
+
+const ERROR = require('@/common/error');
 
 const AUTH_JWT_SECRET = process.env.AUTH_JWT_SECRET || 'secret';
 const AUTH_JWT_EXPIRATION = process.env.AUTH_JWT_EXPIRATION || (30 * CONST.DURATION_DAY) / CONST.DURATION_SECOND; // in seconds, @TODO move to config? or param?
@@ -22,20 +23,17 @@ async function comparePassword(password, targetPassword) {
   return bcrypt.compare(password, targetPassword);
 }
 
-async function generateAccessToken(user, scope = CONST.ROLE.CLIENT) {
+async function generateAccessToken(user, audience = CONST.ROLE.CLIENT) {
   return new Promise((resolve, reject) => {
     const payload = {
       id: user.uid,
-      scope,
     };
-
-    // @TODO move scope to audience
 
     jsonwebtoken.sign(
       payload,
       AUTH_JWT_SECRET,
       {
-        audience: scope,
+        audience,
         expiresIn: AUTH_JWT_EXPIRATION,
         noTimestamp: true,
       },
@@ -53,17 +51,18 @@ async function generateAccessToken(user, scope = CONST.ROLE.CLIENT) {
   });
 }
 
-async function isAccessTokenValid(token, scope = CONST.ROLE.CLIENT) {
+async function validateAccessToken(token, audience = CONST.ROLE.CLIENT) {
   return new Promise((resolve, reject) => {
     jsonwebtoken.verify(
       token,
       AUTH_JWT_SECRET,
       {
-        // audience: scope,
+        // audience,
       },
       (err, payload) => {
         if (err) {
-          reject(err);
+          // reject(err);
+          resolve(null);
           return;
         }
 
@@ -75,8 +74,37 @@ async function isAccessTokenValid(token, scope = CONST.ROLE.CLIENT) {
   });
 }
 
-async function createAdminAccount({ user: userData, client: clientData }) {
+function extractAccessTokenFromRequest(req) {
+  let token;
+
+  token = (req.headers.authorization || '').replace(/^(Bearer|JWT)\ /g, '');
+
+  if (!token) {
+    token = req.query.access_token || '';
+  }
+
+  return token;
+}
+
+async function createAdministratorAccount({ user: userData, client: clientData }) {
+  userData = userData || {};
+  clientData = userData || {};
+
   userData.role = CONST.ROLE.ADMIN;
+
+  let issues = [];
+  let _issues;
+
+  [userData, _issues] = User.helpers.validate(userData, true);
+  issues = [...issues, ..._issues];
+
+  [clientData, _issues] = Client.helpers.validate(clientData, true);
+  issues = [...issues, ..._issues];
+
+  if (issues.length) {
+    throw new ERROR.ValidationError(null, null, { issues });
+  }
+
   userData.password = await encryptPassword(userData.password);
 
   let user = await User.collection.create(userData).fetch();
@@ -89,11 +117,9 @@ async function createAdminAccount({ user: userData, client: clientData }) {
     })
     .fetch();
 
-  user = await User.collection
-    .update(user.id, {
-      _client: client.id,
-    })
-    .fetch();
+  user = await User.collection.updateOne(user.id, {
+    _client: client.id,
+  });
 
   return {
     user,
@@ -102,7 +128,24 @@ async function createAdminAccount({ user: userData, client: clientData }) {
 }
 
 async function createClientAccount({ user: userData, client: clientData }) {
+  userData = userData || {};
+  clientData = userData || {};
+
   userData.role = CONST.ROLE.CLIENT;
+
+  let issues = [];
+  let _issues;
+
+  [userData, _issues] = User.helpers.validate(userData, true);
+  issues = [...issues, ..._issues];
+
+  [clientData, _issues] = Client.helpers.validate(clientData, true);
+  issues = [...issues, ..._issues];
+
+  if (issues.length) {
+    throw new ERROR.ValidationError(null, null, { issues });
+  }
+
   userData.password = await encryptPassword(userData.password);
 
   let user = await User.collection.create(userData).fetch();
@@ -115,11 +158,9 @@ async function createClientAccount({ user: userData, client: clientData }) {
     })
     .fetch();
 
-  user = await User.collection
-    .update(user.id, {
-      _client: client.id,
-    })
-    .fetch();
+  user = await User.collection.updateOne(user.id, {
+    _client: client.id,
+  });
 
   return {
     user,
@@ -131,7 +172,8 @@ module.exports = {
   encryptPassword,
   comparePassword,
   generateAccessToken,
-  isAccessTokenValid,
-  createAdminAccount,
+  validateAccessToken,
+  extractAccessTokenFromRequest,
+  createAdministratorAccount,
   createClientAccount,
 };

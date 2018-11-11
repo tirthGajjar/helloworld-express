@@ -24,7 +24,16 @@ const Job = require('@/common/job');
 
     Logger.debug('processing ...');
 
-    // @PLACEHOLDER for custom scripts
+    let result;
+
+    result = await Data.models.User.collection.find({ role: 'admin' });
+    Logger.debug('find', result);
+
+    result = await Data.models.User.collection.destroyOne(result[0].id);
+    Logger.debug('destroyOne', result);
+
+    result = await Data.models.User.collection.destroy({ role: 'admin' });
+    Logger.debug('destroy', result);
 
     Logger.debug('done');
     process.exit(0);

@@ -8,6 +8,7 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const Waterline = require('waterline');
 const WaterlineUtils = require('waterline-utils');
+const MemoryAdapter = require('sails-disk');
 const MongoAdapter = require('sails-mongo');
 const RedisAdapter = require('sails-redis');
 
@@ -29,7 +30,8 @@ async function setup() {
       Logger.debug('loading', filename);
       const model = require(path.resolve(filename));
       if (model.definition) {
-        model.definition = DataUtils.prepareModelDefinition(model.definition);
+        DataUtils.prepareModelDefinition(model);
+        DataUtils.prepareModelHelpers(model);
         modelsByIdentity[model.definition.identity] = model;
         models[model.definition.tableName] = model;
       }
@@ -37,11 +39,16 @@ async function setup() {
 
     const config = {
       adapters: {
+        'sails-disk': MemoryAdapter,
         'sails-mongo': MongoAdapter,
         'sails-redis': RedisAdapter,
       },
 
       datastores: {
+        memory: {
+          adapter: 'sails-disk',
+          inMemoryOnly: true,
+        },
         mongo: {
           adapter: 'sails-mongo',
           url: CONFIG.MONGODB_URI,

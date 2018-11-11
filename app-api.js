@@ -23,7 +23,7 @@ const Express = require('@/common/express');
     Logger.debug('ready');
     process.nextTick(() => EVENT.emit('api-ready'));
   } catch (error) {
-    Logger.error(error);
+    Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
   }
 })();

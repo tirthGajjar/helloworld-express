@@ -1,5 +1,7 @@
 'use strict';
 
+const DataMixin = require('@/common/data.mixin');
+
 const definition = {
   identity: 'sample_pet',
 
@@ -24,7 +26,10 @@ const definition = {
   },
 };
 
+const helpers = {};
+
 module.exports = {
   definition,
-  collection: {},
+  helpers,
+  collection: null,
 };

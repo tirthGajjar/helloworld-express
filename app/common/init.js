@@ -1,12 +1,12 @@
 'use strict';
 
-/**
+/*
  * Load polyfills
  */
 
 require('@/common/polyfill');
 
-/**
+/*
  * Define global relative file path helper
  */
 
@@ -26,7 +26,7 @@ global.$jobname = function (filename) {
     .replace(/\//g, '$');
 };
 
-/**
+/*
  * Load environment variables
  */
 
@@ -45,7 +45,7 @@ const fs = require('fs');
 
 process.env.MIGRATE = process.env.INSTANCE_ID === 'core' ? process.env.MIGRATE || 'safe' : 'safe';
 
-/**
+/*
  * Setup Logger
  */
 
@@ -63,13 +63,13 @@ if (process.env.NODE_ENV === 'test') {
   Logger.enable(`${PREFIX}-test`);
 }
 
-/**
+/*
  * Load global event bus
  */
 
 const EVENT = require('@/common/events');
 
-/**
+/*
  * Load configurations
  */
 
@@ -79,7 +79,7 @@ if (process.env.NODE_ENV === 'development') {
   Logger.debug('CONFIG', JSON.stringify(CONFIG, null, 2));
 }
 
-/**
+/*
  * Shutdown handling
  */
 

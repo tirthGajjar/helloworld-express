@@ -22,9 +22,9 @@ const definition = {
       type: 'string',
     },
 
-    created_at: { ...DataMixin.attribute.created_at },
+    created_at: { ...DataMixin.attributes.created_at },
 
-    updated_at: { ...DataMixin.attribute.updated_at },
+    updated_at: { ...DataMixin.attributes.updated_at },
 
     _pets: {
       collection: 'sample_pet',
@@ -38,7 +38,10 @@ const definition = {
   },
 };
 
+const helpers = {};
+
 module.exports = {
   definition,
-  collection: {},
+  helpers,
+  collection: null,
 };

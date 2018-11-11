@@ -3,35 +3,35 @@
 
 ## Authentication [/auth/*]
 
-### Log in [POST /auth/login{?scope}]
+### Log in [POST /auth/login{?audience}]
 
 + Parameters
 
-    + scope: `client` (string) - login scope (`client`, or `admin`).
+    + audience: `client` (string) - login audience (`client`, or `admin`).
 
 + Request (application/json)
 
         {
-          "username": "test@example.com",
-          "password": "testpass"
+          "username": "client@starter.com",
+          "password": "password"
         }
 
 + Response 200 (application/json)
 
         {
-            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "access_token": "ACCESS_TOKEN",
             "user": {
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
-                "name": "Test User",
-                "email": "test@example.com",
+                "email": "client@starter.com",
+                "name": "Client",
                 "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
-+ Response 401 (application/json)
++ Response 400 (application/json)
 
         {
-            "code": "Unauthenticated",
+            "code": "InvalidCredentials",
             "message": "Invalid credentials"
         }
 
@@ -41,9 +41,9 @@
 
         {
             "user": {
-                "name": "Test User",
-                "email": "test@example.com",
-                "password": "testpass",
+                "email": "client@starter.com",
+                "password": "password",
+                "name": "Client",
                 "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
@@ -51,11 +51,11 @@
 + Response 200 (application/json)
 
         {
-            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "access_token": "ACCESS_TOKEN",
             "user": {
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
-                "name": "Test User",
-                "email": "test@example.com",
+                "email": "client@starter.com",
+                "name": "Client",
                 "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
@@ -73,7 +73,7 @@
 + Request (application/json)
 
         {
-          "email": "test@example.com"
+          "email": "client@starter.com"
         }
 
 + Response 200 (application/json)
@@ -87,18 +87,18 @@
 + Request (application/json)
 
         {
-            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
-            "password": "testpass"
+            "token": "{{PASSWORD_RESET_TOKEN}}",
+            "password": "password"
         }
 
 + Response 200 (application/json)
 
         {
-            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            "access_token": "ACCESS_TOKEN",
             "user": {
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
-                "name": "Test User",
-                "email": "test@example.com",
+                "email": "client@starter.com",
+                "name": "Client",
                 "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
@@ -117,8 +117,8 @@
         {
             "user": {
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
-                "name": "Test User",
-                "email": "test@example.com",
+                "email": "client@starter.com",
+                "name": "Client",
                 "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }

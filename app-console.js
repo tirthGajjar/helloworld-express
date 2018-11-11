@@ -79,7 +79,7 @@ context.DataUtils = DataUtils;
 
     process.nextTick(() => EVENT.emit('console-ready'));
   } catch (error) {
-    Logger.error(error);
+    Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
   }
 })();
