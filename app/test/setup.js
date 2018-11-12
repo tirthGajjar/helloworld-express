@@ -29,8 +29,6 @@ function setupWithData(mode) {
   });
 }
 
-const TEST_CLUSTER_TIMEOUT = (process.env.TEST_CLUSTER_TIMEOUT && Number(process.env.TEST_CLUSTER_TIMEOUT)) || 3000;
-
 function setupWithRunningApp(mode) {
   let cluster = null;
 
@@ -46,9 +44,7 @@ function setupWithRunningApp(mode) {
     await Data.setup();
 
     Logger.debug('running cluster');
-    cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json'], {
-      // stdio: 'ignore',
-    });
+    cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json']);
 
     let started = false;
 
@@ -58,8 +54,6 @@ function setupWithRunningApp(mode) {
         next();
       }
     });
-
-    // setTimeout(() => next(), TEST_CLUSTER_TIMEOUT);
   });
 
   afterAll((next) => {

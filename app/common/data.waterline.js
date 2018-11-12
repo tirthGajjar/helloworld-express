@@ -22,17 +22,15 @@ const path = require('path');
 
 let waterline = null;
 
-/** Models */
 const models = {};
 
-/** Setup */
 async function setup() {
   return new Promise((resolve, reject) => {
     Logger.info('initiating ...');
 
     const modelsByIdentity = {};
     glob.sync('app/**/*.model.js').forEach((filename) => {
-      Logger.debug('loading', filename);
+      Logger.info('loading', filename);
       const model = require(path.resolve(filename));
       if (model.definition) {
         DataUtils.prepareModelDefinition(model);
@@ -139,7 +137,6 @@ async function setup() {
   });
 }
 
-/** Teardown */
 async function teardown() {
   return new Promise((resolve, reject) => {
     Logger.info('teardown ...');

@@ -51,7 +51,7 @@ async function setup() {
   // Load routers
 
   glob.sync('app/**/*router.js').forEach((filename) => {
-    Logger.debug('loading', filename);
+    Logger.info('loading', filename);
     const router = require(path.resolve(filename));
     app.use(router.prefix, router.router);
   });
