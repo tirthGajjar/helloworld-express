@@ -17,16 +17,16 @@ const Job = require('@/common/job');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
     await Job.setup();
 
-    Logger.debug('processing ...');
+    Logger.info('processing ...');
 
     // @PLACEHOLDER for custom scripts
 
-    Logger.debug('done');
+    Logger.info('done');
     process.exit(0);
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

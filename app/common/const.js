@@ -1,6 +1,8 @@
 'use strict';
 
-const CONST = require('starter-lib/dist/common/const');
+/** @module CONST */
+
+const CONST = { ...require('starter-lib/dist/common/const') };
 
 CONST.ROLES_MAPPING = {
   [CONST.ROLE.ADMIN]: [CONST.ROLE.ADMIN, CONST.ROLE.CLIENT],

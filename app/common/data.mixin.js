@@ -1,5 +1,7 @@
 'use strict';
 
+/** @module Data */
+
 const DataUtils = require('./data.utils');
 
 const attributes = {
@@ -68,8 +70,6 @@ function customToJSON(record) {
  * @param {boolean} strictMode
  */
 
-const VALIDATE_IGNORE = ['id', 'uid', 'created_at', 'updated_at'];
-
 function validate(Model, data, strictMode = false) {
   const values = {};
   const issues = [];
@@ -120,6 +120,8 @@ function validate(Model, data, strictMode = false) {
   });
   return [values, issues];
 }
+
+const VALIDATE_IGNORE = ['id', 'uid', 'created_at', 'updated_at'];
 
 module.exports = {
   attributes,

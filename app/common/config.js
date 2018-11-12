@@ -1,5 +1,7 @@
 'use strict';
 
+/** @module CONFIG */
+
 const { RELEASE_VERSION, RELEASE_DATE } = require('./release');
 
 const INSTANCE_ID = process.env.INSTANCE_ID || '?';

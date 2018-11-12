@@ -16,7 +16,7 @@ let app = null;
 let http = null;
 
 async function setup() {
-  Logger.debug('initiating ...');
+  Logger.info('initiating ...');
 
   app = express();
 
@@ -69,6 +69,7 @@ async function setup() {
       code: err.code || 'Unknown',
       message: err.message || 'Unknown error',
       extra: err.extra || undefined,
+      _stack: err.stack,
     });
   });
 
@@ -85,21 +86,21 @@ async function setup() {
 
   module.exports.http = http;
 
-  Logger.debug(`ready on port ${CONFIG.API_PORT}`);
+  Logger.info(`ready on port ${CONFIG.API_PORT}`);
 }
 
 async function teardown() {
   return new Promise((resolve, reject) => {
-    Logger.debug('teardown ...');
+    Logger.info('teardown ...');
 
     if (!http) {
-      Logger.debug('teardown done.');
+      Logger.info('teardown done.');
       resolve();
       return;
     }
 
     http.close((err) => {
-      Logger.debug('teardown done.', err || '');
+      Logger.info('teardown done.', err || '');
 
       app = null;
       http = null;

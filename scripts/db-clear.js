@@ -18,15 +18,15 @@ const Data = require('@/common/data');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
 
-    Logger.debug('processing ...');
+    Logger.info('processing ...');
 
     // do nothing since handled by MIGRATE
 
-    Logger.debug('done');
+    Logger.info('done');
     process.exit(0);
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

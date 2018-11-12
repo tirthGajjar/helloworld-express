@@ -21,21 +21,21 @@ const Data = require('@/common/data');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
 
-    Logger.debug('processing ...');
+    Logger.info('processing ...');
 
     await Promise.all(
       glob.sync('app/**/*seed.js').map(async (filename) => {
-        Logger.debug('loading', filename);
+        Logger.info('loading', filename);
         const seed = require(path.resolve(filename));
         await seed();
       }),
     );
 
-    Logger.debug('done');
+    Logger.info('done');
     process.exit(0);
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

@@ -3,6 +3,7 @@
 /* eslint-env jest */
 
 const { setupWithRunningApp, testUnauthenticatedFetch, testUnauthorizedFetch } = require('@/test/setup');
+
 const CONST = require('@/common/const');
 
 const CONFIG = require('@/common/config');
@@ -30,8 +31,8 @@ describe('Authentication', () => {
 
     DATA.CLIENT_ACCOUNT = {
       user: {
-        email: 'client@starter.com',
         password: 'password',
+        email: 'client@starter.com',
         name: 'Client',
         picture_uri: '...',
       },
@@ -106,6 +107,7 @@ describe('Authentication', () => {
       expect(response.status).toBe(200);
       const result = await response.json();
       expect(result.access_token).toBeDefined();
+      expect(result.audience).toBe(CONST.ROLE.CLIENT);
       expect(result.user).toBeDefined();
       CACHE.client = result;
     });

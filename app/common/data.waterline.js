@@ -1,5 +1,7 @@
 'use strict';
 
+/** @module DataWaterline */
+
 const EVENT = require('@/common/events');
 
 const CONFIG = require('@/common/config');
@@ -19,11 +21,14 @@ const glob = require('glob');
 const path = require('path');
 
 let waterline = null;
+
+/** Models */
 const models = {};
 
+/** Setup */
 async function setup() {
   return new Promise((resolve, reject) => {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     const modelsByIdentity = {};
     glob.sync('app/**/*.model.js').forEach((filename) => {
@@ -128,24 +133,25 @@ async function setup() {
 
         resolve(waterline);
 
-        Logger.debug('ready');
+        Logger.info('ready');
       });
     });
   });
 }
 
+/** Teardown */
 async function teardown() {
   return new Promise((resolve, reject) => {
-    Logger.debug('teardown ...');
+    Logger.info('teardown ...');
 
     if (!waterline) {
-      Logger.debug('teardown done.');
+      Logger.info('teardown done.');
       resolve();
       return;
     }
 
     waterline.teardown((err) => {
-      Logger.debug('teardown done.', err || '');
+      Logger.info('teardown done.', err || '');
 
       waterline = null;
 

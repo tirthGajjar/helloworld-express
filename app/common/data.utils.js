@@ -1,10 +1,12 @@
 'use strict';
 
+/** @module Data */
+
 const uuid = require('uuid');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const { spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 
 function generateUniqueId() {
   return uuid.v1();
@@ -77,16 +79,20 @@ function prepareModelHelpers(model) {
 }
 
 function clear() {
-  Logger.debug('running db:clear');
-  spawnSync('npm', ['run', 'db:clear'], {
-    stdio: 'ignore',
+  return new Promise((resolve, reject) => {
+    Logger.debug('running db:clear');
+    spawn('npm', ['run', 'db:clear'], {
+      stdio: 'ignore',
+    }).on('close', (code) => (code === 0 ? resolve() : reject(new Error('db:clear failed'))));
   });
 }
 
 function seed() {
-  Logger.debug('running db:seed');
-  spawnSync('npm', ['run', 'db:seed'], {
-    stdio: 'ignore',
+  return new Promise((resolve, reject) => {
+    Logger.debug('running db:seed');
+    spawn('npm', ['run', 'db:seed'], {
+      stdio: 'ignore',
+    }).on('close', (code) => (code === 0 ? resolve() : reject(new Error('db:seed failed'))));
   });
 }
 

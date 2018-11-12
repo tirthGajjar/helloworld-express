@@ -1,5 +1,7 @@
 'use strict';
 
+/** @module Data */
+
 const EVENT = require('@/common/events');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));

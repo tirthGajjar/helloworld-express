@@ -41,7 +41,7 @@ context.DataUtils = DataUtils;
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
     await Job.setup();
@@ -71,7 +71,7 @@ context.DataUtils = DataUtils;
       appConsole.context.$error = error;
     };
 
-    Logger.debug('ready');
+    Logger.info('ready');
 
     appConsole = repl.start();
 

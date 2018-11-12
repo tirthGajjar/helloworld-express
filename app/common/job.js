@@ -8,21 +8,21 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const queues = {};
 
 async function setup() {
-  Logger.debug('initiating ...');
+  Logger.info('initiating ...');
 
   glob.sync('app/**/*.job.js').forEach((filename) => {
-    Logger.debug('loading', filename);
+    Logger.debug('info', filename);
     const job = require(path.resolve(filename));
     queues[job.name] = job.queue;
   });
 
-  Logger.debug('ready');
+  Logger.info('ready');
 }
 
 async function teardown() {
-  Logger.debug('teardown ...');
+  Logger.info('teardown ...');
   // @TODO
-  Logger.debug('teardown done.');
+  Logger.info('teardown done.');
 }
 
 module.exports = {

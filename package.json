@@ -10,9 +10,9 @@
     "format:all": "prettier ./**/*.{md,json,js,css,scss} --write",
     "format:js": "eslint --ext .js --fix ./ ; exit 0",
     "test": "npm run test:unit ; npm run test:integration",
-    "test:unit": "jest \\.unit\\.test\\.",
-    "test:integration": "jest \\.integration\\.test\\.",
-    "test:any": "jest",
+    "test:unit": "jest --runInBand \\.unit\\.test\\.",
+    "test:integration": "jest --runInBand \\.integration\\.test\\.",
+    "test:any": "jest --runInBand",
     "start": "npm run cluster",
     "cluster": "pm2-dev pm2.json",
     "app:core": "nodemon --inspect --inspect-port=5900 ./app-core.js",
@@ -23,10 +23,10 @@
     "db:clear": "node ./scripts/db-clear.js;",
     "db:seed": "node ./scripts/db-seed.js;",
     "docs": "npm run docs:jsdoc ; npm run docs:documentation ; npm run docs:apib ; npm run docs:postman",
-    "docs:jsdoc": "jsdoc -c ./jsdoc.json",
+    "docs:jsdoc": "jsdoc -r ./app/ -d ./docs/_jsdoc",
     "docs:documentation": "documentation build app/** -f html -o docs/_documentation",
-    "docs:apib": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development aglio --theme-variables flatly -o /data/docs/api/index.html -i /data/docs/api/index.apib",
-    "docs:postman": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development sh -c 'cat $(find /data/ -name *.apib) | apiary2postman blueprint > /data/docs/API.postman_collection.json'"
+    "docs:apib": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development aglio --theme-variables flatly -o /data/docs/_apib/index.html -i /data/docs/api/index.apib",
+    "docs:postman": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development sh -c 'cat $(find /data/ -name *.apib) | apiary2postman blueprint > /data/docs/_postman/API.postman_collection.json'"
   },
   "dependencies": {
     "bcrypt": "~3.0.2",

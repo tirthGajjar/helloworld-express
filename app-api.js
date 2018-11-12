@@ -14,13 +14,13 @@ const Express = require('@/common/express');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
     await Job.setup();
     await Express.setup();
 
-    Logger.debug('ready');
+    Logger.info('ready');
     process.nextTick(() => EVENT.emit('api-ready'));
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

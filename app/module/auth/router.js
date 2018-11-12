@@ -9,6 +9,7 @@ const CONST = require('@/common/const');
 const ERROR = require('@/common/error');
 
 const User = require('./User.model');
+const Client = require('./Client.model');
 
 const AuthService = require('./auth.service');
 
@@ -48,6 +49,7 @@ router.post('/auth/login', async (req, res) => {
 
   res.send({
     access_token,
+    audience,
     user,
   });
 });
@@ -79,9 +81,16 @@ router.get('/auth/account', authenticatedMiddleware, async (req, res) => {
   const audience = req.audience;
   const user = req.user;
 
+  let client = null;
+
+  if (user._client) {
+    client = await Client.collection.findOne(user._client);
+  }
+
   res.send({
     audience,
     user,
+    client,
   });
 });
 

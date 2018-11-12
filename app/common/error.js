@@ -1,6 +1,8 @@
 'use strict';
 
-const ERROR = require('starter-lib/dist/common/error');
+/** @module ERROR */
+
+const ERROR = { ...require('starter-lib/dist/common/error') };
 
 module.exports = ERROR;
 

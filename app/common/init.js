@@ -55,12 +55,8 @@ const PREFIX = 'app';
 
 Logger.setup(PREFIX);
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   Logger.enable(`${PREFIX}*`);
-}
-
-if (process.env.NODE_ENV === 'test') {
-  Logger.enable(`${PREFIX}-test`);
 }
 
 /*

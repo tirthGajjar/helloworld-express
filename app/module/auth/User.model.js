@@ -59,5 +59,5 @@ const helpers = {};
 module.exports = {
   definition,
   helpers,
-  collection: null,
+  collection: {},
 };

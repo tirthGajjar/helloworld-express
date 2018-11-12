@@ -16,17 +16,17 @@ const Job = require('@/common/job');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
     await Job.setup();
 
     glob.sync('app/**/*.core.js').forEach((filename) => {
-      Logger.debug('loading', filename);
+      Logger.info('loading', filename);
       require(path.resolve(filename));
     });
 
-    Logger.debug('ready');
+    Logger.info('ready');
     process.nextTick(() => EVENT.emit('core-ready'));
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

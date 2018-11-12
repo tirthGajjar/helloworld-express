@@ -16,7 +16,7 @@ const Job = require('@/common/job');
 
 (async () => {
   try {
-    Logger.debug('initiating ...');
+    Logger.info('initiating ...');
 
     await Data.setup();
     await Job.setup();
@@ -30,7 +30,7 @@ const Job = require('@/common/job');
     jobs = Array.from(new Set(jobs));
 
     jobs.forEach((filename) => {
-      Logger.debug('loading', filename);
+      Logger.info('loading', filename);
       const job = require(path.resolve(filename));
       Logger.debug('job', job.name);
       if (Array.isArray(job.processor)) {
@@ -42,7 +42,7 @@ const Job = require('@/common/job');
       }
     });
 
-    Logger.debug('ready');
+    Logger.info('ready');
     process.nextTick(() => EVENT.emit('job-ready'));
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);

@@ -13,9 +13,9 @@ module.exports = async () => {
 
   record = await AuthService.createAdministratorAccount({
     user: {
+      password: 'password',
       email: 'admin@starter.com',
       phone: '10000000',
-      password: 'password',
       name: 'Starter Administrator',
       picture_uri: 'https://randomuser.me/api/portraits/lego/1.jpg',
     },
@@ -26,9 +26,9 @@ module.exports = async () => {
 
   record = await AuthService.createClientAccount({
     user: {
+      password: 'password',
       email: 'client@starter.com',
       phone: '20000000',
-      password: 'password',
       name: 'Starter Client',
       picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
     },
@@ -40,9 +40,9 @@ module.exports = async () => {
   for (let i = 1; i < 10; i++) {
     record = await AuthService.createAdministratorAccount({
       user: {
+        password: 'password',
         email: `admin+${i}@starter.com`,
         phone: `1000000${i}`,
-        password: 'password',
         name: `Starter Administrator ${i}`,
         picture_uri: `https://randomuser.me/api/portraits/lego/${i}.jpg`,
       },
@@ -51,9 +51,9 @@ module.exports = async () => {
 
     record = await AuthService.createClientAccount({
       user: {
+        password: 'password',
         email: `client+${i}@starter.com`,
         phone: `2000000${i}`,
-        password: 'password',
         name: `Starter Client ${i}`,
         picture_uri: `https://randomuser.me/api/portraits/men/2${i}.jpg`,
       },

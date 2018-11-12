@@ -67,10 +67,10 @@ Data is managed by [waterline](http://waterlinejs.org/).
 
 **References**
 
-- [waterline](http://waterlinejs.org/)
-- [waterline' repository](https://github.com/balderdashy/waterline)
-- [Waterline Docs](https://sailsjs.com/documentation/concepts/models-and-orm)
-- [Waterline Reference](https://sailsjs.com/documentation/reference/waterline-orm)
+- [Waterline](http://waterlinejs.org/)
+- [Waterline Repository](https://github.com/balderdashy/waterline) (check the code for proper documentation)
+- [Sails/Waterline Docs](https://sailsjs.com/documentation/concepts/models-and-orm) ()
+- [Sails/Waterline Reference](https://sailsjs.com/documentation/reference/waterline-orm)
 - [sails-mongo ](https://github.com/balderdashy/sails-mongo)
 - [sails-redis](https://github.com/balderdashy/sails-redis)
 
