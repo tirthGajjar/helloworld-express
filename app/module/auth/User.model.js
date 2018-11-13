@@ -36,7 +36,7 @@ const definition = {
     },
     picture_uri: {
       type: 'string',
-      required: true,
+      defaultsTo: 'https://randomuser.me/api/portraits/lego/1.jpg',
     },
 
     created_at: { ...DataMixin.attributes.created_at },

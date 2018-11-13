@@ -69,7 +69,6 @@ async function setup() {
       code: err.code || 'Unknown',
       message: err.message || 'Unknown error',
       extra: err.extra || undefined,
-      _stack: err.stack,
     });
   });
 

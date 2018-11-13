@@ -34,7 +34,7 @@ describe('Authentication', () => {
         password: 'password',
         email: 'client@starter.com',
         name: 'Client',
-        picture_uri: '...',
+        picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
       },
       client: {},
     };

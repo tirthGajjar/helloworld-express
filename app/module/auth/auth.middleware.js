@@ -1,7 +1,5 @@
 'use strict';
 
-/** @module auth/middleware */
-
 const CONST = require('@/common/const');
 
 const ERROR = require('@/common/error');
@@ -12,10 +10,6 @@ const AuthService = require('./auth.service');
 
 /**
  * Authenticated Middleware
- *
- * @param {ExpressRequest} req
- * @param {ExpressResponse} res
- * @param {function} next
  */
 
 async function authenticatedMiddleware(req, res, next) {
@@ -38,8 +32,6 @@ async function authenticatedMiddleware(req, res, next) {
 
 /**
  * Role-restricted Middleware
- *
- * @param {string} role
  */
 
 function roleRestrictedMiddleware(role) {

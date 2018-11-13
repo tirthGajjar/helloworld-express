@@ -74,13 +74,20 @@ async function validateAccessToken(token, audience = CONST.ROLE.CLIENT) {
   });
 }
 
+const AUTH_HEADER_BEARER = /^Bearer\ /g;
+const AUTH_HEADER_JWT = /^JWT\ /g;
+
 function extractAccessTokenFromRequest(req) {
   let token;
 
-  token = (req.headers.authorization || '').replace(/^(Bearer|JWT)\ /g, '');
+  token = req.headers.authorization || '';
 
-  if (!token) {
-    token = req.query.access_token || '';
+  if (AUTH_HEADER_BEARER.test(token)) {
+    token = token.replace(AUTH_HEADER_BEARER, '').trim();
+  } else if (AUTH_HEADER_JWT.test(token)) {
+    token = token.replace(AUTH_HEADER_JWT, '').trim();
+  } else {
+    token = '';
   }
 
   return token;

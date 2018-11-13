@@ -80,11 +80,17 @@ function validate(Model, data, strictMode = false) {
   );
 
   if (strictMode) {
-    data = Object.keys(Model.definition.attributes).reduce((acc, field) => {
-      if (VALIDATE_IGNORE.includes(field)) {
-        return { ...acc };
+    data = Object.entries(Model.definition.attributes).reduce((acc, [field, fieldConfig]) => {
+      const result = { ...acc };
+      if (field in data) {
+        result[field] = data[field];
+      } else if (fieldConfig.required) {
+        result[field] = null;
       }
-      return { ...acc, [field]: field in data ? data[field] : null };
+      // } else if (fieldConfig.defaultsTo) {
+      //   result[field] = fieldConfig.defaultsTo;
+      // }
+      return result;
     }, {});
   }
 
@@ -120,8 +126,6 @@ function validate(Model, data, strictMode = false) {
   });
   return [values, issues];
 }
-
-const VALIDATE_IGNORE = ['id', 'uid', 'created_at', 'updated_at'];
 
 module.exports = {
   attributes,

@@ -102,10 +102,6 @@ router.post('/auth/account/change-email', async (req, res) => {
   // @TODO implement?
 });
 
-router.post('/auth/account/change-phone', async (req, res) => {
-  // @TODO implement?
-});
-
 router.post('/auth/account/change-password', async (req, res) => {
   // @TODO implement
 });
