@@ -1,8 +1,12 @@
 'use strict';
 
+const uuidv1 = require('uuid/v1');
+
 /** @module Data */
 
-const DataUtils = require('./data.utils');
+function generateUniqueId() {
+  return uuidv1();
+}
 
 const attributes = {
   created_at: {
@@ -23,7 +27,7 @@ const attributes = {
 
 const lifecycles = {
   beforeCreate(record, next) {
-    record.uid = record.uid || DataUtils.generateUniqueId();
+    record.uid = record.uid || generateUniqueId();
     if (this.beforeSave) {
       this.beforeSave(record, next);
     } else {
@@ -44,10 +48,13 @@ const lifecycles = {
  *
  * @param {*} record
  */
-function customToJSON(record) {
+function customToJSON(Modal, record) {
   return Object.entries(record).reduce(
     (acc, [key, value]) => {
       if (key === 'id' || key === 'uid') {
+        return acc;
+      }
+      if (Modal.definition.attributes_to_strip_in_json.includes(key)) {
         return acc;
       }
       if (key.startsWith('_')) {
@@ -93,6 +100,11 @@ function validate(Model, data, strictMode = false) {
       return result;
     }, {});
   }
+
+  data = Object.entries(data).reduce(
+    (acc, [field, value]) => (Model.definition.attributes_to_strip_in_validation.includes(field) ? { ...acc } : { ...acc, [field]: value }),
+    {},
+  );
 
   Object.entries(data).forEach(([field, value]) => {
     try {

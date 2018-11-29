@@ -13,8 +13,6 @@ const EVENT = require('@/common/events');
 const Data = require('@/common/data');
 const Job = require('@/common/job');
 
-const DataUtils = require('@/common/data.utils');
-
 const context = {};
 
 context.fetch = global.fetch;
@@ -37,7 +35,13 @@ context.SANITIZE = require('@/common/sanitize');
 
 context.Data = Data;
 
-context.DataUtils = DataUtils;
+context.DataUtils = require('@/common/data/utils');
+
+context.DataService = require('@/common/data.service');
+
+context.RedisDataStore = require('@/common/RedisDataStore.service');
+
+context.MongoDataStore = require('@/common/MongoDataStore.service');
 
 (async () => {
   try {
@@ -48,7 +52,7 @@ context.DataUtils = DataUtils;
 
     let appConsole = null;
 
-    Object.assign(context, Data.models);
+    Object.assign(context, Data.waterline.models);
 
     context.Job = Job;
 
@@ -87,4 +91,5 @@ context.DataUtils = DataUtils;
 EVENT.once('shutdown', async () => {
   await Job.teardown();
   await Data.teardown();
+  process.exit(0);
 });

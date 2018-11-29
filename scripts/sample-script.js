@@ -1,8 +1,8 @@
 'use strict';
 
-if (process.env.NODE_ENV === 'production') {
-  process.exit(0);
-}
+// if (process.env.NODE_ENV === 'production') {
+//   process.exit(0);
+// }
 
 process.env.INSTANCE_ID = 'script';
 
@@ -11,6 +11,8 @@ require('@/common/init');
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const EVENT = require('@/common/events');
+
+const CONFIG = require('@/common/config');
 
 const Data = require('@/common/data');
 const Job = require('@/common/job');
@@ -27,7 +29,7 @@ const Job = require('@/common/job');
     // @PLACEHOLDER for custom scripts
 
     Logger.info('done');
-    process.exit(0);
+    EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
@@ -37,4 +39,5 @@ const Job = require('@/common/job');
 EVENT.once('shutdown', async () => {
   await Job.teardown();
   await Data.teardown();
+  process.exit(0);
 });

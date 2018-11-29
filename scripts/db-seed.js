@@ -4,11 +4,10 @@ if (process.env.NODE_ENV === 'production') {
   process.exit(0);
 }
 
-process.env.INSTANCE_ID = 'script';
+process.env.INSTANCE_ID = 'core';
+process.env.MIGRATE = 'drop';
 
 require('@/common/init');
-
-process.env.MIGRATE = 'drop';
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -27,16 +26,25 @@ const Data = require('@/common/data');
 
     Logger.info('processing ...');
 
-    await Promise.all(
-      glob.sync('app/**/*seed.js').map(async (filename) => {
-        Logger.info('loading', filename);
-        const seed = require(path.resolve(filename));
-        await seed();
-      }),
-    );
+    const FILES = glob.sync('app/**/*.seed.js');
+    // const FILES = [];
+
+    // await Promise.all(
+    //   FILES.map(async (filename) => {
+    //     Logger.info('loading', filename);
+    //     const seed = require(path.resolve(filename));
+    //     await seed();
+    //   }),
+    // );
+
+    for (const filename of FILES) {
+      Logger.info('loading', filename);
+      const seed = require(path.resolve(filename));
+      await seed();
+    }
 
     Logger.info('done');
-    process.exit(0);
+    EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     process.exit(1);
@@ -45,4 +53,5 @@ const Data = require('@/common/data');
 
 EVENT.once('shutdown', async () => {
   await Data.teardown();
+  process.exit(0);
 });

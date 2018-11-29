@@ -1,6 +1,6 @@
 'use strict';
 
-const DataMixin = require('@/common/data.mixin');
+const DataMixin = require('@/common/data/mixin');
 
 const definition = {
   identity: 'client',

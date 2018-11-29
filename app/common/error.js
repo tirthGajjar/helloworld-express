@@ -8,7 +8,7 @@ module.exports = ERROR;
 
 const WATERLINE_ERRORS = [
   {
-    message: 'Could not use specified `label`.  Cannot set "" (empty string) for a required attribute.',
+    message: 'Could not use specified `title`.  Cannot set "" (empty string) for a required attribute.',
   },
   {
     message: 'Missing value for required attribute `image_uri`.  Expected a string, but instead, got: undefined',
@@ -46,15 +46,17 @@ ERROR.InvalidRequestError = class InvalidRequestError extends ERROR.FailureError
 };
 
 /**
- * NotFoundError
+ * ValidationError
  *
- * throw new ERROR.NotFoundError()
+ * throw new ERROR.ValidationError()
+ * throw new ERROR.ValidationError('InvalidPayload', 'Invalid payload')
+ * throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
  */
 
-ERROR.NotFoundError = class NotFoundError extends ERROR.InvalidRequestError {
-  constructor(message, extra) {
-    super(404, 'NotFound', message || 'Not found', extra);
-    this.name = 'NotFoundError';
+ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError {
+  constructor(code, message, extra) {
+    super(400, code || 'InvalidRequest', message || 'Invalid request', extra);
+    this.name = 'ValidationError';
   }
 };
 
@@ -65,7 +67,7 @@ ERROR.NotFoundError = class NotFoundError extends ERROR.InvalidRequestError {
  */
 
 ERROR.InvalidCredentialsError = class InvalidCredentialsError extends ERROR.InvalidRequestError {
-  constructor(message, extra) {
+  constructor(message, extra = null) {
     super(400, 'InvalidCredentials', message || 'Invalid credentials', extra);
     this.name = 'InvalidCredentialsError';
   }
@@ -78,7 +80,7 @@ ERROR.InvalidCredentialsError = class InvalidCredentialsError extends ERROR.Inva
  */
 
 ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.InvalidRequestError {
-  constructor(message, extra) {
+  constructor(message, extra = null) {
     super(401, 'Unauthenticated', message || 'Unauthenticated', extra);
     this.name = 'UnauthenticatedError';
   }
@@ -91,23 +93,21 @@ ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.InvalidReq
  */
 
 ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.InvalidRequestError {
-  constructor(message, extra) {
+  constructor(message, extra = null) {
     super(403, 'Unauthorized', message || 'Unauthorized', extra);
     this.name = 'UnauthorizedError';
   }
 };
 
 /**
- * ValidationError
+ * NotFoundError
  *
- * throw new ERROR.ValidationError()
- * throw new ERROR.ValidationError('InvalidPayload', 'Invalid payload')
- * throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
+ * throw new ERROR.NotFoundError()
  */
 
-ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError {
-  constructor(code, message, extra) {
-    super(400, code || 'InvalidRequest', message || 'Invalid request', extra);
-    this.name = 'ValidationError';
+ERROR.NotFoundError = class NotFoundError extends ERROR.InvalidRequestError {
+  constructor(message, extra = null) {
+    super(404, 'NotFound', message || 'Not found', extra);
+    this.name = 'NotFoundError';
   }
 };

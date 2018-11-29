@@ -69,11 +69,11 @@ npm run test:unit
 npm run test:integration
 
 # run unit tests for specific module
-npm run test:any -- '/sample/*.unit.test.'
+npm run test:any -- '/task/*.unit.test.'
 
 # run integration tests for specific module
-npm run test:any -- '/sample/*.integration.test.'
+npm run test:any -- '/task/*.integration.test.'
 
 # run specific test
-npm run test:any -- app/module/sample/sample.unit.test.js
+npm run test:any -- app/module/task/task.unit.test.js
 ```

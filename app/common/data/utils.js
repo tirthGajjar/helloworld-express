@@ -2,71 +2,95 @@
 
 /** @module Data */
 
-const uuid = require('uuid');
-
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawn } = require('child_process');
 
-function generateUniqueId() {
-  return uuid.v1();
-}
-
-function generateRandomToken() {
-  return uuid.v4();
-}
+const DataMixin = require('./mixin');
 
 function prepareModelDefinition(model) {
-  const DataMixin = require('./data.mixin');
-
   const result = {
     ...model.definition,
   };
 
+  result.tableName = result.tableName || result.identity;
+
   if (result.beforeCreate) {
     const beforeCreate = result.beforeCreate;
-    result.beforeCreate = function (record, next) {
-      DataMixin.lifecycles.beforeCreate.call(this, record, (err) => {
+
+    result.beforeCreate = (record, next) => {
+      DataMixin.lifecycles.beforeCreate.call(result, record, (err) => {
         if (err) {
           next(err);
-          return;
+        } else {
+          beforeCreate(record, next);
         }
-
-        beforeCreate(record, next);
       });
     };
   } else {
-    result.beforeCreate = DataMixin.lifecycles.beforeCreate;
+    result.beforeCreate = DataMixin.lifecycles.beforeCreate.bind(result);
   }
 
   if (result.beforeUpdate) {
     const beforeUpdate = result.beforeUpdate;
-    result.beforeUpdate = function (record, next) {
-      DataMixin.lifecycles.beforeUpdate.call(this, record, (err) => {
+
+    result.beforeUpdate = (record, next) => {
+      DataMixin.lifecycles.beforeUpdate.call(result, record, (err) => {
         if (err) {
           next(err);
-          return;
+        } else {
+          beforeUpdate(record, next);
         }
-
-        beforeUpdate(record, next);
       });
     };
   } else {
-    result.beforeUpdate = DataMixin.lifecycles.beforeUpdate;
+    result.beforeUpdate = DataMixin.lifecycles.beforeUpdate.bind(result);
   }
 
-  Object.entries(result).forEach(([key, value]) => {
-    if (typeof value === 'function' && key !== 'customToJSON') {
-      result[key] = value.bind(result);
-    }
-  });
+  if (!result.customToJSON) {
+    result.customToJSON = function () {
+      return DataMixin.customToJSON(model, this);
+    };
+  }
+
+  result.attributes = {
+    ...(!model.primaryKey && !result.attributes.id
+      ? {
+        id: {
+          type: 'string',
+          columnName: '_id',
+          autoMigrations: {},
+        },
+        ...result.attributes,
+      }
+      : {}),
+    uid: {
+      type: 'string',
+      allowNull: false,
+      validations: {
+        isUUID: true,
+      },
+      autoMigrations: {
+        columnType: 'string',
+        unique: true,
+        autoIncrement: false,
+      },
+    },
+    ...result.attributes,
+  };
+
+  if (!result.attributes_to_strip_in_validation) {
+    result.attributes_to_strip_in_validation = [];
+  }
+
+  if (!result.attributes_to_strip_in_json) {
+    result.attributes_to_strip_in_json = [];
+  }
 
   model.definition = result;
 }
 
 function prepareModelHelpers(model) {
-  const DataMixin = require('./data.mixin');
-
   const result = {
     validate(data, strictMode) {
       return DataMixin.validate(model, data, strictMode);
@@ -97,8 +121,6 @@ function seed() {
 }
 
 module.exports = {
-  generateUniqueId,
-  generateRandomToken,
   prepareModelDefinition,
   prepareModelHelpers,
   clear,

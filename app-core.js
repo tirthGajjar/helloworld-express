@@ -37,4 +37,5 @@ const Job = require('@/common/job');
 EVENT.once('shutdown', async () => {
   await Job.teardown();
   await Data.teardown();
+  process.exit(0);
 });

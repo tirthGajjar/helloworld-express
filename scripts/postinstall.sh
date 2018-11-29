@@ -1,3 +1,3 @@
 #!/bin/bash
 
-# ln -fsT '../app' './node_modules/@'
+ln -fsT '../app' './node_modules/@'

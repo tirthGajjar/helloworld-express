@@ -4,7 +4,7 @@
  * Load polyfills
  */
 
-require('@/common/polyfill');
+require('./polyfill');
 
 /*
  * Define global relative file path helper
@@ -46,33 +46,29 @@ const fs = require('fs');
 process.env.MIGRATE = process.env.INSTANCE_ID === 'core' ? process.env.MIGRATE || 'safe' : 'safe';
 
 /*
- * Setup Logger
- */
-
-const Logger = require('@/common/logger');
-
-const PREFIX = 'app';
-
-Logger.setup(PREFIX);
-
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-  Logger.enable(`${PREFIX}*`);
-}
-
-/*
  * Load global event bus
  */
 
-const EVENT = require('@/common/events');
+const EVENT = require('./events');
 
 /*
  * Load configurations
  */
 
-const CONFIG = require('@/common/config');
+const CONFIG = require('./config');
 
-if (process.env.NODE_ENV === 'development') {
-  Logger.debug('CONFIG', JSON.stringify(CONFIG, null, 2));
+/*
+ * Setup Logger
+ */
+
+const Logger = require('./logger');
+
+const PREFIX = 'app';
+
+Logger.setup(PREFIX);
+
+if (!CONFIG.IS_TEST && (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')) {
+  Logger.enable(`${PREFIX}*`);
 }
 
 /*
@@ -83,7 +79,15 @@ process.on('SIGINT', () => {
   Logger.debug('shutdown initiated ...');
   process.nextTick(() => EVENT.emit('shutdown'));
   setTimeout(() => {
-    Logger.debug('exiting.');
+    Logger.debug('exiting');
     process.nextTick(() => process.exit(0));
   }, 1000);
 });
+
+/**
+ * Other
+ */
+
+if (process.env.NODE_ENV === 'development') {
+  Logger.debug('CONFIG', JSON.stringify(CONFIG, null, 2));
+}

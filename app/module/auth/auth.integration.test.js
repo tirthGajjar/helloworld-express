@@ -21,7 +21,7 @@ describe('Authentication', () => {
      * - login X as client with failure and success
      * - retrieve user profile with failure (unauthenticated) and success (authenticated)
      * - initiate password reset as X with failure and success
-     * - continue password reset as X with failure and success
+     * - perform password reset as X with failure and success
      * - relogin X as client
      * - make sure X login as admin do not work
      * - make sure X access_token do not work for other audiences

@@ -11,7 +11,8 @@
     "node": true
   },
   "rules": {
-    "arrow-parens": ["warn", "always"]
+    "arrow-parens": ["warn", "always"],
+    "camelcase": ["warn"]
   },
   "globals": {
     "$filepath": true,

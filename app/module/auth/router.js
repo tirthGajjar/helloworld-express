@@ -8,10 +8,21 @@ const CONST = require('@/common/const');
 
 const ERROR = require('@/common/error');
 
+const CONFIG = require('@/common/config');
+
+const SANITIZE = require('@/common/sanitize');
+
+const { $t } = require('@/common/intl');
+
 const User = require('./User.model');
 const Client = require('./Client.model');
 
+const EmailJob = require('@/shared/email/email.job');
+
 const AuthService = require('./auth.service');
+
+const DataService = require('@/common/data.service');
+const RedisDataStore = require('@/common/RedisDataStore.service');
 
 const router = express.Router();
 
@@ -55,26 +66,83 @@ router.post('/auth/login', async (req, res) => {
 });
 
 router.post('/auth/signup', async (req, res) => {
-  const { user, client } = await AuthService.createClientAccount({
+  const account = await AuthService.createClientAccount({
     user: req.body.user,
     client: req.body.client,
   });
 
-  const access_token = await AuthService.generateAccessToken(user);
+  const access_token = await AuthService.generateAccessToken(account.user);
 
   res.send({
     access_token,
-    user,
-    client,
+    ...account,
   });
 });
 
 router.post('/auth/password-reset/initiate', async (req, res) => {
-  // @TODO implement
+  const email = SANITIZE.email(req.body.email || '');
+
+  if (!email) {
+    throw new ERROR.InvalidRequestError(); // @TODO message
+  }
+
+  const user = await User.collection.findOne({
+    email,
+  });
+
+  if (user) {
+    const token = DataService.generateToken();
+    const tokenPayload = {
+      email,
+    };
+
+    await RedisDataStore.storeWithExpiry(`password-reset:${token}`, tokenPayload, (3 * CONST.DURATION_DAY) / 1000);
+
+    EmailJob.queue.add({
+      to: email,
+      subject: $t('Password Reset'),
+      template: 'app/module/auth/password-reset',
+      templateContext: {
+        continue_url: `${CONFIG.CLIENT_APP_URL}/password-reset/perform?token=${token}`,
+      },
+    });
+  }
+
+  res.send({});
 });
 
-router.post('/auth/password-reset/continue', async (req, res) => {
-  // @TODO implement
+router.post('/auth/password-reset/perform', async (req, res) => {
+  const { token, password } = req.body;
+
+  const tokenPayload = await RedisDataStore.retrieve(`password-reset:${token}`);
+
+  if (tokenPayload === null) {
+    throw new ERROR.InvalidRequestError(); // @TODO message
+  }
+
+  const encryptedPassword = await AuthService.encryptPassword(password);
+
+  const user = await User.collection.updateOne(
+    {
+      email: tokenPayload.email,
+    },
+    {
+      password: encryptedPassword,
+    },
+  );
+
+  await RedisDataStore.clear(`password-reset:${token}`);
+
+  EmailJob.queue.add({
+    to: user.email,
+    subject: $t('Password Reset Confirmation'),
+    template: 'email/password-reset-alert',
+    templateContext: {
+      user: user.toJSON(),
+    },
+  });
+
+  res.send({});
 });
 
 router.get('/auth/account', authenticatedMiddleware, async (req, res) => {

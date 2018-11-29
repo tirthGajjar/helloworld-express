@@ -2,7 +2,7 @@
 
 const CONST = require('@/common/const');
 
-const DataMixin = require('@/common/data.mixin');
+const DataMixin = require('@/common/data/mixin');
 
 const definition = {
   identity: 'user',
@@ -17,23 +17,33 @@ const definition = {
         isIn: Object.values(CONST.ROLE),
       },
     },
+
     password: {
       type: 'string',
       required: true,
     },
+
     email: {
       type: 'string',
       required: true,
       validations: {
         isEmail: true,
       },
-      // @TODO make unique
+      autoMigrations: {
+        unique: true,
+      },
     },
+
+    email_verified: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
+
     name: {
       type: 'string',
       required: true,
-      // @TODO add index
     },
+
     picture_uri: {
       type: 'string',
       defaultsTo: 'https://randomuser.me/api/portraits/lego/1.jpg',
@@ -48,10 +58,25 @@ const definition = {
     },
   },
 
-  customToJSON() {
-    const { password, ...record } = DataMixin.customToJSON(this);
-    return record;
+  attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],
+
+  attributes_to_strip_in_json: ['password'],
+
+  async onBeforeReady(Model, nativeCollection) {
+    await nativeCollection.ensureIndex({
+      name: 1,
+    });
   },
+
+  // customToJSON() {
+  //   const record = DataMixin.customToJSON(module.exports, this);
+  //   record.initials = record.name
+  //     .split(/\W+/)
+  //     .map((w) => w[0] || '')
+  //     .join('')
+  //     .toUpperCase();
+  //   return record;
+  // },
 };
 
 const helpers = {};

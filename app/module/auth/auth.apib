@@ -18,11 +18,12 @@
 
         {
             "access_token": "ACCESS_TOKEN",
+            "audience": "client",
             "user": {
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "email": "client@starter.com",
                 "name": "Client",
-                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -42,7 +43,10 @@
                 "email": "client@starter.com",
                 "password": "password",
                 "name": "Client",
-                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
+            },
+            "client": {
+              "...": "..."
             }
         }
 
@@ -54,7 +58,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "email": "client@starter.com",
                 "name": "Client",
-                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -80,7 +84,7 @@
         }
 
 
-### Continue password reset [POST /auth/password-reset/continue]
+### Perform password reset [POST /auth/password-reset/perform]
 
 + Request (application/json)
 
@@ -97,7 +101,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "email": "client@starter.com",
                 "name": "Client",
-                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 
@@ -117,7 +121,7 @@
                 "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
                 "email": "client@starter.com",
                 "name": "Client",
-                "picture": "https://randomuser.me/api/portraits/lego/1.jpg"
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
             }
         }
 

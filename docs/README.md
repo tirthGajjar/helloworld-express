@@ -14,8 +14,7 @@ app
 ├── module
 │   └── sample
 │       ├── sample.router.js
-│       ├── SamplePerson.model.js
-│       ├── SamplePet.model.js
+│       ├── Sample.model.js
 │       ├── sample.job.js
 │       ├── sample.script.js
 │       ├── sample.seed.js
@@ -72,7 +71,6 @@ Data is managed by [waterline](http://waterlinejs.org/).
 - [Sails/Waterline Docs](https://sailsjs.com/documentation/concepts/models-and-orm) ()
 - [Sails/Waterline Reference](https://sailsjs.com/documentation/reference/waterline-orm)
 - [sails-mongo ](https://github.com/balderdashy/sails-mongo)
-- [sails-redis](https://github.com/balderdashy/sails-redis)
 
 ## Jobs / Queues
 

@@ -17,14 +17,14 @@
 - CRUD operations:
   - `GET /role/module/entity` list entities
   - `POST /role/module/entity/create` create entity
-  - `GET /role/module/entity/:uid` get entity
-  - `POST /role/module/entity/:uid/edit` edit entity
-  - `POST /role/module/entity/:uid/delete` delete entity
+  - `GET /role/module/entity/:id` get entity
+  - `POST /role/module/entity/:id/edit` edit entity
+  - `POST /role/module/entity/:id/delete` delete entity
 
 Example:
 
 - `GET /any/content/post`
 - `POST /admin/content/post/create`
-- `GET /any/content/post/:uid`
-- `POST /admin/content/post/:uid/edit`
-- `POST /admin/content/post/:uid/delete`
+- `GET /any/content/post/:id`
+- `POST /admin/content/post/:id/edit`
+- `POST /admin/content/post/:id/delete`

@@ -20,7 +20,7 @@ async function setup() {
 
   app = express();
 
-  // trust proxy
+  // Enable proxy trust
   app.enable('trust proxy');
 
   // Showing stack errors
@@ -29,6 +29,7 @@ async function setup() {
   // Enable logger (morgan)
   app.use(require('morgan')(process.env.LOGGER_FORMAT || 'dev'));
 
+  // Enable CORS in development
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
@@ -46,18 +47,22 @@ async function setup() {
     });
   }
 
+  // Delay response in development
+  if (process.env.NODE_ENV === 'development') {
+    app.use((req, res, next) => setTimeout(() => next(), 1000));
+  }
+
+  // Handle JSON
   app.use(express.json({}));
 
   // Load routers
-
   glob.sync('app/**/*router.js').forEach((filename) => {
     Logger.info('loading', filename);
-    const router = require(path.resolve(filename));
-    app.use(router.prefix, router.router);
+    const item = require(path.resolve(filename));
+    app.use(item.prefix, item.router);
   });
 
   // Handle errors
-
   app.use((err, req, res, next) => {
     console.error(err);
 
@@ -93,23 +98,22 @@ async function teardown() {
     Logger.info('teardown ...');
 
     if (!http) {
-      Logger.info('teardown done.');
+      Logger.info('teardown done');
       resolve();
       return;
     }
 
     http.close((err) => {
-      Logger.info('teardown done.', err || '');
+      Logger.info('teardown done', err || '');
 
       app = null;
       http = null;
 
       if (err) {
         reject(err);
-        return;
+      } else {
+        resolve();
       }
-
-      resolve();
     });
   });
 }

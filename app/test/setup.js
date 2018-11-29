@@ -7,13 +7,15 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const { spawn } = require('child_process');
 
 const Data = require('@/common/data');
-const DataUtils = require('@/common/data.utils');
+const DataUtils = require('@/common/data/utils');
 
 const User = require('@/module/auth/User.model');
 const AuthService = require('@/module/auth/auth.service');
 
 function setupWithData(mode) {
   beforeAll(async () => {
+    jest.setTimeout(10000);
+
     if (mode === 'seed') {
       await DataUtils.seed();
     } else {
@@ -25,7 +27,7 @@ function setupWithData(mode) {
 
   afterAll(async (next) => {
     await Data.teardown();
-    setTimeout(() => next(), 3000);
+    next();
   });
 }
 
@@ -56,10 +58,10 @@ function setupWithRunningApp(mode) {
     });
   });
 
-  afterAll((next) => {
+  afterAll(async (next) => {
+    await Data.teardown();
     cluster.on('exit', () => next());
     cluster.kill('SIGINT');
-    // setTimeout(() => cluster.kill('SIGTERM'), 2000);
   });
 }
 

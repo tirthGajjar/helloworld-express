@@ -32,4 +32,5 @@ EVENT.once('shutdown', async () => {
   await Express.teardown();
   await Job.teardown();
   await Data.teardown();
+  process.exit(0);
 });

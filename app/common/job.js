@@ -8,7 +8,7 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const queues = {};
 
 async function setup() {
-  Logger.info('initiating ...');
+  Logger.info('setup ...');
 
   glob.sync('app/**/*.job.js').forEach((filename) => {
     Logger.info('loading', filename);
@@ -16,13 +16,15 @@ async function setup() {
     queues[job.name] = job.queue;
   });
 
-  Logger.info('ready');
+  Logger.info('setup done');
 }
 
 async function teardown() {
   Logger.info('teardown ...');
-  // @TODO
-  Logger.info('teardown done.');
+
+  await Promise.all(Object.values(queues).map((queue) => queue.close()));
+
+  Logger.info('teardown done');
 }
 
 module.exports = {

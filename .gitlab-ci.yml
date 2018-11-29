@@ -38,9 +38,9 @@ test:unit:
   tags:
     - docker
   services:
-    - name: mongo:3.6
+    - name: mongo:4.0
       alias: mongo
-    - name: redis:4.0
+    - name: redis:5.0
       alias: redis
   script:
     - export MONGODB_URI=mongodb://mongo:27017/Test
@@ -54,9 +54,9 @@ test:integration:
   tags:
     - docker
   services:
-    - name: mongo:3.6
+    - name: mongo:4.0
       alias: mongo
-    - name: redis:4.0
+    - name: redis:5.0
       alias: redis
   script:
     - export MONGODB_URI=mongodb://mongo:27017/Test

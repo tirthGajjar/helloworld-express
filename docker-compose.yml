@@ -1,0 +1,39 @@
+version: '2.3'
+
+services:
+
+  starter-core:
+    build: .
+    container_name: starter-core
+    hostname: starter-core
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+    command: pm2-runtime app-core.js
+    environment: &environment
+        NODE_ENV: development
+        MONGODB_URI: mongodb://172.18.0.1:27017/Starter
+        REDIS_STORAGE_URI: redis://172.18.0.1:6379/0
+        REDIS_CACHE_URI: redis://172.18.0.1:6379/1
+        REDIS_JOB_URI: redis://172.18.0.1:6379/2
+
+  starter-job:
+    build: .
+    container_name: starter-job
+    hostname: starter-job
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+    command: pm2-runtime app-job.js
+    environment:
+      <<: *environment
+
+  starter-api:
+    build: .
+    container_name: starter-api
+    hostname: starter-api
+    ports:
+      - 127.0.0.1:7100:5000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+    command: pm2-runtime app-api.js
+    environment:
+      <<: *environment

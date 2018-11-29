@@ -40,12 +40,10 @@ async function generateAccessToken(user, audience = CONST.ROLE.CLIENT) {
       (err, token) => {
         if (err) {
           reject(err);
-          return;
+        } else {
+          // TokenStore.setex(`auth:${token}`, AUTH_JWT_EXPIRATION, user.id);
+          resolve(token);
         }
-
-        // TokenStore.setex(`auth:${token}`, AUTH_JWT_EXPIRATION, user.uid);
-
-        resolve(token);
       },
     );
   });
@@ -63,12 +61,10 @@ async function validateAccessToken(token, audience = CONST.ROLE.CLIENT) {
         if (err) {
           // reject(err);
           resolve(null);
-          return;
+        } else {
+          // TokenStore.get(`auth:${token}`, () => { /* ... */});
+          resolve(payload);
         }
-
-        // TokenStore.get(`auth:${token}`, () => { /* ... */});
-
-        resolve(payload);
       },
     );
   });
@@ -93,32 +89,34 @@ function extractAccessTokenFromRequest(req) {
   return token;
 }
 
-async function createAdministratorAccount({ user: userData, client: clientData }) {
-  userData = userData || {};
-  clientData = userData || {};
+async function createAdministratorAccount({ user: user_data, client: client_data }) {
+  user_data = user_data || {};
+  client_data = client_data || {};
 
-  userData.role = CONST.ROLE.ADMIN;
+  let user_record = { ...user_data };
+  let client_record = { ...client_data };
 
   let issues = [];
   let _issues;
 
-  [userData, _issues] = User.helpers.validate(userData, true);
+  [user_record, _issues] = User.helpers.validate(user_record, true);
   issues = [...issues, ..._issues];
 
-  [clientData, _issues] = Client.helpers.validate(clientData, true);
+  [client_record, _issues] = Client.helpers.validate(client_record, true);
   issues = [...issues, ..._issues];
 
   if (issues.length) {
     throw new ERROR.ValidationError(null, null, { issues });
   }
 
-  userData.password = await encryptPassword(userData.password);
+  user_record.role = CONST.ROLE.ADMIN;
+  user_record.password = await encryptPassword(user_data.password || 'password');
 
-  let user = await User.collection.create(userData).fetch();
+  let user = await User.collection.create(user_record).fetch();
 
   const client = await Client.collection
     .create({
-      ...clientData,
+      ...client_record,
       uid: user.uid,
       _user: user.id,
     })
@@ -134,32 +132,34 @@ async function createAdministratorAccount({ user: userData, client: clientData }
   };
 }
 
-async function createClientAccount({ user: userData, client: clientData }) {
-  userData = userData || {};
-  clientData = userData || {};
+async function createClientAccount({ user: user_data, client: client_data }) {
+  user_data = user_data || {};
+  client_data = client_data || {};
 
-  userData.role = CONST.ROLE.CLIENT;
+  let user_record = { ...user_data };
+  let client_record = { ...client_data };
 
   let issues = [];
   let _issues;
 
-  [userData, _issues] = User.helpers.validate(userData, true);
+  [user_record, _issues] = User.helpers.validate(user_record, true);
   issues = [...issues, ..._issues];
 
-  [clientData, _issues] = Client.helpers.validate(clientData, true);
+  [client_record, _issues] = Client.helpers.validate(client_record, true);
   issues = [...issues, ..._issues];
 
   if (issues.length) {
     throw new ERROR.ValidationError(null, null, { issues });
   }
 
-  userData.password = await encryptPassword(userData.password);
+  user_record.role = CONST.ROLE.CLIENT;
+  user_record.password = await encryptPassword(user_data.password || 'password');
 
-  let user = await User.collection.create(userData).fetch();
+  let user = await User.collection.create(user_record).fetch();
 
   const client = await Client.collection
     .create({
-      ...clientData,
+      ...client_record,
       uid: user.uid,
       _user: user.id,
     })
