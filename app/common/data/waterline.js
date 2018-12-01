@@ -69,6 +69,15 @@ async function setup() {
       migrate: process.env.MIGRATE,
       schema: true,
       primaryKey: 'id',
+      attributes: {
+        id: {
+          type: 'string',
+          columnName: '_id',
+          autoMigrations: {
+            autoIncrement: false,
+          },
+        },
+      },
     },
   };
 
@@ -97,12 +106,13 @@ async function setup() {
     });
 
     await Promise.all(
-      Object.values(models).map(async (Model) => {
-        if (Model.collection.onBeforeReady) {
-          const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
-          const nativeCollection = nativeClient.collection(Model.collection.tableName);
-          await Model.collection.onBeforeReady(Model, nativeCollection);
+      Object.values(models).map(async (model) => {
+        if (!model.collection.onBeforeReady) {
+          return;
         }
+        const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
+        const nativeCollection = nativeClient.collection(model.collection.tableName);
+        await model.collection.onBeforeReady(model, nativeCollection);
       }),
     );
   }
@@ -143,16 +153,8 @@ async function teardown() {
 }
 
 async function clear() {
-  return new Promise((resolve, reject) => {
-    const mongo = ontology.datastores.mongo.adapter.datastores.mongo.manager;
-    mongo.dropDatabase((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
+  await nativeClient.dropDatabase();
 }
 
 module.exports = {

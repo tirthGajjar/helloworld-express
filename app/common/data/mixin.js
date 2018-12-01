@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable no-invalid-this */
+
 const uuidv1 = require('uuid/v1');
 
 /** @module Data */
@@ -27,7 +29,9 @@ const attributes = {
 
 const lifecycles = {
   beforeCreate(record, next) {
-    record.uid = record.uid || generateUniqueId();
+    if (this.dontUseObjectIds && this.primaryKey === 'id') {
+      record.id = record.id || generateUniqueId();
+    }
     if (this.beforeSave) {
       this.beforeSave(record, next);
     } else {
@@ -51,21 +55,21 @@ const lifecycles = {
 function customToJSON(Modal, record) {
   return Object.entries(record).reduce(
     (acc, [key, value]) => {
-      if (key === 'id' || key === 'uid') {
+      if (key === 'id' || key === '_id') {
         return acc;
       }
       if (Modal.definition.attributes_to_strip_in_json.includes(key)) {
         return acc;
       }
-      if (key.startsWith('_')) {
-        if (typeof value === 'object' && value) {
-          return { ...acc, [key.substr(1)]: value };
-        }
-        return acc;
-      }
+      // if (key.startsWith('_')) {
+      //   if (typeof value === 'object' && value) {
+      //     return { ...acc, [key.substr(1)]: value };
+      //   }
+      //   return acc;
+      // }
       return { ...acc, [key]: value };
     },
-    { id: record.uid },
+    { id: record.id },
   );
 }
 
@@ -139,9 +143,65 @@ function validate(Model, data, strictMode = false) {
   return [values, issues];
 }
 
+/**
+ * retrieve association collections
+ *
+ * @param {object} collection
+ * @param {string} field
+ */
+function association(field) {
+  const collection = this;
+  const collections = collection.waterline.collections;
+  const config = collection.attributes[field];
+
+  if (!config.collection) {
+    throw new Error('invalid operation: field is not an association');
+  }
+
+  const targetCollection = collections[config.collection];
+
+  const throughCollection = collections[config.through]
+    || collections[`${collection.identity}_${field}__${config.collection}_${config.via}`]
+    || collections[`${config.collection}_${config.via}__${collection.identity}_${field}`];
+
+  const attributes = {};
+
+  if (throughCollection) {
+    const attributeByModel = Object.entries(throughCollection.attributes).reduce(
+      (acc, [attribute, config]) => ({ ...acc, [config.model || attribute]: attribute }),
+      {},
+    );
+    attributes.self = attributeByModel[collection.identity];
+    attributes.target = attributeByModel[targetCollection.identity];
+  } else {
+    const attributeByModel = Object.entries(targetCollection.attributes).reduce(
+      (acc, [attribute, config]) => ({ ...acc, [config.model || attribute]: attribute }),
+      {},
+    );
+    attributes.self = attributeByModel[collection.identity];
+  }
+
+  return [targetCollection, throughCollection, attributes];
+}
+
+async function lookupByAssociationWithId(field, criterion) {
+  const [_, throughCollection, attributes] = this.association(field);
+
+  const records = await throughCollection
+    .find()
+    .where({ [attributes.target]: criterion })
+    .select([attributes.self]);
+
+  const ids = records.map((item) => item[attributes.self]);
+
+  return ids;
+}
+
 module.exports = {
   attributes,
   lifecycles,
   customToJSON,
   validate,
+  association,
+  lookupByAssociationWithId,
 };

@@ -26,8 +26,8 @@ const Data = require('@/common/data');
 
     Logger.info('processing ...');
 
-    const FILES = glob.sync('app/**/*.seed.js');
-    // const FILES = [];
+    // const FILES = glob.sync('app/**/*.seed.js');
+    const FILES = ['app/module/auth/auth.seed.js', 'app/module/task/task.seed.js'];
 
     // await Promise.all(
     //   FILES.map(async (filename) => {

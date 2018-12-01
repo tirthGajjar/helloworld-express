@@ -29,16 +29,15 @@ router.use(authenticatedMiddleware);
 // });
 
 router.get('/task', async (req, res) => {
-  const data = await Task.collection.find();
+  const data = await Task.collection.find().populate('_owner');
+
   res.send({
     data,
   });
 });
 
 router.get('/task/:task_id', async (req, res) => {
-  const data = await Task.collection.findOne({
-    uid: req.params.task_id,
-  });
+  const data = await Task.collection.findOne(req.params.task_id);
 
   if (!data) {
     throw new ERROR.NotFoundError();
@@ -70,12 +69,7 @@ router.post('/task/:task_id/edit', async (req, res) => {
     throw new ERROR.ValidationError(null, null, { issues });
   }
 
-  const data = await Task.collection.updateOne(
-    {
-      uid: req.params.task_id,
-    },
-    record,
-  );
+  const data = await Task.collection.updateOne(req.params.task_id, record);
 
   if (!data) {
     throw new ERROR.NotFoundError();
@@ -87,9 +81,7 @@ router.post('/task/:task_id/edit', async (req, res) => {
 });
 
 router.post('/task/:task_id/delete', async (req, res) => {
-  const data = await Task.collection.archiveOne({
-    uid: req.params.task_id,
-  });
+  const data = await Task.collection.archiveOne(req.params.task_id);
 
   if (!data) {
     throw new ERROR.NotFoundError();

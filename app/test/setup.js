@@ -67,7 +67,7 @@ function setupWithRunningApp(mode) {
 
 async function getAuthenticatedUserByEmail(email, audience) {
   const account = {};
-  account.user = await User.collection.findOne({ email });
+  account.user = await User.collection.findOne().where({ email });
   account.access_token = await AuthService.generateAccessToken(account.user, audience);
   account.audience = audience;
   account.user = account.user.toJSON();

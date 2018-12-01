@@ -7,6 +7,7 @@ const EVENT = require('@/common/events');
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const DataWaterline = require('./waterline');
+const DataGraphql = require('./graphql');
 const DataRedisStorage = require('./redis.storage');
 const DataRedisCache = require('./redis.cache');
 
@@ -15,9 +16,14 @@ const initialize = require('./initialize');
 async function setup() {
   Logger.info('setup ...');
 
-  await Promise.all([DataWaterline.setup(), DataRedisStorage.setup(), DataRedisCache.setup()]);
+  await Promise.all([
+    DataWaterline.setup().then(() => DataGraphql.setup()),
+    DataRedisStorage.setup(),
+    DataRedisCache.setup(),
+  ]);
 
   module.exports.waterline = DataWaterline;
+  module.exports.graphql = DataGraphql;
   module.exports.redisStorage = DataRedisStorage;
   module.exports.redisCache = DataRedisCache;
 
@@ -31,9 +37,15 @@ async function setup() {
 async function teardown() {
   Logger.info('teardown ...');
 
-  await Promise.all([DataWaterline.teardown(), DataRedisStorage.teardown(), DataRedisCache.teardown()]);
+  await Promise.all([
+    DataWaterline.teardown(),
+    DataGraphql.teardown(),
+    DataRedisStorage.teardown(),
+    DataRedisCache.teardown(),
+  ]);
 
   module.exports.waterline = null;
+  module.exports.graphql = null;
   module.exports.redisStorage = null;
   module.exports.redisCache = null;
 

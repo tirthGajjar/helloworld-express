@@ -10,7 +10,7 @@ const Store = require('@/module/shared/store.model');
  * @param {string} key
  */
 async function retrieve(key) {
-  const record = await Store.collection.findOne({ key });
+  const record = await Store.collection.findOne(key);
   return record ? record.value || null : null;
 }
 
@@ -25,11 +25,11 @@ async function store(key, value) {
     value = null;
   }
 
-  const record = await Store.collection.findOne({ key });
+  const record = await Store.collection.findOne(key);
   if (record) {
-    await Store.collection.update({ key }, { value });
+    await Store.collection.update(key, { value });
   } else {
-    await Store.collection.create({ key, value });
+    await Store.collection.create({ id: key, value });
   }
 }
 
@@ -39,7 +39,7 @@ async function store(key, value) {
  * @param {*} key
  */
 async function clear(key) {
-  await Store.collection.destroyOne({ key });
+  await Store.collection.destroyOne(key);
 }
 
 /**
@@ -55,10 +55,10 @@ async function retrieveOrStore(key, value) {
 
   const record = await Store.collection.findOrCreate(
     {
-      key,
+      id: key,
     },
     {
-      key,
+      id: key,
       value,
     },
   );

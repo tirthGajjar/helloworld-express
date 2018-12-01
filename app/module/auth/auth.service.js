@@ -26,7 +26,7 @@ async function comparePassword(password, targetPassword) {
 async function generateAccessToken(user, audience = CONST.ROLE.CLIENT) {
   return new Promise((resolve, reject) => {
     const payload = {
-      id: user.uid,
+      id: user.id,
     };
 
     jsonwebtoken.sign(
@@ -117,7 +117,7 @@ async function createAdministratorAccount({ user: user_data, client: client_data
   const client = await Client.collection
     .create({
       ...client_record,
-      uid: user.uid,
+      id: user.id,
       _user: user.id,
     })
     .fetch();
@@ -160,7 +160,7 @@ async function createClientAccount({ user: user_data, client: client_data }) {
   const client = await Client.collection
     .create({
       ...client_record,
-      uid: user.uid,
+      id: user.id,
       _user: user.id,
     })
     .fetch();

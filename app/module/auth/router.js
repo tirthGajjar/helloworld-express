@@ -17,7 +17,7 @@ const { $t } = require('@/common/intl');
 const User = require('./User.model');
 const Client = require('./Client.model');
 
-const EmailJob = require('@/shared/email/email.job');
+const EmailJob = require('@/shared/email.job');
 
 const AuthService = require('./auth.service');
 
@@ -42,7 +42,7 @@ router.post('/auth/login', async (req, res) => {
 
   username = (username || '').trim().toLowerCase();
 
-  const user = await User.collection.findOne({
+  const user = await User.collection.findOne().where({
     email: username,
   });
 
@@ -86,7 +86,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
     throw new ERROR.InvalidRequestError(); // @TODO message
   }
 
-  const user = await User.collection.findOne({
+  const user = await User.collection.findOne().where({
     email,
   });
 

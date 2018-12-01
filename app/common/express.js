@@ -4,6 +4,7 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const express = require('express');
 require('express-async-errors');
+const express_graphql = require('express-graphql');
 
 const glob = require('glob');
 const path = require('path');
@@ -11,6 +12,8 @@ const path = require('path');
 const CONFIG = require('@/common/config');
 
 const ERROR = require('@/common/error');
+
+const Data = require('@/common/data');
 
 let app = null;
 let http = null;
@@ -54,6 +57,15 @@ async function setup() {
 
   // Handle JSON
   app.use(express.json({}));
+
+  // Load graphql
+  app.use(
+    '/any/graphql',
+    express_graphql({
+      schema: Data.graphql.schema,
+      graphiql: process.env.NODE_ENV === 'development',
+    }),
+  );
 
   // Load routers
   glob.sync('app/**/*router.js').forEach((filename) => {

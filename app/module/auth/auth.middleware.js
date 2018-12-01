@@ -19,7 +19,7 @@ async function authenticatedMiddleware(req, res, next) {
 
   if (payload) {
     req.audience = payload.aud;
-    req.user = await User.collection.findOne({ uid: payload.id });
+    req.user = await User.collection.findOne(payload.id);
   }
 
   if (!req.user) {

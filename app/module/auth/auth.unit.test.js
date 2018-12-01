@@ -37,28 +37,28 @@ describe('Authentication', () => {
   describe('access token generation and validation', () => {
     test('access token generation and validation should succeed with client', async () => {
       const user = {
-        uid: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
+        id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
       const access_token = await AuthService.generateAccessToken(user);
       const result = await AuthService.validateAccessToken(access_token);
       expect(result.aud).toBe(CONST.ROLE.CLIENT);
-      expect(result.id).toBe(user.uid);
+      expect(result.id).toBe(user.id);
     });
     test('access token generation and validation should succeed with admin', async () => {
       const user = {
-        uid: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
+        id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
       const access_token = await AuthService.generateAccessToken(user, CONST.ROLE.ADMIN);
       const result = await AuthService.validateAccessToken(access_token);
       expect(result.aud).toBe(CONST.ROLE.ADMIN);
-      expect(result.id).toBe(user.uid);
+      expect(result.id).toBe(user.id);
     });
   });
 
   describe('access token extraction', () => {
     test('access token extraction should fail with authorization header', async () => {
       const user = {
-        uid: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
+        id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
       let access_token = await AuthService.generateAccessToken(user);
       const req = {
@@ -73,7 +73,7 @@ describe('Authentication', () => {
 
     test('access token extraction should succeed with `Bearer` authorization header', async () => {
       const user = {
-        uid: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
+        id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
       let access_token = await AuthService.generateAccessToken(user);
       const req = {
@@ -84,12 +84,12 @@ describe('Authentication', () => {
       };
       access_token = AuthService.extractAccessTokenFromRequest(req);
       const result = await AuthService.validateAccessToken(access_token);
-      expect(result.id).toBe(user.uid);
+      expect(result.id).toBe(user.id);
     });
 
     test('access token extraction should succeed with `JWT` authorization header', async () => {
       const user = {
-        uid: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
+        id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
       let access_token = await AuthService.generateAccessToken(user);
       const req = {
@@ -100,7 +100,7 @@ describe('Authentication', () => {
       };
       access_token = AuthService.extractAccessTokenFromRequest(req);
       const result = await AuthService.validateAccessToken(access_token);
-      expect(result.id).toBe(user.uid);
+      expect(result.id).toBe(user.id);
     });
   });
 
@@ -131,10 +131,8 @@ describe('Authentication', () => {
       delete payload.user.password;
       expect(result).toMatchObject(payload);
       expect(result.user.id).toBeDefined();
-      expect(result.user.uid).toBeDefined();
       expect(result.client.id).toBeDefined();
-      expect(result.client.uid).toBeDefined();
-      expect(result.client.uid).toBe(result.user.uid);
+      expect(result.client.id).toBe(result.user.id);
       expect(result.user._client).toBe(result.client.id);
     });
 
@@ -163,10 +161,8 @@ describe('Authentication', () => {
       delete payload.user.password;
       expect(result).toMatchObject(payload);
       expect(result.user.id).toBeDefined();
-      expect(result.user.uid).toBeDefined();
       expect(result.client.id).toBeDefined();
-      expect(result.client.uid).toBeDefined();
-      expect(result.client.uid).toBe(result.user.uid);
+      expect(result.client.id).toBe(result.user.id);
       expect(result.user._client).toBe(result.client.id);
     });
   });

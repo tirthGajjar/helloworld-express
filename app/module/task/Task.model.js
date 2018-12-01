@@ -10,7 +10,7 @@ const definition = {
   tableName: 'Task',
 
   attributes: {
-    label: {
+    title: {
       type: 'string',
       required: true,
     },
@@ -29,19 +29,19 @@ const definition = {
     updated_at: { ...DataMixin.attributes.updated_at },
 
     _owner: {
-      collection: 'user',
+      model: 'user',
     },
   },
 
-  async onMigrate(collection) {
-    await collection.ensureIndex({
-      label: 1,
+  async onBeforeReady(Model, nativeCollection) {
+    await nativeCollection.ensureIndex({
+      title: 1,
     });
   },
 
   beforeSave(record, next) {
-    if (record.label) {
-      record.slug = TaskUtils.slugify(record.label);
+    if (record.title) {
+      record.slug = TaskUtils.slugify(record.title);
     }
     next();
   },

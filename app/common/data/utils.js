@@ -15,6 +15,51 @@ function prepareModelDefinition(model) {
 
   result.tableName = result.tableName || result.identity;
 
+  result.dontUseObjectIds = 'dontUseObjectIds' in result ? result.dontUseObjectIds : !result.junctionTable;
+
+  result.primaryKey = result.primaryKey || 'id';
+
+  if (result.dontUseObjectIds && result.primaryKey === 'id') {
+    result.attributes = {
+      id: {
+        type: 'string',
+        allowNull: false,
+        validations: {
+          isUUID: true,
+        },
+        autoMigrations: {
+          columnType: 'string',
+          unique: true,
+          autoIncrement: false,
+        },
+      },
+      ...result.attributes,
+    };
+  } else if (!result.attributes[result.primaryKey]) {
+    result.attributes = {
+      [result.primaryKey]: {
+        type: 'string',
+        columnName: '_id',
+        autoMigrations: {
+          autoIncrement: false,
+        },
+      },
+      ...result.attributes,
+    };
+  }
+
+  Object.values(result.attributes).forEach((config) => {
+    config.autoMigrations = config.autoMigrations || {};
+  });
+
+  if (!result.attributes_to_strip_in_validation) {
+    result.attributes_to_strip_in_validation = [];
+  }
+
+  if (!result.attributes_to_strip_in_json) {
+    result.attributes_to_strip_in_json = [];
+  }
+
   if (result.beforeCreate) {
     const beforeCreate = result.beforeCreate;
 
@@ -53,39 +98,9 @@ function prepareModelDefinition(model) {
     };
   }
 
-  result.attributes = {
-    ...(!model.primaryKey && !result.attributes.id
-      ? {
-        id: {
-          type: 'string',
-          columnName: '_id',
-          autoMigrations: {},
-        },
-        ...result.attributes,
-      }
-      : {}),
-    uid: {
-      type: 'string',
-      allowNull: false,
-      validations: {
-        isUUID: true,
-      },
-      autoMigrations: {
-        columnType: 'string',
-        unique: true,
-        autoIncrement: false,
-      },
-    },
-    ...result.attributes,
-  };
+  result.association = DataMixin.association;
 
-  if (!result.attributes_to_strip_in_validation) {
-    result.attributes_to_strip_in_validation = [];
-  }
-
-  if (!result.attributes_to_strip_in_json) {
-    result.attributes_to_strip_in_json = [];
-  }
+  result.lookupByAssociationWithId = DataMixin.lookupByAssociationWithId;
 
   model.definition = result;
 }

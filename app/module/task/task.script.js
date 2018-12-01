@@ -26,7 +26,7 @@ const Task = require('./Task.model');
 
     Logger.debug('processing ...');
 
-    const records = await Task.collection.find({});
+    const records = await Task.collection.find().where({});
 
     Logger.debug(records);
     Logger.debug(JSON.stringify(records, null, 2));

@@ -21,7 +21,7 @@ describe('Task integration test', () => {
     };
 
     DATA.CREATE_RECORD = {
-      label: 'Test Record',
+      title: 'Test Record',
       image_uri: '...',
     };
 

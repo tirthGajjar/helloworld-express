@@ -56,6 +56,11 @@ const definition = {
     _client: {
       model: 'client',
     },
+
+    _tasks: {
+      collection: 'task',
+      via: '_owner',
+    },
   },
 
   attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],
@@ -63,6 +68,9 @@ const definition = {
   attributes_to_strip_in_json: ['password'],
 
   async onBeforeReady(Model, nativeCollection) {
+    await nativeCollection.ensureIndex({
+      email: 1,
+    });
     await nativeCollection.ensureIndex({
       name: 1,
     });
