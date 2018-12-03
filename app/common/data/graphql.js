@@ -10,6 +10,15 @@ const DataWaterline = require('./waterline');
 
 let schema = null;
 
+const RawType = new graphql.GraphQLScalarType({
+  name: 'Raw',
+  serialize: (value) => value,
+  parseValue: (value) => value,
+  parseLiteral(ast) {
+    return ast.value;
+  },
+});
+
 const JSONType = new graphql.GraphQLScalarType({
   name: 'JSON',
   serialize: (value) => value,
@@ -19,22 +28,29 @@ const JSONType = new graphql.GraphQLScalarType({
   },
 });
 
-function getGraphqlFieldFromWaterlineAttribute(config) {
+function getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, attributeConfig) {
   const result = {};
 
-  if (config.type === 'string') {
+  if (attributeConfig.type === 'string') {
     result.type = graphql.GraphQLString;
-  } else if (config.type === 'number') {
+  } else if (attributeConfig.type === 'number') {
     result.type = graphql.GraphQLFloat;
-  } else if (config.type === 'boolean') {
+  } else if (attributeConfig.type === 'boolean') {
     result.type = graphql.GraphQLBoolean;
-  } else if (config.type === 'json') {
+  } else if (attributeConfig.type === 'json') {
     result.type = JSONType;
-  } else if (config.type === 'ref') {
-    result.type = JSONType;
+  } else if (attributeConfig.type === 'ref') {
+    result.type = RawType;
   } else {
     return;
   }
+
+  // if (attributeConfig.validations && attributeConfig.validations.isIn) {
+  //   result.type = new graphql.GraphQLEnumType({
+  //     name: attributeName,
+  //     values: attributeConfig.validations.isIn.reduce((acc, item) => ({ ...acc, [item]: { value: item } }), {}),
+  //   });
+  // }
 
   return result;
 }
@@ -51,47 +67,42 @@ function getGraphQLSchemaFromWaterline(ontology) {
       return;
     }
 
-    const name = collection.tableName;
+    const collectionName = collection.tableName;
 
-    const fields = Object.entries(collection.attributes).reduce((acc, [attribute, config]) => {
-      if (collection.attributes_to_strip_in_json.includes(attribute)) {
+    const collectionFields = Object.entries(collection.attributes).reduce((acc, [attributeName, attributeConfig]) => {
+      if (collection.attributes_to_strip_in_json.includes(attributeName)) {
         return acc;
       }
 
       let field;
 
-      if (attribute === collection.primaryKey) {
+      if (attributeName === collection.primaryKey) {
         field = {
           type: graphql.GraphQLID,
         };
-      } else if (config.model) {
+      } else if (attributeConfig.model) {
         field = {
           get type() {
-            return ontology.collections[config.model].graphql.type;
+            return ontology.collections[attributeConfig.model].graphql.type;
           },
           async resolve(parent) {
-            const result = await ontology.collections[config.model].findOne(parent[attribute]);
+            const result = await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
             return result ? result.toJSON() : null;
           },
         };
-      } else if (config.collection) {
-        // field = {
-        //   type: new graphql.GraphQLList(graphql.GraphQLID),
-        // };
-
+      } else if (attributeConfig.collection) {
         field = {
           get type() {
-            return new graphql.GraphQLList(ontology.collections[config.collection].graphql.type);
+            return new graphql.GraphQLList(ontology.collections[attributeConfig.collection].graphql.type);
           },
           async resolve(parent, args) {
-            const [targetCollection, throughCollection, attributes] = collection.association(attribute);
+            const [targetCollection, throughCollection, attributes] = collection.association(attributeName);
 
             let ids = null;
 
             if (throughCollection) {
               const result = await throughCollection.find().where({
                 [attributes.self]: parent.id,
-                ...args,
               });
               ids = result.map((item) => item[attributes.target]);
             }
@@ -103,7 +114,6 @@ function getGraphQLSchemaFromWaterline(ontology) {
             } else {
               result = await targetCollection.find().where({
                 [attributes.self]: parent.id,
-                ...args,
               });
             }
 
@@ -111,7 +121,7 @@ function getGraphQLSchemaFromWaterline(ontology) {
           },
         };
       } else {
-        field = getGraphqlFieldFromWaterlineAttribute(config);
+        field = getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, attributeConfig);
       }
 
       if (!field) {
@@ -120,16 +130,16 @@ function getGraphQLSchemaFromWaterline(ontology) {
 
       return {
         ...acc,
-        [attribute]: field,
+        [attributeName]: field,
       };
     }, {});
 
     const CollectionType = new graphql.GraphQLObjectType({
-      name,
-      fields,
+      name: collectionName,
+      fields: collectionFields,
     });
 
-    const args = Object.entries(fields).reduce((acc, [key, value]) => {
+    const collectionArgs = Object.entries(collectionFields).reduce((acc, [key, value]) => {
       if (collection.attributes[key].collection) {
         return acc;
       }
@@ -144,17 +154,17 @@ function getGraphQLSchemaFromWaterline(ontology) {
     }, {});
 
     collection.graphql = {
-      name,
-      args,
-      fields,
+      name: collectionName,
+      args: collectionArgs,
+      fields: collectionFields,
       type: CollectionType,
     };
 
     const indexQuery = {
-      name: `${name}Index`,
+      name: `${collectionName}Index`,
       type: new graphql.GraphQLList(CollectionType),
       args: {
-        ...args,
+        ...collectionArgs,
       },
       async resolve(parent, args) {
         const result = await collection.find(args);
@@ -163,18 +173,18 @@ function getGraphQLSchemaFromWaterline(ontology) {
     };
 
     const itemQuery = {
-      name,
+      name: collectionName,
       type: CollectionType,
       args: {
         [collection.primaryKey]: { type: graphql.GraphQLID },
       },
       async resolve(parent, args) {
-        const result = await collection.findOne().where(args);
+        const result = await collection.findOne(args);
         return result ? result.toJSON() : null;
       },
     };
 
-    if (name === 'store') {
+    if (collectionName === 'store') {
       queries[itemQuery.name] = itemQuery;
     } else {
       queries[indexQuery.name] = indexQuery;
@@ -182,7 +192,10 @@ function getGraphQLSchemaFromWaterline(ontology) {
     }
 
     if (collection.defineGraphQLQueries) {
-      Object.assign(queries, collection.defineGraphQLQueries(graphql, name, fields, CollectionType));
+      Object.assign(
+        queries,
+        collection.defineGraphQLQueries(graphql, collectionName, collectionFields, CollectionType),
+      );
     }
   });
 
@@ -222,3 +235,5 @@ module.exports = {
   teardown,
   schema,
 };
+
+// @TODO allow filtering by many-to-many association in index queries

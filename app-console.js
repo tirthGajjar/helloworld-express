@@ -39,9 +39,9 @@ context.DataUtils = require('@/common/data/utils');
 
 context.DataService = require('@/common/data.service');
 
-context.RedisDataStore = require('@/common/RedisDataStore.service');
+context.PermanentDataStore = require('@/common/PermanentDataStore.service');
 
-context.MongoDataStore = require('@/common/MongoDataStore.service');
+context.TemporaryDataStore = require('@/common/TemporaryDataStore.service');
 
 (async () => {
   try {

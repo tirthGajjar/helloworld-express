@@ -22,7 +22,7 @@ const EmailJob = require('@/shared/email.job');
 const AuthService = require('./auth.service');
 
 const DataService = require('@/common/data.service');
-const RedisDataStore = require('@/common/RedisDataStore.service');
+const TemporaryDataStore = require('@/common/TemporaryDataStore.service');
 
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.post('/auth/login', async (req, res) => {
 
   username = (username || '').trim().toLowerCase();
 
-  const user = await User.collection.findOne().where({
+  const user = await User.collection.findOne({
     email: username,
   });
 
@@ -86,7 +86,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
     throw new ERROR.InvalidRequestError(); // @TODO message
   }
 
-  const user = await User.collection.findOne().where({
+  const user = await User.collection.findOne({
     email,
   });
 
@@ -96,7 +96,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
       email,
     };
 
-    await RedisDataStore.storeWithExpiry(`password-reset:${token}`, tokenPayload, (3 * CONST.DURATION_DAY) / 1000);
+    await TemporaryDataStore.storeWithExpiry(`password-reset:${token}`, tokenPayload, (3 * CONST.DURATION_DAY) / 1000);
 
     EmailJob.queue.add({
       to: email,
@@ -114,7 +114,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
 router.post('/auth/password-reset/perform', async (req, res) => {
   const { token, password } = req.body;
 
-  const tokenPayload = await RedisDataStore.retrieve(`password-reset:${token}`);
+  const tokenPayload = await TemporaryDataStore.retrieve(`password-reset:${token}`);
 
   if (tokenPayload === null) {
     throw new ERROR.InvalidRequestError(); // @TODO message
@@ -131,7 +131,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
     },
   );
 
-  await RedisDataStore.clear(`password-reset:${token}`);
+  await TemporaryDataStore.clear(`password-reset:${token}`);
 
   EmailJob.queue.add({
     to: user.email,

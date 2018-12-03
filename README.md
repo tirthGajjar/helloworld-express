@@ -1,6 +1,6 @@
 # Node.js/Express Starter
 
-A boilerplate and reference implementation for Node.js backend built with Express, Waterline, Bull, ...
+A boilerplate and reference implementation for Node.js backend built with Express, Waterline, Bull, GraphQL, ...
 
 ## Requirements
 
@@ -10,6 +10,19 @@ A boilerplate and reference implementation for Node.js backend built with Expres
 ## References
 
 - [Documentation](./docs/)
+
+## Features
+
+- modular setup with some convention over configuration
+  - `*.model.js` for data models
+  - `*seed.js` for data seed
+  - `*.job.js` for Bull' job definition
+  - `*router.js` for express' routing
+- manages data with Waterline
+- auto-exposes Waterline schema as GraphQL
+- enables temporary (backed by Redis) and permanent (backed by MongoDB) data key-value storage
+- enables one-time and repetitive/cron jobs and managed by Bull
+- ...
 
 ## Usage
 
@@ -27,7 +40,7 @@ npm run lint
 npm run lint:critical
 ```
 
-### Manipulating Database
+### Managing Database
 
 ```sh
 # clear database
@@ -56,7 +69,7 @@ npm run app:job
 npm run app:console
 ```
 
-### Testing Application
+### Testing
 
 ```sh
 # run all tests

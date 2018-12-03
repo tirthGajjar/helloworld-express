@@ -11,12 +11,13 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const glob = require('glob');
 const path = require('path');
 
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
+
+const APP_CONFIG = require('../app-config');
 
 (async () => {
   try {
@@ -26,8 +27,7 @@ const Data = require('@/common/data');
 
     Logger.info('processing ...');
 
-    // const FILES = glob.sync('app/**/*.seed.js');
-    const FILES = ['app/module/auth/auth.seed.js', 'app/module/task/task.seed.js'];
+    const FILES = APP_CONFIG.SEED;
 
     // await Promise.all(
     //   FILES.map(async (filename) => {

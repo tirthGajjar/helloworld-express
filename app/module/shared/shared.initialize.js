@@ -1,7 +1,7 @@
 'use strict';
 
-const MongoDataStore = require('@/common/MongoDataStore.service');
+const PermanentDataStore = require('@/common/PermanentDataStore.service');
 
 module.exports = async () => {
-  await MongoDataStore.retrieveOrStore('APP_PARAMETER', 'VALUE');
+  await PermanentDataStore.retrieveOrStore('APP_PARAMETER', 'VALUE');
 };

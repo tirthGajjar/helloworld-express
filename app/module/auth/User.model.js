@@ -57,7 +57,7 @@ const definition = {
       model: 'client',
     },
 
-    _tasks: {
+    _task_s: {
       collection: 'task',
       via: '_owner',
     },
