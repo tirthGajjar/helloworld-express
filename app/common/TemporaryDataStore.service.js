@@ -9,10 +9,9 @@ const DataRedisStorage = require('./data/redis.storage');
  *
  * @param {string} key
  */
-async function retrieve(key) {
-  let value = await DataRedisStorage.client.get(key);
-  value = value ? JSON.parse(value) : null;
-  return value;
+async function retrieve(key, defaultValue = null) {
+  const value = await DataRedisStorage.client.get(key);
+  return value ? JSON.parse(value) : defaultValue;
 }
 
 /**

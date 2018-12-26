@@ -9,9 +9,9 @@ const Store = require('@/module/shared/store.model');
  *
  * @param {string} key
  */
-async function retrieve(key) {
+async function retrieve(key, defaultValue = null) {
   const record = await Store.collection.findOne(key);
-  return record ? record.value || null : null;
+  return record ? record.value || defaultValue : defaultValue;
 }
 
 /**

@@ -18,6 +18,7 @@ module.exports = async () => {
     .create({
       title: 'Do something ...',
       _owner: SharedUtils.getRandomArrayItem(DATA.User).id,
+      // _manager_s: SharedUtils.getRandomArrayItemSet(DATA.User).map((item) => item.id),
     })
     .fetch();
 
@@ -27,6 +28,7 @@ module.exports = async () => {
     .create({
       title: 'Do something else ...',
       _owner: SharedUtils.getRandomArrayItem(DATA.User).id,
+      // _manager_s: SharedUtils.getRandomArrayItemSet(DATA.User).map((item) => item.id),
     })
     .fetch();
 

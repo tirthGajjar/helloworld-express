@@ -15,6 +15,8 @@ const ERROR = require('@/common/error');
 
 const Data = require('@/common/data');
 
+const { authenticatedMiddleware } = require('@/module/auth/auth.middleware');
+
 let app = null;
 let http = null;
 
@@ -61,6 +63,7 @@ async function setup() {
   // Load graphql
   app.use(
     '/any/graphql',
+    authenticatedMiddleware,
     express_graphql({
       schema: Data.graphql.schema,
       graphiql: process.env.NODE_ENV === 'development',

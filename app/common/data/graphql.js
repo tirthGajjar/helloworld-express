@@ -4,6 +4,9 @@
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
+const glob = require('glob');
+const path = require('path');
+
 const graphql = require('graphql');
 
 const DataWaterline = require('./waterline');
@@ -67,6 +70,17 @@ function getGraphQLSchemaFromWaterline(ontology) {
       return;
     }
 
+    collection.graphql_ignore = collection.graphql_ignore || false;
+
+    if (collection.graphql_ignore === true) {
+      return;
+    }
+    collection.graphql_options = collection.graphql_options || {
+      count: true,
+      index: true,
+      item: true,
+    };
+
     const collectionName = collection.tableName;
 
     const collectionFields = Object.entries(collection.attributes).reduce((acc, [attributeName, attributeConfig]) => {
@@ -86,8 +100,8 @@ function getGraphQLSchemaFromWaterline(ontology) {
             return ontology.collections[attributeConfig.model].graphql.type;
           },
           async resolve(parent) {
-            const result = await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
-            return result ? result.toJSON() : null;
+            const data = await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
+            return data ? data.toJSON() : null;
           },
         };
       } else if (attributeConfig.collection) {
@@ -101,23 +115,23 @@ function getGraphQLSchemaFromWaterline(ontology) {
             let ids = null;
 
             if (throughCollection) {
-              const result = await throughCollection.find().where({
+              const data = await throughCollection.find().where({
                 [attributes.self]: parent.id,
               });
-              ids = result.map((item) => item[attributes.target]);
+              ids = data.map((item) => item[attributes.target]);
             }
 
-            let result = [];
+            let data = [];
 
             if (ids) {
-              result = await targetCollection.find(ids);
+              data = await targetCollection.find(ids);
             } else {
-              result = await targetCollection.find().where({
+              data = await targetCollection.find().where({
                 [attributes.self]: parent.id,
               });
             }
 
-            return result ? result.map((item) => item.toJSON()) : [];
+            return data ? data.map((item) => item.toJSON()) : [];
           },
         };
       } else {
@@ -160,48 +174,110 @@ function getGraphQLSchemaFromWaterline(ontology) {
       type: CollectionType,
     };
 
-    const indexQuery = {
-      name: `${collectionName}Index`,
-      type: new graphql.GraphQLList(CollectionType),
-      args: {
+    const FilterType = new graphql.GraphQLInputObjectType({
+      name: `${collectionName}Filter`,
+      fields: {
         ...collectionArgs,
       },
-      async resolve(parent, args) {
-        const result = await collection.find(args);
-        return result ? result.map((item) => item.toJSON()) : [];
-      },
-    };
+    });
 
-    const itemQuery = {
-      name: collectionName,
-      type: CollectionType,
-      args: {
-        [collection.primaryKey]: { type: graphql.GraphQLID },
-      },
-      async resolve(parent, args) {
-        const result = await collection.findOne(args);
-        return result ? result.toJSON() : null;
-      },
-    };
+    if (collection.graphql_options.count) {
+      const query = collection.graphql_options.count === 'simple'
+        ? {
+          name: `${collectionName}Count`,
+          description: `fetch ${collectionName} count`,
+          type: graphql.GraphQLInt,
+          async resolve(parent, args) {
+            return await collection.count();
+          },
+        }
+        : {
+          name: `${collectionName}Count`,
+          description: `fetch ${collectionName} count`,
+          args: {
+            filter: {
+              type: FilterType,
+            },
+          },
+          type: graphql.GraphQLInt,
+          async resolve(parent, args) {
+            return await collection.count().where(args.filter);
+          },
+        };
 
-    if (collectionName === 'store') {
-      queries[itemQuery.name] = itemQuery;
-    } else {
-      queries[indexQuery.name] = indexQuery;
-      queries[itemQuery.name] = itemQuery;
+      queries[query.name] = query;
     }
 
-    if (collection.defineGraphQLQueries) {
-      Object.assign(
-        queries,
-        collection.defineGraphQLQueries(graphql, collectionName, collectionFields, CollectionType),
-      );
+    if (collection.graphql_options.index) {
+      const query = collection.graphql_options.index === 'simple'
+        ? {
+          name: `${collectionName}Index`,
+          description: `fetch ${collectionName} index`,
+          type: new graphql.GraphQLList(CollectionType),
+          async resolve(parent, args) {
+            const data = await collection.find();
+            return data ? data.map((item) => item.toJSON()) : [];
+          },
+        }
+        : {
+          name: `${collectionName}Index`,
+          description: `fetch ${collectionName} index`,
+          args: {
+            filter: {
+              type: FilterType,
+            },
+            offset: {
+              type: graphql.GraphQLInt,
+            },
+            limit: {
+              type: graphql.GraphQLInt,
+            },
+            sort: {
+              type: graphql.GraphQLString,
+            },
+          },
+          type: new graphql.GraphQLList(CollectionType),
+          async resolve(parent, args) {
+            const data = await collection
+              .find()
+              .where(args.filter)
+              .skip(args.offset)
+              .limit(args.limit)
+              .sort(args.sort);
+            return data ? data.map((item) => item.toJSON()) : [];
+          },
+        };
+
+      queries[query.name] = query;
     }
+
+    if (collection.graphql_options.item) {
+      const query = {
+        name: collectionName,
+        description: `fetch ${collectionName} item`,
+        args: {
+          [collection.primaryKey]: { type: graphql.GraphQLID },
+        },
+        type: CollectionType,
+        async resolve(parent, args) {
+          const data = await collection.findOne(args);
+          return data ? data.toJSON() : null;
+        },
+      };
+
+      queries[query.name] = query;
+    }
+  });
+
+  glob.sync('app/**/*.graphql.js').forEach((filename) => {
+    Logger.info('loading', filename);
+    const defineGraphQLQueries = require(path.resolve(filename));
+    Object.assign(queries, defineGraphQLQueries());
   });
 
   const Root = new graphql.GraphQLObjectType({
     name: 'Root',
-    description: 'Schema Root Query',
+    description: 'Root query',
     fields: () => queries,
   });
 

@@ -61,6 +61,11 @@ const definition = {
       collection: 'task',
       via: '_owner',
     },
+
+    // _managed_task_s: {
+    //   collection: 'task',
+    //   via: '_manager_s',
+    // },
   },
 
   attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],

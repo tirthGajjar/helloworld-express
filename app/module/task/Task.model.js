@@ -31,6 +31,11 @@ const definition = {
     _owner: {
       model: 'user',
     },
+
+    // _manager_s: {
+    //   collection: 'user',
+    //   via: '_managed_task_s',
+    // },
   },
 
   async onBeforeReady(Model, nativeCollection) {

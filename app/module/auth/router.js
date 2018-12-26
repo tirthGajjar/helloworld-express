@@ -34,7 +34,7 @@ module.exports = {
 router.post('/auth/login', async (req, res) => {
   let { username, password } = req.body;
 
-  const audience = CONST.normalize(req.query.audience, CONST.ROLE, CONST.ROLE.CLIENT);
+  const audience = CONST.normalize(req.query.audience, CONST.AUDIENCE, CONST.AUDIENCE.CLIENT);
 
   if (!username || !password) {
     throw new ERROR.InvalidCredentialsError();
@@ -46,7 +46,7 @@ router.post('/auth/login', async (req, res) => {
     email: username,
   });
 
-  if (!user || !CONST.ROLES_MAPPING[user.role].includes(audience)) {
+  if (!user || !CONST.AUDIENCE_TO_ROLES[audience].includes(user.role)) {
     throw new ERROR.InvalidCredentialsError();
   }
 
@@ -83,7 +83,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
   const email = SANITIZE.email(req.body.email || '');
 
   if (!email) {
-    throw new ERROR.InvalidRequestError(); // @TODO message
+    throw new ERROR.InvalidRequestError(); // @TODO better code and message
   }
 
   const user = await User.collection.findOne({
@@ -117,7 +117,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   const tokenPayload = await TemporaryDataStore.retrieve(`password-reset:${token}`);
 
   if (tokenPayload === null) {
-    throw new ERROR.InvalidRequestError(); // @TODO message
+    throw new ERROR.InvalidRequestError(); // @TODO better code and message
   }
 
   const encryptedPassword = await AuthService.encryptPassword(password);
@@ -136,7 +136,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   EmailJob.queue.add({
     to: user.email,
     subject: $t('Password Reset Confirmation'),
-    template: 'email/password-reset-alert',
+    template: 'app/module/auth/password-reset-done',
     templateContext: {
       user: user.toJSON(),
     },

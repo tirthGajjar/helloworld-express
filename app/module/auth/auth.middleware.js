@@ -27,6 +27,11 @@ async function authenticatedMiddleware(req, res, next) {
     return;
   }
 
+  if (!CONST.AUDIENCE_TO_ROLES[req.audience].includes(req.user.role)) {
+    next(new ERROR.UnauthorizedError());
+    return;
+  }
+
   next();
 }
 
@@ -36,7 +41,7 @@ async function authenticatedMiddleware(req, res, next) {
 
 function roleRestrictedMiddleware(role) {
   return (req, res, next) => {
-    if (!CONST.ROLES_MAPPING[req.user.role].includes(role) || req.audience !== role) {
+    if (!CONST.ROLE_TO_ROLES[req.user.role].includes(role)) {
       next(new ERROR.UnauthorizedError());
       return;
     }
@@ -44,7 +49,22 @@ function roleRestrictedMiddleware(role) {
   };
 }
 
+/**
+ * Permission-restricted Middleware
+ */
+
+// function permissionRestrictedMiddleware(permission) {
+//   return (req, res, next) => {
+//     if (!req.user.permissions.include(permission)) {
+//       next(new ERROR.UnauthorizedError());
+//       return;
+//     }
+//     next();
+//   };
+// }
+
 module.exports = {
   authenticatedMiddleware,
   roleRestrictedMiddleware,
+  // permissionRestrictedMiddleware,
 };

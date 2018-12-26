@@ -7,7 +7,7 @@ COPY ./ /app
 
 WORKDIR /app
 
-RUN npm install --unsafe-perm
+RUN npm install --production --unsafe-perm
 
 ENV PORT=5000
 EXPOSE $PORT

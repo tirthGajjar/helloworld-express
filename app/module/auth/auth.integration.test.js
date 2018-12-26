@@ -107,7 +107,7 @@ describe('Authentication', () => {
       expect(response.status).toBe(200);
       const result = await response.json();
       expect(result.access_token).toBeDefined();
-      expect(result.audience).toBe(CONST.ROLE.CLIENT);
+      expect(result.audience).toBe(CONST.AUDIENCE.CLIENT);
       expect(result.user).toBeDefined();
       CACHE.client = result;
     });
@@ -122,7 +122,7 @@ describe('Authentication', () => {
       });
       expect(response.status).toBe(200);
       const result = await response.json();
-      expect(result.audience).toBe(CONST.ROLE.CLIENT);
+      expect(result.audience).toBe(CONST.AUDIENCE.CLIENT);
       expect(result.user).toMatchObject(CACHE.client.user);
     });
 
@@ -130,25 +130,36 @@ describe('Authentication', () => {
   });
 
   // describe('admin as client', () => {
-  //   setupWithRunningApp();
+  //   setupWithRunningApp('seed');
 
   //   const CACHE = {};
 
   //   /* @TODO admin as client scenario
   //    * - login Y as client
   //    * - retrieve user profile for Y
+  //    * - make sure Y access_token do not work for other audiences
   //    */
   // });
 
   // describe('admin as admin', () => {
-  //   setupWithRunningApp();
+  //   setupWithRunningApp('seed');
 
   //   const CACHE = {};
 
   //   /* @TODO admin as admin scenario
   //    * - login Y as admin
   //    * - retrieve user profile ad Y
-  //    * - make sure X access_token do not work for other audiences
+  //    * - make sure Y access_token do not work for other audiences
+  //    */
+  // });
+
+  // describe('client as admin', () => {
+  //   setupWithRunningApp('seed');
+
+  //   const CACHE = {};
+
+  //   /* @TODO client as admin scenario
+  //    * - login Y as admin should fail
   //    */
   // });
 });

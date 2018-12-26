@@ -23,7 +23,7 @@ async function comparePassword(password, targetPassword) {
   return bcrypt.compare(password, targetPassword);
 }
 
-async function generateAccessToken(user, audience = CONST.ROLE.CLIENT) {
+async function generateAccessToken(user, audience = CONST.AUDIENCE.CLIENT) {
   return new Promise((resolve, reject) => {
     const payload = {
       id: user.id,
@@ -82,6 +82,8 @@ function extractAccessTokenFromRequest(req) {
     token = token.replace(AUTH_HEADER_BEARER, '').trim();
   } else if (AUTH_HEADER_JWT.test(token)) {
     token = token.replace(AUTH_HEADER_JWT, '').trim();
+  } else if (process.env.NODE_ENV === 'development' && req.query.access_token) {
+    token = req.query.access_token;
   } else {
     token = '';
   }

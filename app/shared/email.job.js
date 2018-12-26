@@ -11,25 +11,32 @@ const name = $jobname(__filename);
 const queue = new Queue(name, CONFIG.REDIS_JOB_URI);
 
 const { default: NotifmeSdk } = require('notifme-sdk');
+const nodemailer = require('nodemailer');
 
 const ejs = require('ejs');
 const juice = require('juice');
 
 let notifmeSdk;
+let transport;
 
 const TEMPLATE_CONTEXT_DEFAULTS = {
   CLIENT_APP_URL: CONFIG.CLIENT_APP_URL,
 };
 
 async function setup() {
+  transport = nodemailer.createTransport(CONFIG.EMAIL_TRANSPORT_URI);
+
   notifmeSdk = new NotifmeSdk({
     channels: {
       email: {
         providers: [
           {
-            type: 'smtp',
-            url: CONFIG.EMAIL_TRANSPORT_URI,
-            // @TODO fix this
+            type: 'custom',
+            id: 'smtp',
+            send: async (request) => {
+              const result = await transport.sendMail(request);
+              return result.messageId;
+            },
           },
         ],
       },

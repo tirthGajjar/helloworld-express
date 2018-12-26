@@ -41,16 +41,16 @@ describe('Authentication', () => {
       };
       const access_token = await AuthService.generateAccessToken(user);
       const result = await AuthService.validateAccessToken(access_token);
-      expect(result.aud).toBe(CONST.ROLE.CLIENT);
+      expect(result.aud).toBe(CONST.AUDIENCE.CLIENT);
       expect(result.id).toBe(user.id);
     });
     test('access token generation and validation should succeed with admin', async () => {
       const user = {
         id: 'd90ed360-e744-11e8-b4de-0d7fd38ce0e5',
       };
-      const access_token = await AuthService.generateAccessToken(user, CONST.ROLE.ADMIN);
+      const access_token = await AuthService.generateAccessToken(user, CONST.AUDIENCE.ADMIN);
       const result = await AuthService.validateAccessToken(access_token);
-      expect(result.aud).toBe(CONST.ROLE.ADMIN);
+      expect(result.aud).toBe(CONST.AUDIENCE.ADMIN);
       expect(result.id).toBe(user.id);
     });
   });

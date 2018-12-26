@@ -7,8 +7,6 @@ const definition = {
 
   primaryKey: 'id',
 
-  // dontUseObjectIds: false,
-
   attributes: {
     id: {
       type: 'string',
@@ -22,6 +20,8 @@ const definition = {
       required: true,
     },
   },
+
+  graphql_ignore: true,
 };
 
 const helpers = {};
