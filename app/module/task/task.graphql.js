@@ -12,8 +12,6 @@ module.exports = function defineGraphQLQueries() {
         return new graphql.GraphQLList(Task.collection.graphql.type);
       },
       async resolve(parent, args) {
-        console.log(parent, args);
-
         const data = await Task.collection.find().where({
           // _owner: req.user.id, // @TODO
         });

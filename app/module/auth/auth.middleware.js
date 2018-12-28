@@ -5,14 +5,21 @@ const CONST = require('@/common/const');
 const ERROR = require('@/common/error');
 
 const User = require('./User.model');
+const Client = require('./Client.model');
 
 const AuthService = require('./auth.service');
+
+const throwError = (error) => {
+  if (error) {
+    throw error;
+  }
+};
 
 /**
  * Authenticated Middleware
  */
 
-async function authenticatedMiddleware(req, res, next) {
+async function withAuthenticatedUserMiddleware(req, res, next) {
   const access_token = AuthService.extractAccessTokenFromRequest(req);
 
   const payload = await AuthService.validateAccessToken(access_token);
@@ -39,8 +46,8 @@ async function authenticatedMiddleware(req, res, next) {
  * Role-restricted Middleware
  */
 
-function roleRestrictedMiddleware(role) {
-  return (req, res, next) => {
+function withRoleRestrictionMiddleware(role) {
+  return (req, res, next = throwError) => {
     if (!CONST.ROLE_TO_ROLES[req.user.role].includes(role)) {
       next(new ERROR.UnauthorizedError());
       return;
@@ -49,12 +56,15 @@ function roleRestrictedMiddleware(role) {
   };
 }
 
+withRoleRestrictionMiddleware[CONST.ROLE.ADMIN] = withRoleRestrictionMiddleware(CONST.ROLE.ADMIN);
+withRoleRestrictionMiddleware[CONST.ROLE.CLIENT] = withRoleRestrictionMiddleware(CONST.ROLE.CLIENT);
+
 /**
  * Permission-restricted Middleware
  */
 
-// function permissionRestrictedMiddleware(permission) {
-//   return (req, res, next) => {
+// function withPermissionRestrictionMiddleware(permission) {
+//   return (req, res, next = throwError) => {
 //     if (!req.user.permissions.include(permission)) {
 //       next(new ERROR.UnauthorizedError());
 //       return;
@@ -63,8 +73,18 @@ function roleRestrictedMiddleware(role) {
 //   };
 // }
 
+/**
+ * Load client profile
+ */
+
+async function withClientMiddleware(req, res, next = throwError) {
+  req.client = await Client.collection.findOne(req.user._client);
+  next();
+}
+
 module.exports = {
-  authenticatedMiddleware,
-  roleRestrictedMiddleware,
+  withAuthenticatedUserMiddleware,
+  withRoleRestrictionMiddleware,
   // permissionRestrictedMiddleware,
+  withClientMiddleware,
 };

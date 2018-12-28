@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const { authenticatedMiddleware } = require('./auth.middleware');
+const { withAuthenticatedUserMiddleware } = require('./auth.middleware');
 
 const CONST = require('@/common/const');
 
@@ -61,7 +61,11 @@ router.post('/auth/login', async (req, res) => {
   res.send({
     access_token,
     audience,
-    user,
+    user: {
+      role: user.role,
+      email: user.email,
+      ...user.toJSON(),
+    },
   });
 });
 
@@ -71,11 +75,17 @@ router.post('/auth/signup', async (req, res) => {
     client: req.body.client,
   });
 
-  const access_token = await AuthService.generateAccessToken(account.user);
+  const { user } = account;
+
+  const access_token = await AuthService.generateAccessToken(user);
 
   res.send({
     access_token,
-    ...account,
+    user: {
+      role: user.role,
+      email: user.email,
+      ...user.toJSON(),
+    },
   });
 });
 
@@ -145,7 +155,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   res.send({});
 });
 
-router.get('/auth/account', authenticatedMiddleware, async (req, res) => {
+router.get('/auth/account', withAuthenticatedUserMiddleware, async (req, res) => {
   const audience = req.audience;
   const user = req.user;
 
@@ -157,7 +167,11 @@ router.get('/auth/account', authenticatedMiddleware, async (req, res) => {
 
   res.send({
     audience,
-    user,
+    user: {
+      role: user.role,
+      email: user.email,
+      ...user.toJSON(),
+    },
     client,
   });
 });

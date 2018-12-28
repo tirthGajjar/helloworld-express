@@ -4,7 +4,7 @@ const express = require('express');
 
 const ERROR = require('@/common/error');
 
-const { authenticatedMiddleware } = require('@/module/auth/auth.middleware');
+const { withAuthenticatedUserMiddleware } = require('@/module/auth/auth.middleware');
 
 const Task = require('./Task.model');
 
@@ -15,7 +15,7 @@ module.exports = {
   router,
 };
 
-router.use(authenticatedMiddleware);
+router.use(withAuthenticatedUserMiddleware);
 
 // @TODO validate `task_id` route param: if value is not a uuid, throw 404 status
 
