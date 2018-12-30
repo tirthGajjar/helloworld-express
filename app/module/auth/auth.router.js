@@ -110,7 +110,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
 
     EmailJob.queue.add({
       to: email,
-      subject: $t('Password Reset'),
+      subject: 'Password Reset',
       template: 'app/module/auth/password-reset',
       templateContext: {
         continue_url: `${CONFIG.CLIENT_APP_URL}/password-reset/perform?token=${token}`,
@@ -145,7 +145,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
 
   EmailJob.queue.add({
     to: user.email,
-    subject: $t('Password Reset Confirmation'),
+    subject: 'Password Reset Confirmation',
     template: 'app/module/auth/password-reset-done',
     templateContext: {
       user: user.toJSON(),

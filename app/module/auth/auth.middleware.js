@@ -16,7 +16,16 @@ const throwError = (error) => {
 };
 
 /**
- * Authenticated Middleware
+ * Anonymous User
+ */
+
+function withAnonymousUserMiddleware(req, res, next) {
+  req.allowAnonymous = true;
+  next();
+}
+
+/**
+ * Authenticated User
  */
 
 async function withAuthenticatedUserMiddleware(req, res, next) {
@@ -27,6 +36,14 @@ async function withAuthenticatedUserMiddleware(req, res, next) {
   if (payload) {
     req.audience = payload.aud;
     req.user = await User.collection.findOne(payload.id);
+  }
+
+  if (req.allowAnonymous && !req.user) {
+    req.audience = CONST.AUDIENCE.ANONYMOUS;
+    req.user = {
+      id: CONST.ROLE.ANONYMOUS,
+      role: CONST.ROLE.ANONYMOUS,
+    };
   }
 
   if (!req.user) {
@@ -43,7 +60,7 @@ async function withAuthenticatedUserMiddleware(req, res, next) {
 }
 
 /**
- * Role-restricted Middleware
+ * Role-restricted Access
  */
 
 function withRoleRestrictionMiddleware(role) {
@@ -60,18 +77,18 @@ withRoleRestrictionMiddleware[CONST.ROLE.ADMIN] = withRoleRestrictionMiddleware(
 withRoleRestrictionMiddleware[CONST.ROLE.CLIENT] = withRoleRestrictionMiddleware(CONST.ROLE.CLIENT);
 
 /**
- * Permission-restricted Middleware
+ * Permission-restricted Access
  */
 
-// function withPermissionRestrictionMiddleware(permission) {
-//   return (req, res, next = throwError) => {
-//     if (!req.user.permissions.include(permission)) {
-//       next(new ERROR.UnauthorizedError());
-//       return;
-//     }
-//     next();
-//   };
-// }
+function withPermissionRestrictionMiddleware(permission) {
+  return (req, res, next = throwError) => {
+    if (!req.user.permissions.include(permission)) {
+      next(new ERROR.UnauthorizedError());
+      return;
+    }
+    next();
+  };
+}
 
 /**
  * Load client profile
@@ -83,8 +100,9 @@ async function withClientMiddleware(req, res, next = throwError) {
 }
 
 module.exports = {
+  withAnonymousUserMiddleware,
   withAuthenticatedUserMiddleware,
   withRoleRestrictionMiddleware,
-  // permissionRestrictedMiddleware,
+  withPermissionRestrictionMiddleware,
   withClientMiddleware,
 };
