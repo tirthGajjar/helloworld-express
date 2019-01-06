@@ -11,7 +11,7 @@
       "name": "app-api",
       "script": "./app-api.js",
       "exec_mode": "cluster",
-      "instances": 2,
+      "instances": 1,
       "watch": true,
       "autorestart": false
     },
@@ -19,7 +19,7 @@
       "name": "app-job",
       "script": "./app-job.js",
       "exec_mode": "cluster",
-      "instances": 2,
+      "instances": 1,
       "watch": true,
       "autorestart": false
     }
