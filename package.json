@@ -46,7 +46,7 @@
     "redis": "~2.8.0",
     "sails-disk": "~1.0.1",
     "sails-mongo": "~1.0.1",
-    "starter-lib": "git+https://github.com/emiketic/emiketic-starter-lib.git#0.5.3",
+    "starter-lib": "git+https://github.com/emiketic/emiketic-starter-lib.git#0.5.4",
     "uuid": "~3.3.2",
     "waterline": "~0.13.6"
   },
