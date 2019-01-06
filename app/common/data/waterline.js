@@ -95,6 +95,7 @@ async function setup() {
   module.exports.models = models;
 
   if (CONFIG.IS_CORE && process.env.MIGRATE !== 'safe') {
+    Logger.info('migrate...');
     await new Promise((resolve, reject) => {
       WaterlineUtils.autoMigrations(process.env.MIGRATE, ontology, async (err) => {
         if (err) {
@@ -104,15 +105,18 @@ async function setup() {
         }
       });
     });
+    Logger.info('migrate done');
+  }
 
+  if (CONFIG.IS_CORE) {
     await Promise.all(
       Object.values(models).map(async (model) => {
-        if (!model.collection.onBeforeReady) {
+        if (!model.collection.onCollectionReady) {
           return;
         }
         const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
         const nativeCollection = nativeClient.collection(model.collection.tableName);
-        await model.collection.onBeforeReady(model, nativeCollection);
+        await model.collection.onCollectionReady(model, nativeCollection);
       }),
     );
   }

@@ -70,9 +70,9 @@ const definition = {
 
   attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],
 
-  attributes_to_strip_in_json: ['password'],
+  attributes_to_strip_in_json: ['password', 'role', 'email'],
 
-  async onBeforeReady(Model, nativeCollection) {
+  async onCollectionReady(Model, nativeCollection) {
     await nativeCollection.ensureIndex({
       email: 1,
     });

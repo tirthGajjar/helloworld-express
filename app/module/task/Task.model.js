@@ -38,7 +38,7 @@ const definition = {
     // },
   },
 
-  async onBeforeReady(Model, nativeCollection) {
+  async onCollectionReady(Model, nativeCollection) {
     await nativeCollection.ensureIndex({
       title: 1,
     });

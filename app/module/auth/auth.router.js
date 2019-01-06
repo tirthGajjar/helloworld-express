@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const { withAuthenticatedUserMiddleware } = require('./auth.middleware');
+const { withAuthenticatedUserMiddleware, withUserProfileMiddleware } = require('./auth.middleware');
 
 const CONST = require('@/common/const');
 
@@ -11,8 +11,6 @@ const ERROR = require('@/common/error');
 const CONFIG = require('@/common/config');
 
 const SANITIZE = require('@/common/sanitize');
-
-const { $t } = require('@/common/intl');
 
 const User = require('./User.model');
 const Client = require('./Client.model');
@@ -155,15 +153,8 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   res.send({});
 });
 
-router.get('/auth/account', withAuthenticatedUserMiddleware, async (req, res) => {
-  const audience = req.audience;
-  const user = req.user;
-
-  let client = null;
-
-  if (user._client) {
-    client = await Client.collection.findOne(user._client);
-  }
+router.get('/auth/account', withAuthenticatedUserMiddleware, withUserProfileMiddleware, async (req, res) => {
+  const { audience, user, client } = req;
 
   res.send({
     audience,

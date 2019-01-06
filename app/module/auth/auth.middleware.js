@@ -91,10 +91,10 @@ function withPermissionRestrictionMiddleware(permission) {
 }
 
 /**
- * Load client profile
+ * Load profile
  */
 
-async function withClientMiddleware(req, res, next = throwError) {
+async function withUserProfileMiddleware(req, res, next = throwError) {
   req.client = await Client.collection.findOne(req.user._client);
   next();
 }
@@ -104,5 +104,5 @@ module.exports = {
   withAuthenticatedUserMiddleware,
   withRoleRestrictionMiddleware,
   withPermissionRestrictionMiddleware,
-  withClientMiddleware,
+  withUserProfileMiddleware,
 };

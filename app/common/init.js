@@ -43,7 +43,7 @@ const fs = require('fs');
   }
 });
 
-process.env.MIGRATE = process.env.INSTANCE_ID === 'core' ? process.env.MIGRATE || 'alter' : 'safe';
+process.env.MIGRATE = process.env.INSTANCE_ID === 'core' ? process.env.MIGRATE || 'safe' : 'safe';
 
 /*
  * Load global event bus
