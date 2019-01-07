@@ -38,6 +38,9 @@ npm run lint
 
 # lint code for critical issues
 npm run lint:critical
+
+# generate docs
+npm run docs
 ```
 
 ### Managing Database

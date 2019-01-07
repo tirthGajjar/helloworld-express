@@ -1,0 +1,21 @@
+{
+  "apps": [
+    {
+      "name": "app-core",
+      "script": "./app-core.js",
+      "exec_mode": "fork"
+    },
+    {
+      "name": "app-api",
+      "script": "./app-api.js",
+      "exec_mode": "cluster",
+      "instances": 1
+    },
+    {
+      "name": "app-job",
+      "script": "./app-job.js",
+      "exec_mode": "cluster",
+      "instances": 1
+    }
+  ]
+}
