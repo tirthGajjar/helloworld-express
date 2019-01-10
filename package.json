@@ -11,7 +11,7 @@
     "lint": "eslint --ext .js ./",
     "lint:critical": "eslint --no-eslintrc --config .eslintrc.critical.json ./",
     "format": "npm run format:all && npm run format:js",
-    "format:all": "prettier ./**/*.{md,json,js,css,scss} --write",
+    "format:all": "prettier './**/*.{md,json,js,css,scss}' --write",
     "format:js": "eslint -o /dev/null --ext .js --fix ./ || true",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest --runInBand \\.unit\\.test\\.",
@@ -63,7 +63,7 @@
     "jest": "~23.6.0",
     "jsdoc": "~3.5.5",
     "nodemon": "~1.18.9",
-    "pm2": "~3.2.4",
+    "pm2": "~3.2.7",
     "prettier": "~1.15.3"
   }
 }

@@ -106,7 +106,7 @@
         }
 
 
-### Retrieve user account [GET /auth/account]
+### Check access token validity [GET /auth/check]
 
 + Request
 
@@ -117,12 +117,6 @@
 + Response 200 (application/json)
 
         {
-            "user": {
-                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
-                "email": "client@starter.com",
-                "name": "Client",
-                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
-            }
         }
 
 + Response 401 (application/json)

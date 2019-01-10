@@ -63,11 +63,11 @@ function getGraphQLSchemaFromWaterline(ontology) {
 
   Object.values(ontology.collections).forEach((collection) => {
     if (collection.junctionTable) {
-      return;
+      collection.graphql_ignore = true;
     }
 
     if (collection.identity === 'archive') {
-      return;
+      collection.graphql_ignore = true;
     }
 
     collection.graphql_ignore = collection.graphql_ignore || false;
@@ -75,11 +75,20 @@ function getGraphQLSchemaFromWaterline(ontology) {
     if (collection.graphql_ignore === true) {
       return;
     }
-    collection.graphql_options = collection.graphql_options || {
+
+    collection.graphql_options = {
+      reference: true,
       count: true,
       index: true,
       item: true,
+      ...(collection.graphql_options || {}),
     };
+  });
+
+  Object.values(ontology.collections).forEach((collection) => {
+    if (collection.graphql_ignore === true) {
+      return;
+    }
 
     const collectionName = collection.tableName;
 
@@ -94,7 +103,7 @@ function getGraphQLSchemaFromWaterline(ontology) {
         field = {
           type: graphql.GraphQLID,
         };
-      } else if (attributeConfig.model) {
+      } else if (attributeConfig.model && ontology.collections[attributeConfig.model].graphql_options.reference) {
         field = {
           get type() {
             return ontology.collections[attributeConfig.model].graphql.type;
@@ -104,7 +113,10 @@ function getGraphQLSchemaFromWaterline(ontology) {
             return data ? data.toJSON() : null;
           },
         };
-      } else if (attributeConfig.collection) {
+      } else if (
+        attributeConfig.collection
+        && ontology.collections[attributeConfig.collection].graphql_options.reference
+      ) {
         field = {
           get type() {
             return new graphql.GraphQLList(ontology.collections[attributeConfig.collection].graphql.type);

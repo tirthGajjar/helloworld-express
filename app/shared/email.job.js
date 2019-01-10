@@ -67,8 +67,8 @@ async function processor(job) {
 }
 
 module.exports = {
-  setup,
   name,
   queue,
+  setup,
   processor,
 };

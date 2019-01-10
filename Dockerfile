@@ -2,8 +2,6 @@ FROM node:10
 
 RUN npm install -g pm2
 
-ENV NODE_ICU_DATA=node_modules/full-icu
-
 RUN mkdir /app
 COPY ./ /app
 

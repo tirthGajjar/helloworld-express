@@ -11,7 +11,7 @@ const AUTH_JWT_SECRET = process.env.AUTH_JWT_SECRET || 'secret';
 const AUTH_JWT_EXPIRATION = process.env.AUTH_JWT_EXPIRATION || (30 * CONST.DURATION_DAY) / CONST.DURATION_SECOND; // in seconds, @TODO move to config? or param?
 
 const User = require('./User.model');
-const Client = require('./Client.model');
+const Client = require('../account/Client.model');
 
 const SALT_ROUNDS = 8;
 

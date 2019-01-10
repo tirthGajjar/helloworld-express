@@ -5,7 +5,7 @@ const CONST = require('@/common/const');
 const ERROR = require('@/common/error');
 
 const User = require('./User.model');
-const Client = require('./Client.model');
+const Client = require('../account/Client.model');
 
 const AuthService = require('./auth.service');
 
@@ -19,7 +19,7 @@ const throwError = (error) => {
  * Anonymous User
  */
 
-function withAnonymousUserMiddleware(req, res, next) {
+function withAnonymousUser(req, res, next) {
   req.allowAnonymous = true;
   next();
 }
@@ -28,7 +28,7 @@ function withAnonymousUserMiddleware(req, res, next) {
  * Authenticated User
  */
 
-async function withAuthenticatedUserMiddleware(req, res, next) {
+async function withAuthenticatedUser(req, res, next) {
   const access_token = AuthService.extractAccessTokenFromRequest(req);
 
   const payload = await AuthService.validateAccessToken(access_token);
@@ -39,10 +39,14 @@ async function withAuthenticatedUserMiddleware(req, res, next) {
   }
 
   if (req.allowAnonymous && !req.user) {
-    req.audience = CONST.AUDIENCE.ANONYMOUS;
+    req.audience = CONST.AUDIENCE.CLIENT;
     req.user = {
-      id: CONST.ROLE.ANONYMOUS,
-      role: CONST.ROLE.ANONYMOUS,
+      id: 'anonymous',
+      role: CONST.ROLE.CLIENT,
+      _client: 'anonymous',
+      toJSON() {
+        return this;
+      },
     };
   }
 
@@ -63,7 +67,7 @@ async function withAuthenticatedUserMiddleware(req, res, next) {
  * Role-restricted Access
  */
 
-function withRoleRestrictionMiddleware(role) {
+function withRoleRestriction(role) {
   return (req, res, next = throwError) => {
     if (!CONST.ROLE_TO_ROLES[req.user.role].includes(role)) {
       next(new ERROR.UnauthorizedError());
@@ -73,14 +77,14 @@ function withRoleRestrictionMiddleware(role) {
   };
 }
 
-withRoleRestrictionMiddleware[CONST.ROLE.ADMIN] = withRoleRestrictionMiddleware(CONST.ROLE.ADMIN);
-withRoleRestrictionMiddleware[CONST.ROLE.CLIENT] = withRoleRestrictionMiddleware(CONST.ROLE.CLIENT);
+withRoleRestriction[CONST.ROLE.ADMIN] = withRoleRestriction(CONST.ROLE.ADMIN);
+withRoleRestriction[CONST.ROLE.CLIENT] = withRoleRestriction(CONST.ROLE.CLIENT);
 
 /**
  * Permission-restricted Access
  */
 
-function withPermissionRestrictionMiddleware(permission) {
+function withPermissionRestriction(permission) {
   return (req, res, next = throwError) => {
     if (!req.user.permissions.include(permission)) {
       next(new ERROR.UnauthorizedError());
@@ -91,18 +95,21 @@ function withPermissionRestrictionMiddleware(permission) {
 }
 
 /**
- * Load profile
+ * Load client profile
  */
 
-async function withUserProfileMiddleware(req, res, next = throwError) {
+async function withUserAsClient(req, res, next = throwError) {
   req.client = await Client.collection.findOne(req.user._client);
   next();
 }
 
+/**
+ * Exports
+ */
 module.exports = {
-  withAnonymousUserMiddleware,
-  withAuthenticatedUserMiddleware,
-  withRoleRestrictionMiddleware,
-  withPermissionRestrictionMiddleware,
-  withUserProfileMiddleware,
+  withAnonymousUser,
+  withAuthenticatedUser,
+  withRoleRestriction,
+  withPermissionRestriction,
+  withUserAsClient,
 };

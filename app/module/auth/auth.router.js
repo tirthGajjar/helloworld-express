@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const { withAuthenticatedUserMiddleware, withUserProfileMiddleware } = require('./auth.middleware');
+const { withAuthenticatedUser } = require('./auth.middleware');
 
 const CONST = require('@/common/const');
 
@@ -13,7 +13,6 @@ const CONFIG = require('@/common/config');
 const SANITIZE = require('@/common/sanitize');
 
 const User = require('./User.model');
-const Client = require('./Client.model');
 
 const EmailJob = require('@/shared/email.job');
 
@@ -153,28 +152,6 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   res.send({});
 });
 
-router.get('/auth/account', withAuthenticatedUserMiddleware, withUserProfileMiddleware, async (req, res) => {
-  const { audience, user, client } = req;
-
-  res.send({
-    audience,
-    user: {
-      role: user.role,
-      email: user.email,
-      ...user.toJSON(),
-    },
-    client,
-  });
-});
-
-router.post('/auth/account/edit', async (req, res) => {
-  // @TODO implement
-});
-
-router.post('/auth/account/change-email', async (req, res) => {
-  // @TODO implement?
-});
-
-router.post('/auth/account/change-password', async (req, res) => {
-  // @TODO implement
+router.get('/auth/check', withAuthenticatedUser, async (req, res) => {
+  res.send({});
 });

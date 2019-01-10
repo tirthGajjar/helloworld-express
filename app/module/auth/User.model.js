@@ -72,6 +72,12 @@ const definition = {
 
   attributes_to_strip_in_json: ['password', 'role', 'email'],
 
+  graphql_options: {
+    // reference: false,
+    count: false,
+    index: false,
+  },
+
   async onCollectionReady(Model, nativeCollection) {
     await nativeCollection.ensureIndex({
       email: 1,

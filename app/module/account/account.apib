@@ -1,0 +1,68 @@
+
+# Group Account
+
+### Retrieve user account [GET /account]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "user": {
+                "id": "f67ebbe0-4cc1-11e8-97ea-c16513384dd0",
+                "email": "client@starter.com",
+                "name": "Starter Client",
+                "picture_uri": "https://randomuser.me/api/portraits/lego/1.jpg"
+            }
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+
+### Edit account [POST /account/edit]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+            }
+
++ Response 200 (application/json)
+
+        {
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }

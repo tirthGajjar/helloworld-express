@@ -112,18 +112,15 @@ describe('Authentication', () => {
       CACHE.client = result;
     });
 
-    testUnauthenticatedFetch('GET /auth/account should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/auth/account`));
+    testUnauthenticatedFetch('GET /auth/check should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/auth/check`));
 
-    test('GET /auth/account should succeed with authenticated access', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/auth/account`, {
+    test('GET /auth/check should succeed with authenticated access', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/auth/check`, {
         headers: {
           Authorization: `Bearer ${CACHE.client.access_token}`,
         },
       });
       expect(response.status).toBe(200);
-      const result = await response.json();
-      expect(result.audience).toBe(CONST.AUDIENCE.CLIENT);
-      expect(result.user).toMatchObject(CACHE.client.user);
     });
 
     // ...
