@@ -1,9 +1,7 @@
 'use strict';
 
-const RELEASE_VERSION = 'development';
-const RELEASE_DATE = new Date().toJSON();
+const RELEASE_VERSION = 'dev';
 
 module.exports = {
   RELEASE_VERSION,
-  RELEASE_DATE,
 };

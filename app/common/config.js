@@ -2,7 +2,7 @@
 
 /** @module CONFIG */
 
-const { RELEASE_VERSION, RELEASE_DATE } = require('./release');
+const { RELEASE_VERSION } = require('./release');
 
 const INSTANCE_ID = process.env.INSTANCE_ID || '?';
 const INSTANCE_TYPE = INSTANCE_ID.split('-')[0] || '?';
@@ -25,7 +25,6 @@ const CLIENT_APP_URL = process.env.CLIENT_APP_URL || 'http://localhost:3000';
 
 module.exports = {
   RELEASE_VERSION,
-  RELEASE_DATE,
 
   INSTANCE_ID,
   INSTANCE_TYPE,
