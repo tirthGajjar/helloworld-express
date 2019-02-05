@@ -57,13 +57,13 @@
   "devDependencies": {
     "babel-eslint": "~10.0.1",
     "documentation": "~9.1.1",
-    "eslint": "~5.12.1",
+    "eslint": "~5.13.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "~2.16.0",
-    "jest": "~24.0.0",
+    "jest": "~24.1.0",
     "jsdoc": "~3.5.5",
     "nodemon": "~1.18.9",
     "pm2": "~3.2.9",
-    "prettier": "~1.16.3"
+    "prettier": "~1.16.4"
   }
 }
