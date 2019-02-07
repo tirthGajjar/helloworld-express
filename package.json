@@ -33,7 +33,7 @@
     "docs:postman": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development sh -c 'cat $(find /data/ -name *.apib) | apiary2postman blueprint > /data/docs/_postman/API.postman_collection.json'"
   },
   "dependencies": {
-    "bcrypt": "~3.0.3",
+    "bcrypt": "~3.0.4",
     "bull": "~3.6.0",
     "dotenv": "~6.2.0",
     "ejs": "~2.6.1",
