@@ -1,5 +1,5 @@
 
-# Group CRUD Specifications
+# Group Tasl
 
 CRUD API.
 
@@ -48,7 +48,7 @@ CRUD API.
         }
 
 
-### Create item [POST /task/create]
+### Create task [POST /task/create]
 
 + Request
 
@@ -77,7 +77,7 @@ CRUD API.
         }
 
 
-### Edit item [POST /task/{task_id}/edit]
+### Edit task [POST /task/{task_id}/edit]
 
 + Parameters
 
@@ -110,7 +110,7 @@ CRUD API.
         }
 
 
-### Delete item [POST /task/{task_id}/delete]
+### Delete task [POST /task/{task_id}/delete]
 
 + Parameters
 
@@ -127,3 +127,60 @@ CRUD API.
         {
         }
 
+
+### Mark as done [POST /task/{task_id}/mark-done]
+
++ Parameters
+
+    + task_id: `ID` (id) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "ID",
+                "title": "do something...",
+                "done": true
+            }
+        }
+
+
+### Mark as undone [POST /task/{task_id}/mark-undone]
+
++ Parameters
+
+    + task_id: `ID` (id) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "ID",
+                "title": "do something...",
+                "done": false
+            }
+        }

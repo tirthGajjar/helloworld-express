@@ -29,7 +29,9 @@ router.use(withAuthenticatedUser);
 // });
 
 router.get('/task', async (req, res) => {
-  const data = await Task.collection.find().populate('_owner');
+  const data = await Task.collection.find().where({
+    _owner: req.user.id,
+  });
 
   res.send({
     data,
@@ -49,7 +51,13 @@ router.get('/task/:task_id', async (req, res) => {
 });
 
 router.post('/task/create', async (req, res) => {
-  const [record, issues] = Task.helpers.validate(req.body.data, true);
+  const [record, issues] = Task.helpers.validate(
+    {
+      ...req.body.data,
+      _owner: req.user.id,
+    },
+    true,
+  );
 
   if (issues.length) {
     throw new ERROR.ValidationError(null, null, { issues });
@@ -89,3 +97,7 @@ router.post('/task/:task_id/delete', async (req, res) => {
 
   res.send({});
 });
+
+// POST /task/:task_id/mark-done
+
+// POST /task/:task_id/mark-undone
