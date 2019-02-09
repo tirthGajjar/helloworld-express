@@ -72,7 +72,7 @@ const definition = {
 
   attributes_to_strip_in_json: ['password', 'role', 'email'],
 
-  graphql_options: {
+  graphql_settings: {
     // reference: false,
     count: false,
     index: false,

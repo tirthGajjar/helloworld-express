@@ -6,10 +6,23 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawn } = require('child_process');
 
+const { promisify } = require('util');
+
+const uuidv1 = require('uuid/v1');
+
+const { EventEmitter } = require('@/common/events');
+
 const DataMixin = require('./mixin');
 
+function generateUniqueId() {
+  return uuidv1();
+}
+
 function prepareModelDefinition(model) {
+  const events = new EventEmitter();
+
   const result = {
+    events,
     ...model.definition,
   };
 
@@ -60,37 +73,85 @@ function prepareModelDefinition(model) {
     result.attributes_to_strip_in_json = [];
   }
 
-  if (result.beforeCreate) {
-    const beforeCreate = result.beforeCreate;
+  const {
+    beforeCreate,
+    afterCreate,
+    beforeUpdate,
+    afterUpdate,
+    beforeDestroy,
+    afterDestroy,
+    beforeSave,
+    afterSave,
+  } = result;
 
-    result.beforeCreate = (record, next) => {
-      DataMixin.lifecycles.beforeCreate.call(result, record, (err) => {
-        if (err) {
-          next(err);
-        } else {
-          beforeCreate(record, next);
-        }
-      });
-    };
-  } else {
-    result.beforeCreate = DataMixin.lifecycles.beforeCreate.bind(result);
+  if (beforeCreate) {
+    events.on('beforeCreate', promisify(beforeCreate.bind(result)));
   }
 
-  if (result.beforeUpdate) {
-    const beforeUpdate = result.beforeUpdate;
-
-    result.beforeUpdate = (record, next) => {
-      DataMixin.lifecycles.beforeUpdate.call(result, record, (err) => {
-        if (err) {
-          next(err);
-        } else {
-          beforeUpdate(record, next);
-        }
-      });
-    };
-  } else {
-    result.beforeUpdate = DataMixin.lifecycles.beforeUpdate.bind(result);
+  if (afterCreate) {
+    events.on('afterCreate', promisify(afterCreate.bind(result)));
   }
+
+  if (beforeUpdate) {
+    events.on('beforeUpdate', promisify(beforeUpdate.bind(result)));
+  }
+
+  if (afterUpdate) {
+    events.on('afterUpdate', promisify(afterUpdate.bind(result)));
+  }
+
+  if (beforeDestroy) {
+    events.on('beforeDestroy', promisify(beforeDestroy.bind(result)));
+  }
+
+  if (afterDestroy) {
+    events.on('afterDestroy', promisify(afterDestroy.bind(result)));
+  }
+
+  if (beforeSave) {
+    events.on('beforeSave', promisify(beforeSave.bind(result)));
+  }
+
+  if (afterSave) {
+    events.on('afterSave', promisify(afterSave.bind(result)));
+  }
+
+  Object.assign(result, {
+    beforeCreate(recordToCreate, proceed) {
+      if (result.dontUseObjectIds && result.primaryKey === 'id') {
+        recordToCreate.id = recordToCreate.id || generateUniqueId();
+      }
+
+      events
+        .emitAsync('beforeCreate', recordToCreate)
+        .then(() => events.emitAsync('beforeSave', recordToCreate))
+        .then(() => proceed(), proceed);
+    },
+    afterCreate(newlyCreatedRecord, proceed) {
+      events
+        .emitAsync('afterCreate', newlyCreatedRecord)
+        .then(() => events.emitAsync('afterSave', newlyCreatedRecord))
+        .then(() => proceed(), proceed);
+    },
+    beforeUpdate(valuesToSet, proceed) {
+      events
+        .emitAsync('beforeUpdate', valuesToSet)
+        .then(() => events.emitAsync('beforeSave', valuesToSet))
+        .then(() => proceed(), proceed);
+    },
+    afterUpdate(updatedRecord, proceed) {
+      events
+        .emitAsync('afterUpdate', updatedRecord)
+        .then(() => events.emitAsync('afterSave', updatedRecord))
+        .then(() => proceed(), proceed);
+    },
+    beforeDestroy(criteria, proceed) {
+      events.emitAsync('beforeDestroy', criteria).then(() => proceed(), proceed);
+    },
+    afterDestroy(destroyedRecord, proceed) {
+      events.emitAsync('afterDestroy', destroyedRecord).then(() => proceed(), proceed);
+    },
+  });
 
   if (!result.customToJSON) {
     result.customToJSON = function () {

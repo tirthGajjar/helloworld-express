@@ -56,8 +56,10 @@ npm run db:seed
 ### Running Application
 
 ```sh
-# run app in cluster mode (all components)
-npm run cluster
+# run app core, api worker, and job runner
+npm run app:all
+
+## OR
 
 # run app core
 npm run app:core

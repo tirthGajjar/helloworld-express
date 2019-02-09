@@ -52,7 +52,16 @@ async function teardown() {
   Logger.info('teardown done');
 }
 
+async function clear() {
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+
+  await Promise.all([DataWaterline.clear(), DataGraphql.clear(), DataRedisStorage.clear(), DataRedisCache.clear()]);
+}
+
 module.exports = {
   setup,
   teardown,
+  clear,
 };

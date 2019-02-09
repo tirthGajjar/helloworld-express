@@ -21,7 +21,9 @@ const definition = {
     },
   },
 
-  graphql_ignore: true,
+  graphql_settings: {
+    exclude: true,
+  },
 };
 
 const helpers = {};

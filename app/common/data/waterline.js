@@ -14,7 +14,6 @@ const MemoryAdapter = require('sails-disk');
 const MongoAdapter = require('sails-mongo');
 
 const DataUtils = require('./utils');
-const DataMixin = require('./mixin');
 
 const glob = require('glob');
 const path = require('path');

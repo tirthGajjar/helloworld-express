@@ -11,7 +11,7 @@ services:
     command: pm2-runtime app-core.js
     environment: &environment
         NODE_ENV: development
-        MONGODB_URI: mongodb://172.18.0.1:27017/Starter
+        MONGODB_URI: mongodb://172.18.0.1:27017/starter
         REDIS_STORAGE_URI: redis://172.18.0.1:6379/0
         REDIS_CACHE_URI: redis://172.18.0.1:6379/1
         REDIS_JOB_URI: redis://172.18.0.1:6379/2

@@ -23,7 +23,7 @@ const Data = require('@/common/data');
 
     Logger.info('processing ...');
 
-    await Promise.all([Data.waterline.clear(), Data.redisStorage.clear(), Data.redisCache.clear()]);
+    await Data.clear();
 
     Logger.info('done');
     EVENT.emit('shutdown');

@@ -2,13 +2,7 @@
 
 /* eslint-disable no-invalid-this */
 
-const uuidv1 = require('uuid/v1');
-
 /** @module Data */
-
-function generateUniqueId() {
-  return uuidv1();
-}
 
 const attributes = {
   created_at: {
@@ -24,26 +18,6 @@ const attributes = {
   timestamp: {
     type: 'ref',
     autoUpdatedAt: true,
-  },
-};
-
-const lifecycles = {
-  beforeCreate(record, next) {
-    if (this.dontUseObjectIds && this.primaryKey === 'id') {
-      record.id = record.id || generateUniqueId();
-    }
-    if (this.beforeSave) {
-      this.beforeSave(record, next);
-    } else {
-      next();
-    }
-  },
-  beforeUpdate(record, next) {
-    if (this.beforeSave) {
-      this.beforeSave(record, next);
-    } else {
-      next();
-    }
   },
 };
 
@@ -160,13 +134,22 @@ function association(field) {
 
   const targetCollection = collections[config.collection];
 
-  const throughCollection = collections[config.through]
+  let throughCollection = collections[config.through]
     || collections[`${collection.identity}_${field}__${config.collection}_${config.via}`]
     || collections[`${config.collection}_${config.via}__${collection.identity}_${field}`];
 
+  const isReflexiveAssociation = config.collection === collection.identity && !config.via;
+
+  if (!throughCollection && isReflexiveAssociation) {
+    throughCollection = collections[`${collection.identity}_${field}__${collection.identity}_${field}_${collection.identity}`];
+  }
+
   const attributes = {};
 
-  if (throughCollection) {
+  if (isReflexiveAssociation) {
+    attributes.self = `${collection.identity}_${field}`;
+    attributes.target = `${collection.identity}_${field}_${collection.identity}`;
+  } else if (throughCollection) {
     const attributeByModel = Object.entries(throughCollection.attributes).reduce(
       (acc, [attribute, config]) => ({ ...acc, [config.model || attribute]: attribute }),
       {},
@@ -199,7 +182,6 @@ async function lookupByAssociationWithId(field, criterion) {
 
 module.exports = {
   attributes,
-  lifecycles,
   customToJSON,
   validate,
   association,

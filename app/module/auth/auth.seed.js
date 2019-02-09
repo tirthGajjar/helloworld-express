@@ -11,7 +11,7 @@ module.exports = async () => {
     user: {
       password: 'password',
       email: 'admin@starter.com',
-      name: 'Starter Administrator',
+      name: 'Administrator',
       picture_uri: 'https://randomuser.me/api/portraits/lego/1.jpg',
     },
     client: {},
@@ -23,7 +23,7 @@ module.exports = async () => {
     user: {
       password: 'password',
       email: 'client@starter.com',
-      name: 'Starter Client',
+      name: 'Client',
       picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
     },
     client: {},
@@ -36,7 +36,7 @@ module.exports = async () => {
       user: {
         password: 'password',
         email: `admin+${i}@starter.com`,
-        name: `Starter Administrator ${i}`,
+        name: `Administrator ${i}`,
       },
       client: {},
     });
@@ -45,7 +45,7 @@ module.exports = async () => {
       user: {
         password: 'password',
         email: `client+${i}@starter.com`,
-        name: `Starter Client ${i}`,
+        name: `Client ${i}`,
         picture_uri: `https://randomuser.me/api/portraits/${i % 2 === 0 ? 'women' : 'men'}/1${i}.jpg`,
       },
       client: {},

@@ -123,7 +123,7 @@ describe('Authentication', () => {
         user: {
           password: 'password',
           email: 'admin@starter.com',
-          name: 'Starter Administrator',
+          name: 'Administrator',
         },
         client: {},
       };
@@ -152,7 +152,7 @@ describe('Authentication', () => {
         user: {
           password: 'password',
           email: 'client@starter.com',
-          name: 'Starter Client',
+          name: 'Client',
           picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
         },
         client: {},

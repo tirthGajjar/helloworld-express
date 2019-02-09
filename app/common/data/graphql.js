@@ -11,6 +11,16 @@ const graphql = require('graphql');
 
 const DataWaterline = require('./waterline');
 
+const DEFAULTS = {
+  graphql_settings: {
+    exclude: false,
+    reference: true,
+    count: true,
+    index: true,
+    item: true,
+  },
+};
+
 let schema = null;
 
 const RawType = new graphql.GraphQLScalarType({
@@ -62,31 +72,21 @@ function getGraphQLSchemaFromWaterline(ontology) {
   const queries = {};
 
   Object.values(ontology.collections).forEach((collection) => {
-    if (collection.junctionTable) {
-      collection.graphql_ignore = true;
-    }
-
-    if (collection.identity === 'archive') {
-      collection.graphql_ignore = true;
-    }
-
-    collection.graphql_ignore = collection.graphql_ignore || false;
-
-    if (collection.graphql_ignore === true) {
+    if (collection.junctionTable || collection.identity === 'archive') {
+      collection.graphql_settings = {
+        exclude: true,
+      };
       return;
     }
 
-    collection.graphql_options = {
-      reference: true,
-      count: true,
-      index: true,
-      item: true,
-      ...(collection.graphql_options || {}),
+    collection.graphql_settings = {
+      ...DEFAULTS.graphql_settings,
+      ...(collection.graphql_settings || {}),
     };
   });
 
   Object.values(ontology.collections).forEach((collection) => {
-    if (collection.graphql_ignore === true) {
+    if (collection.graphql_settings.exclude) {
       return;
     }
 
@@ -103,7 +103,7 @@ function getGraphQLSchemaFromWaterline(ontology) {
         field = {
           type: graphql.GraphQLID,
         };
-      } else if (attributeConfig.model && ontology.collections[attributeConfig.model].graphql_options.reference) {
+      } else if (attributeConfig.model && ontology.collections[attributeConfig.model].graphql_settings.reference) {
         field = {
           get type() {
             return ontology.collections[attributeConfig.model].graphql.type;
@@ -115,7 +115,7 @@ function getGraphQLSchemaFromWaterline(ontology) {
         };
       } else if (
         attributeConfig.collection
-        && ontology.collections[attributeConfig.collection].graphql_options.reference
+        && ontology.collections[attributeConfig.collection].graphql_settings.reference
       ) {
         field = {
           get type() {
@@ -193,8 +193,8 @@ function getGraphQLSchemaFromWaterline(ontology) {
       },
     });
 
-    if (collection.graphql_options.count) {
-      const query = collection.graphql_options.count === 'simple'
+    if (collection.graphql_settings.count) {
+      const query = collection.graphql_settings.count === 'simple'
         ? {
           name: `${collectionName}Count`,
           description: `fetch ${collectionName} count`,
@@ -220,8 +220,8 @@ function getGraphQLSchemaFromWaterline(ontology) {
       queries[query.name] = query;
     }
 
-    if (collection.graphql_options.index) {
-      const query = collection.graphql_options.index === 'simple'
+    if (collection.graphql_settings.index) {
+      const query = collection.graphql_settings.index === 'simple'
         ? {
           name: `${collectionName}Index`,
           description: `fetch ${collectionName} index`,
@@ -263,7 +263,7 @@ function getGraphQLSchemaFromWaterline(ontology) {
       queries[query.name] = query;
     }
 
-    if (collection.graphql_options.item) {
+    if (collection.graphql_settings.item) {
       const query = {
         name: collectionName,
         description: `fetch ${collectionName} item`,
@@ -318,9 +318,12 @@ async function teardown() {
   Logger.info('teardown done');
 }
 
+async function clear() {}
+
 module.exports = {
   setup,
   teardown,
+  clear,
   schema,
 };
 
