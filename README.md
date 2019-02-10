@@ -57,7 +57,7 @@ npm run db:seed
 
 ```sh
 # run app core, api worker, and job runner
-npm run app:all
+npm run app
 
 ## OR
 
