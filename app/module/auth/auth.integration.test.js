@@ -32,7 +32,7 @@ describe('Authentication', () => {
     DATA.CLIENT_ACCOUNT = {
       user: {
         password: 'password',
-        email: 'client@starter.com',
+        email: 'client@starter.emiketic.com',
         name: 'Client',
         picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
       },
@@ -84,7 +84,7 @@ describe('Authentication', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: 'incorrect@starter.com',
+          username: 'incorrect@starter.emiketic.com',
           password: 'incorrect',
         }),
       });

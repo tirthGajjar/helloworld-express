@@ -19,7 +19,7 @@ const REDIS_CACHE_URI = process.env.REDIS_CACHE_URI || 'redis://localhost:6379/1
 const REDIS_JOB_URI = process.env.REDIS_JOB_URI || 'redis://localhost:6379/2';
 
 const EMAIL_TRANSPORT_URI = process.env.EMAIL_TRANSPORT_URI || 'smtp://localhost:1025';
-const EMAIL_FROM = process.env.EMAIL_FROM || 'Starter <no-reply@starter.com>';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'Starter <no-reply@starter.emiketic.com>';
 
 const CLIENT_APP_URL = process.env.CLIENT_APP_URL || 'http://localhost:3000';
 

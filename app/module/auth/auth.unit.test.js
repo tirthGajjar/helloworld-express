@@ -122,7 +122,7 @@ describe('Authentication', () => {
       const payload = {
         user: {
           password: 'password',
-          email: 'admin@starter.com',
+          email: 'admin@starter.emiketic.com',
           name: 'Administrator',
         },
         client: {},
@@ -151,7 +151,7 @@ describe('Authentication', () => {
       const payload = {
         user: {
           password: 'password',
-          email: 'client@starter.com',
+          email: 'client@starter.emiketic.com',
           name: 'Client',
           picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
         },

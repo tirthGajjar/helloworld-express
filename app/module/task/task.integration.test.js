@@ -17,7 +17,7 @@ describe('Task integration test', () => {
     const DATA = {};
 
     DATA.CLIENT_ACCOUNT = {
-      email: 'client@starter.com',
+      email: 'client@starter.emiketic.com',
     };
 
     DATA.CREATE_RECORD = {

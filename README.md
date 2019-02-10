@@ -1,4 +1,4 @@
-# Node.js/Express Starter
+# Starter Backend (Node.js/Express)
 
 A boilerplate and reference implementation for Node.js backend built with Express, Waterline, Bull, GraphQL, ...
 
