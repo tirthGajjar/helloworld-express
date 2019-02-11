@@ -1,5 +1,7 @@
 # Starter Backend (Node.js/Express)
 
+![](https://img.shields.io/david/emiketic/emiketic-starter-express.svg?style=for-the-badge)
+
 A boilerplate and reference implementation for Node.js backend built with Express, Waterline, Bull, GraphQL, ...
 
 ## Requirements
