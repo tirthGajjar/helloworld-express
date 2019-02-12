@@ -13,9 +13,9 @@ const UserAccount = new graphql.GraphQLObjectType({
   }),
 });
 
-module.exports = function defineGraphQLQueries() {
-  return {
-    my_account: {
+module.exports = () => ({
+  queries: {
+    account: {
       description: 'fetch account',
       get type() {
         return UserAccount;
@@ -28,5 +28,5 @@ module.exports = function defineGraphQLQueries() {
         };
       },
     },
-  };
-};
+  },
+});

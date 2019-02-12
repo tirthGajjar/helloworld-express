@@ -4,8 +4,8 @@ const graphql = require('graphql');
 
 const Task = require('./Task.model');
 
-module.exports = function defineGraphQLQueries() {
-  return {
+module.exports = () => ({
+  queries: {
     my_tasks: {
       description: 'fetch my tasks',
       get type() {
@@ -19,5 +19,5 @@ module.exports = function defineGraphQLQueries() {
         return data ? data.map((item) => item.toJSON()) : [];
       },
     },
-  };
-};
+  },
+});

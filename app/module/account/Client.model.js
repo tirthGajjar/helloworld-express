@@ -12,6 +12,12 @@ const definition = {
       model: 'user',
     },
   },
+
+  graphql_settings: {
+    count: false,
+    index: false,
+    item: false,
+  },
 };
 
 const helpers = {};

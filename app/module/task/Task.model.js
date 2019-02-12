@@ -38,6 +38,12 @@ const definition = {
     // },
   },
 
+  // graphql_settings: {
+  //   count: false,
+  //   index: false,
+  //   item: false,
+  // },
+
   async onCollectionReady(Model, nativeCollection) {
     await nativeCollection.ensureIndex({
       title: 1,

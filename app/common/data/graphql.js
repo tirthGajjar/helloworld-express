@@ -68,8 +68,36 @@ function getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, at
   return result;
 }
 
-function getGraphQLSchemaFromWaterline(ontology) {
-  const queries = {};
+function getGraphQLSchemaFromWaterline() {
+  const ontology = DataWaterline.ontology;
+
+  const queries = {
+    hello: {
+      args: {
+        name: {
+          type: graphql.GraphQLString,
+        },
+      },
+      type: graphql.GraphQLString,
+      resolve(parent, args) {
+        return `Hello World!`;
+      },
+    },
+  };
+
+  const mutations = {
+    sayHello: {
+      args: {
+        name: {
+          type: graphql.GraphQLString,
+        },
+      },
+      type: graphql.GraphQLString,
+      resolve(parent, args) {
+        return `Hello ${args.name}!`;
+      },
+    },
+  };
 
   Object.values(ontology.collections).forEach((collection) => {
     if (collection.junctionTable || collection.identity === 'archive') {
@@ -283,25 +311,33 @@ function getGraphQLSchemaFromWaterline(ontology) {
 
   glob.sync('app/**/*.graphql.js').forEach((filename) => {
     Logger.info('loading', filename);
-    const defineGraphQLQueries = require(path.resolve(filename));
-    Object.assign(queries, defineGraphQLQueries());
+    const graphqlDefinition = require(path.resolve(filename))();
+    Object.assign(queries, graphqlDefinition.queries || {});
+    Object.assign(mutations, graphqlDefinition.mutations || {});
   });
 
-  const Root = new graphql.GraphQLObjectType({
-    name: 'Root',
-    description: 'Root query',
+  const query = new graphql.GraphQLObjectType({
+    name: 'Query',
+    description: 'Query',
     fields: () => queries,
   });
 
+  const mutation = new graphql.GraphQLObjectType({
+    name: 'Mutation',
+    description: 'Mutation',
+    fields: () => mutations,
+  });
+
   return new graphql.GraphQLSchema({
-    query: Root,
+    query,
+    mutation,
   });
 }
 
 async function setup() {
   Logger.info('setup ...');
 
-  schema = getGraphQLSchemaFromWaterline(DataWaterline.ontology);
+  schema = getGraphQLSchemaFromWaterline();
 
   module.exports.schema = schema;
 
