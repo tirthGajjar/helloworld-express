@@ -6,7 +6,7 @@ const Task = require('./Task.model');
 
 module.exports = function defineGraphQLQueries() {
   return {
-    MyTasks: {
+    my_tasks: {
       description: 'fetch my tasks',
       get type() {
         return new graphql.GraphQLList(Task.collection.graphql.type);
