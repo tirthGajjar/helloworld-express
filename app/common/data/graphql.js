@@ -69,7 +69,7 @@ function getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, at
 }
 
 function getGraphQLSchemaFromWaterline() {
-  const ontology = DataWaterline.ontology;
+  const { ontology } = DataWaterline;
 
   const queries = {
     hello: {

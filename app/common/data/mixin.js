@@ -125,7 +125,7 @@ function validate(Model, data, strictMode = false) {
  */
 function association(field) {
   const collection = this;
-  const collections = collection.waterline.collections;
+  const { collections } = collection.waterline;
   const config = collection.attributes[field];
 
   if (!config.collection) {
