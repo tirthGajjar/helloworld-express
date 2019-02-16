@@ -26,9 +26,8 @@
     "app:console:debug": "nodemon --inspect --inspect-port=5999 ./app-console.js",
     "db:clear": "node ./scripts/db-clear.js;",
     "db:seed": "node ./scripts/db-seed.js;",
-    "docs": "npm run docs:jsdoc ; npm run docs:documentation ; npm run docs:apib ; npm run docs:postman",
-    "docs:jsdoc": "jsdoc -r ./app/ -d ./docs/_jsdoc",
-    "docs:documentation": "documentation build app/** -f html -o docs/_documentation",
+    "docs": "npm run docs:jsdoc ; npm run docs:apib ; npm run docs:postman",
+    "docs:jsdoc": "jsdoc -c ./.jsdoc.json",
     "docs:apib": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development aglio --theme-variables flatly -o /data/docs/_apib/index.html -i /data/docs/api/index.apib",
     "docs:postman": "docker run -it --rm -u $(id -u) -v $PWD:/data emiketic/development sh -c 'cat $(find /data/ -name *.apib) | apiary2postman blueprint > /data/docs/_postman/API.postman_collection.json'"
   },
@@ -56,7 +55,6 @@
   },
   "devDependencies": {
     "babel-eslint": "~10.0.1",
-    "documentation": "~9.1.1",
     "eslint": "~5.14.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "~2.16.0",

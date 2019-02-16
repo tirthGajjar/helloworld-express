@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module CONFIG */
+/** @module common/config */
 
 const { RELEASE_VERSION } = require('./release');
 

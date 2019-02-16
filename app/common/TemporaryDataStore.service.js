@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/TemporaryDataStore */
 
 const DataRedisStorage = require('./data/redis.storage');
 
@@ -8,6 +8,7 @@ const DataRedisStorage = require('./data/redis.storage');
  * retrieve `key` from redis store
  *
  * @param {string} key
+ * @param {*} defaultValue
  */
 async function retrieve(key, defaultValue = null) {
   const value = await DataRedisStorage.client.get(key);

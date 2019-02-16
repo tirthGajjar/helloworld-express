@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/PermanentDataStore */
 
 const Store = require('@/module/shared/store.model');
 
@@ -8,6 +8,7 @@ const Store = require('@/module/shared/store.model');
  * retrieve `key` from mongo store
  *
  * @param {string} key
+ * @param {*} defaultValue
  */
 async function retrieve(key, defaultValue = null) {
   const record = await Store.collection.findOne(key);

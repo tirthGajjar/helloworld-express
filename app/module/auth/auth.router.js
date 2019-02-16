@@ -18,7 +18,7 @@ const EmailJob = require('@/shared/email.job');
 
 const AuthService = require('./auth.service');
 
-const DataService = require('@/common/data.service');
+const DataUtils = require('@/common/data/utils');
 const TemporaryDataStore = require('@/common/TemporaryDataStore.service');
 
 const router = express.Router();
@@ -98,7 +98,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
   });
 
   if (user) {
-    const token = DataService.generateToken();
+    const token = DataUtils.generateToken();
     const tokenPayload = {
       email,
     };

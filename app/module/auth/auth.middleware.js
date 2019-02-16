@@ -1,5 +1,7 @@
 'use strict';
 
+/** @module common/auth/middleware */
+
 const CONST = require('@/common/const');
 
 const ERROR = require('@/common/error');

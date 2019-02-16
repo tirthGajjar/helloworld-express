@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/data/utils */
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -9,15 +9,35 @@ const { spawn } = require('child_process');
 const { promisify } = require('util');
 
 const uuidv1 = require('uuid/v1');
+const uuidv4 = require('uuid/v4');
 
 const { EventEmitter } = require('@/common/events');
 
 const DataMixin = require('./mixin');
 
+/**
+ * generate a unique id
+ *
+ * @returns {UUID} - unique id (UUID v1)
+ */
 function generateUniqueId() {
   return uuidv1();
 }
 
+/**
+ * generate a token
+ *
+ * @returns {UUID} - token (UUID v4)
+ */
+function generateToken() {
+  return uuidv4();
+}
+
+/**
+ * prepare and augment model definition
+ *
+ * @param {Model} model - model definition.
+ */
 function prepareModelDefinition(model) {
   const events = new EventEmitter();
 
@@ -166,6 +186,11 @@ function prepareModelDefinition(model) {
   model.definition = result;
 }
 
+/**
+ * prepare and augment model helpers
+ *
+ * @param {Model} model - model definition.
+ */
 function prepareModelHelpers(model) {
   const result = {
     validate(data, strictMode) {
@@ -178,6 +203,11 @@ function prepareModelHelpers(model) {
   model.helpers = result;
 }
 
+/**
+ * clear out data stores
+ *
+ * @returns {Promise}
+ */
 function clear() {
   return new Promise((resolve, reject) => {
     Logger.debug('running db:clear');
@@ -187,6 +217,11 @@ function clear() {
   });
 }
 
+/**
+ * seed data stores
+ *
+ * @returns {Promise}
+ */
 function seed() {
   return new Promise((resolve, reject) => {
     Logger.debug('running db:seed');
@@ -197,6 +232,8 @@ function seed() {
 }
 
 module.exports = {
+  generateUniqueId,
+  generateToken,
   prepareModelDefinition,
   prepareModelHelpers,
   clear,

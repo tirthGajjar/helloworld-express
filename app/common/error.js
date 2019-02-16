@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module ERROR */
+/** @module common/error */
 
 const ERROR = { ...require('starter-lib/dist/common/error') };
 
@@ -18,8 +18,8 @@ const WATERLINE_ERRORS = [
 /**
  * InvalidRequestError
  *
- * throw new ERROR.InvalidRequestError()
- * throw new ERROR.InvalidRequestError(400, 'InvalidRequest', 'Invalid request', {})
+ * @example throw new ERROR.InvalidRequestError()
+ * @example throw new ERROR.InvalidRequestError(400, 'InvalidRequest', 'Invalid request', {})
  */
 
 ERROR.InvalidRequestError = class InvalidRequestError extends ERROR.FailureError {
@@ -48,9 +48,9 @@ ERROR.InvalidRequestError = class InvalidRequestError extends ERROR.FailureError
 /**
  * ValidationError
  *
- * throw new ERROR.ValidationError()
- * throw new ERROR.ValidationError('InvalidPayload', 'Invalid payload')
- * throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
+ * @example throw new ERROR.ValidationError()
+ * @example throw new ERROR.ValidationError('InvalidPayload', 'Invalid payload')
+ * @example throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
  */
 
 ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError {
@@ -63,7 +63,7 @@ ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError 
 /**
  * InvalidCredentialsError
  *
- * throw new ERROR.InvalidCredentialsError()
+ * @example throw new ERROR.InvalidCredentialsError()
  */
 
 ERROR.InvalidCredentialsError = class InvalidCredentialsError extends ERROR.InvalidRequestError {
@@ -76,7 +76,7 @@ ERROR.InvalidCredentialsError = class InvalidCredentialsError extends ERROR.Inva
 /**
  * UnauthenticatedError
  *
- * throw new ERROR.UnauthenticatedError()
+ * @example throw new ERROR.UnauthenticatedError()
  */
 
 ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.InvalidRequestError {
@@ -89,7 +89,7 @@ ERROR.UnauthenticatedError = class UnauthenticatedError extends ERROR.InvalidReq
 /**
  * UnauthorizedError
  *
- * throw new ERROR.UnauthorizedError()
+ * @example throw new ERROR.UnauthorizedError()
  */
 
 ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.InvalidRequestError {
@@ -102,7 +102,7 @@ ERROR.UnauthorizedError = class UnauthorizedError extends ERROR.InvalidRequestEr
 /**
  * NotFoundError
  *
- * throw new ERROR.NotFoundError()
+ * @example throw new ERROR.NotFoundError()
  */
 
 ERROR.NotFoundError = class NotFoundError extends ERROR.InvalidRequestError {

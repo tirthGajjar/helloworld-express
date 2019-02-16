@@ -2,7 +2,7 @@
 
 /* eslint-disable no-invalid-this */
 
-/** @module Data */
+/** @module common/data/mixin */
 
 const attributes = {
   created_at: {
@@ -24,6 +24,7 @@ const attributes = {
 /**
  * converts data to JSON
  *
+ * @param {*} Modal
  * @param {*} record
  */
 function customToJSON(Modal, record) {
@@ -120,7 +121,6 @@ function validate(Model, data, strictMode = false) {
 /**
  * retrieve association collections
  *
- * @param {object} collection
  * @param {string} field
  */
 function association(field) {

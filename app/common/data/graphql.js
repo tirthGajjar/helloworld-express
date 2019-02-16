@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/data/graphql */
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
@@ -21,6 +21,9 @@ const DEFAULTS = {
   },
 };
 
+/**
+ * GraphQL schema
+ */
 let schema = null;
 
 const RawType = new graphql.GraphQLScalarType({
@@ -334,6 +337,9 @@ function getGraphQLSchemaFromWaterline() {
   });
 }
 
+/**
+ * @returns {Promise}
+ */
 async function setup() {
   Logger.info('setup ...');
 
@@ -346,6 +352,9 @@ async function setup() {
   return schema;
 }
 
+/**
+ * @returns {Promise}
+ */
 async function teardown() {
   Logger.info('teardown ...');
 
@@ -354,6 +363,9 @@ async function teardown() {
   Logger.info('teardown done');
 }
 
+/**
+ * @returns {Promise}
+ */
 async function clear() {}
 
 module.exports = {

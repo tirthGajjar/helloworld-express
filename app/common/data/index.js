@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/data */
 
 const EVENT = require('@/common/events');
 
@@ -13,6 +13,11 @@ const DataRedisCache = require('./redis.cache');
 
 const initialize = require('./initialize');
 
+/**
+ * setup
+ *
+ * @returns {Promise}
+ */
 async function setup() {
   Logger.info('setup ...');
 
@@ -34,6 +39,11 @@ async function setup() {
   Logger.info('setup done');
 }
 
+/**
+ * teardown
+ *
+ * @returns {Promise}
+ */
 async function teardown() {
   Logger.info('teardown ...');
 
@@ -52,6 +62,11 @@ async function teardown() {
   Logger.info('teardown done');
 }
 
+/**
+ * clear
+ *
+ * @returns {Promise}
+ */
 async function clear() {
   if (process.env.NODE_ENV === 'production') {
     return;

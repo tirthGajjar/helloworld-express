@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module CONST */
+/** @module common/const */
 
 const CONST = { ...require('starter-lib/dist/common/const') };
 

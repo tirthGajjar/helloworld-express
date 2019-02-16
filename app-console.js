@@ -37,8 +37,6 @@ context.Data = Data;
 
 context.DataUtils = require('@/common/data/utils');
 
-context.DataService = require('@/common/data.service');
-
 context.PermanentDataStore = require('@/common/PermanentDataStore.service');
 
 context.TemporaryDataStore = require('@/common/TemporaryDataStore.service');

@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module Data */
+/** @module common/data/waterline */
 
 const CONFIG = require('@/common/config');
 
