@@ -35,7 +35,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const dotenv = require('dotenv');
 const fs = require('fs');
 
-[`.env${process.env.NODE_ENV}.local`, `.env.${process.env.NODE_ENV}`, '.env.local', '.env'].forEach((filename) => {
+[`.env.${process.env.NODE_ENV}.local`, `.env.${process.env.NODE_ENV}`, '.env.local', '.env'].forEach((filename) => {
   if (fs.existsSync(filename)) {
     dotenv.load({
       path: filename,
