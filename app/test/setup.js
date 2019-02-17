@@ -32,7 +32,7 @@ function setupWithData(mode) {
 }
 
 function setupWithRunningApp(mode) {
-  let cluster = null;
+  let app = null;
 
   beforeAll(async (next) => {
     jest.setTimeout(30000);
@@ -45,12 +45,12 @@ function setupWithRunningApp(mode) {
 
     await Data.setup();
 
-    Logger.debug('running cluster');
-    cluster = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json']);
+    Logger.debug('running app');
+    app = spawn('pm2-runtime', ['--formatted', '--no-autorestart', 'pm2.test.json']);
 
     let started = false;
 
-    cluster.stdout.on('data', (data) => {
+    app.stdout.on('data', (data) => {
       if (data.toString().includes('ready on port') && !started) {
         started = true;
         next();
@@ -60,8 +60,8 @@ function setupWithRunningApp(mode) {
 
   afterAll(async (next) => {
     await Data.teardown();
-    cluster.on('exit', () => next());
-    cluster.kill('SIGINT');
+    app.on('exit', () => next());
+    app.kill('SIGINT');
   });
 }
 
