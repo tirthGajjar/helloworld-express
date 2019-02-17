@@ -2,7 +2,8 @@
 
 /* eslint-env jest */
 
-const { setupWithRunningApp, testUnauthenticatedFetch, testUnauthorizedFetch } = require('@/test/setup');
+const { setupWithRunningApp } = require('@/test/setup');
+const { testUnauthenticatedFetch, testUnauthorizedFetch } = require('@/test/utils');
 
 const CONST = require('@/common/const');
 
