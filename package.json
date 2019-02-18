@@ -23,7 +23,6 @@
     "app:api": "nodemon --inspect --inspect-port=5901 ./app-api.js",
     "app:job": "nodemon --inspect --inspect-port=5902 ./app-job.js",
     "app:console": "node ./app-console.js",
-    "app:console:debug": "nodemon --inspect --inspect-port=5999 ./app-console.js",
     "db:clear": "node ./scripts/db-clear.js;",
     "db:seed": "node ./scripts/db-seed.js;",
     "docs": "npm run docs:jsdoc ; npm run docs:apib ; npm run docs:postman",
