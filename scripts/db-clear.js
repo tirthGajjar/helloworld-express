@@ -15,12 +15,18 @@ const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
 
+async function setup() {
+  await Data.setup();
+}
+
+async function teardown() {
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.info('initiating ...');
-
-    await Data.setup();
-
+    await setup();
     Logger.info('processing ...');
 
     await Data.clear();
@@ -29,11 +35,8 @@ const Data = require('@/common/data');
     EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Data.teardown();
-  process.exit(0);
-});
+EVENT.once('shutdown', teardown);

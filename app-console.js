@@ -41,12 +41,20 @@ context.PermanentDataStore = require('@/common/PermanentDataStore.service');
 
 context.TemporaryDataStore = require('@/common/TemporaryDataStore.service');
 
+async function setup() {
+  await Data.setup();
+  await Job.setup();
+}
+
+async function teardown() {
+  await Job.teardown();
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.info('initiating ...');
-
-    await Data.setup();
-    await Job.setup();
+    await setup();
 
     let appConsole = null;
 
@@ -82,12 +90,8 @@ context.TemporaryDataStore = require('@/common/TemporaryDataStore.service');
     process.nextTick(() => EVENT.emit('console-ready'));
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Job.teardown();
-  await Data.teardown();
-  process.exit(0);
-});
+EVENT.once('shutdown', teardown);

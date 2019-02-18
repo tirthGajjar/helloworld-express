@@ -19,12 +19,18 @@ const Data = require('@/common/data');
 
 const APP_CONFIG = require('../app-config');
 
+async function setup() {
+  await Data.setup();
+}
+
+async function teardown() {
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.info('initiating ...');
-
-    await Data.setup();
-
+    await setup();
     Logger.info('processing ...');
 
     const FILES = APP_CONFIG.SEED;
@@ -47,11 +53,8 @@ const APP_CONFIG = require('../app-config');
     EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Data.teardown();
-  process.exit(0);
-});
+EVENT.once('shutdown', teardown);

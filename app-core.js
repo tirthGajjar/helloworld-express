@@ -14,12 +14,20 @@ const EVENT = require('@/common/events');
 const Data = require('@/common/data');
 const Job = require('@/common/job');
 
+async function setup() {
+  await Data.setup();
+  await Job.setup();
+}
+
+async function teardown() {
+  await Job.teardown();
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.info('initiating ...');
-
-    await Data.setup();
-    await Job.setup();
+    await setup();
 
     glob.sync('app/**/*.core.js').forEach((filename) => {
       Logger.info('loading', filename);
@@ -30,12 +38,8 @@ const Job = require('@/common/job');
     process.nextTick(() => EVENT.emit('core-ready'));
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Job.teardown();
-  await Data.teardown();
-  process.exit(0);
-});
+EVENT.once('shutdown', teardown);

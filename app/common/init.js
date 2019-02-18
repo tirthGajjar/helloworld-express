@@ -78,9 +78,12 @@ if (!CONFIG.IS_TEST && (process.env.NODE_ENV === 'development' || process.env.NO
 process.on('SIGINT', () => {
   Logger.debug('shutdown initiated ...');
   process.nextTick(() => EVENT.emit('shutdown'));
+});
+
+EVENT.once('shutdown', (code = 0) => {
   setTimeout(() => {
     Logger.debug('exiting');
-    process.nextTick(() => process.exit(0));
+    process.nextTick(() => process.exit(code));
   }, 1000);
 });
 

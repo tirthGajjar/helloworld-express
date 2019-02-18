@@ -17,13 +17,20 @@ const CONFIG = require('@/common/config');
 const Data = require('@/common/data');
 const Job = require('@/common/job');
 
+async function setup() {
+  await Data.setup();
+  await Job.setup();
+}
+
+async function teardown() {
+  await Job.teardown();
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.info('initiating ...');
-
-    await Data.setup();
-    await Job.setup();
-
+    await setup();
     Logger.info('processing ...');
 
     // @PLACEHOLDER for custom scripts
@@ -32,12 +39,8 @@ const Job = require('@/common/job');
     EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Job.teardown();
-  await Data.teardown();
-  process.exit(0);
-});
+EVENT.once('shutdown', teardown);

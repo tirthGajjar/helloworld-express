@@ -17,13 +17,20 @@ const Job = require('@/common/job');
 
 const Task = require('./Task.model');
 
+async function setup() {
+  await Data.setup();
+  await Job.setup();
+}
+
+async function teardown() {
+  await Job.teardown();
+  await Data.teardown();
+}
+
 (async () => {
   try {
     Logger.debug('initiating ...');
-
-    await Data.setup();
-    await Job.setup();
-
+    await setup();
     Logger.debug('processing ...');
 
     const records = await Task.collection.find().where({});
@@ -32,14 +39,11 @@ const Task = require('./Task.model');
     Logger.debug(JSON.stringify(records, null, 2));
 
     Logger.debug('done');
-    process.exit(0);
+    EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
-    process.exit(1);
+    EVENT.emit('shutdown', 1);
   }
 })();
 
-EVENT.once('shutdown', async () => {
-  await Job.teardown();
-  await Data.teardown();
-});
+EVENT.once('shutdown', teardown);
