@@ -58,11 +58,7 @@ router.post('/auth/login', async (req, res) => {
   res.send({
     access_token,
     audience,
-    user: {
-      role: user.role,
-      email: user.email,
-      ...user.toJSON(),
-    },
+    user: User.collection.toAccount(user),
   });
 });
 
@@ -78,11 +74,7 @@ router.post('/auth/signup', async (req, res) => {
 
   res.send({
     access_token,
-    user: {
-      role: user.role,
-      email: user.email,
-      ...user.toJSON(),
-    },
+    user: User.collection.toAccount(user),
   });
 });
 

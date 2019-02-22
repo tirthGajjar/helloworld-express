@@ -15,11 +15,7 @@ async function getAuthenticatedUserByEmail(email, audience) {
   }
   account.access_token = await AuthService.generateAccessToken(account.user, audience);
   account.audience = audience;
-  account.user = {
-    ...account.user.toJSON(),
-    role: account.user.role,
-    email: account.user.email,
-  };
+  account.user = User.collection.toAccount(account.user);
   return JSON.parse(JSON.stringify(account));
 }
 

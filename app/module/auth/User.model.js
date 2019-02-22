@@ -70,7 +70,7 @@ const definition = {
 
   attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],
 
-  attributes_to_strip_in_json: ['password', 'role', 'email'],
+  attributes_to_strip_in_json: ['password', 'role', 'email', 'email_verified'],
 
   graphql_settings: {
     count: false,
@@ -96,6 +96,15 @@ const definition = {
   //     .toUpperCase();
   //   return record;
   // },
+
+  toAccount(user) {
+    return {
+      role: user.role,
+      email: user.email,
+      email_verified: user.email_verified,
+      ...user.toJSON(),
+    };
+  },
 };
 
 const helpers = {};

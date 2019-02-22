@@ -4,6 +4,8 @@ const express = require('express');
 
 const { withAuthenticatedUser, withUserAsClient } = require('../auth/auth.middleware');
 
+const User = require('../auth/User.model');
+
 const router = express.Router();
 
 module.exports = {
@@ -16,11 +18,7 @@ router.get('/account', withAuthenticatedUser, withUserAsClient, async (req, res)
 
   res.send({
     audience,
-    user: {
-      role: user.role,
-      email: user.email,
-      ...user.toJSON(),
-    },
+    user: User.collection.toAccount(user),
     client,
   });
 });

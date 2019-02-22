@@ -50,7 +50,7 @@ ERROR.InvalidRequestError = class InvalidRequestError extends ERROR.FailureError
  *
  * @example throw new ERROR.ValidationError()
  * @example throw new ERROR.ValidationError('InvalidPayload', 'Invalid payload')
- * @example throw new ERROR.ValidationError(null, null, { issues: ['email', 'lastname']})
+ * @example throw new ERROR.ValidationError(null, null, { issues: ['email', 'name']})
  */
 
 ERROR.ValidationError = class ValidationError extends ERROR.InvalidRequestError {

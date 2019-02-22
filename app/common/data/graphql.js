@@ -140,8 +140,7 @@ function getGraphQLSchemaFromWaterline() {
             return ontology.collections[attributeConfig.model].graphql.type;
           },
           async resolve(parent) {
-            const data = await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
-            return data ? data.toJSON() : null;
+            return await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
           },
         };
       } else if (
@@ -174,7 +173,7 @@ function getGraphQLSchemaFromWaterline() {
               });
             }
 
-            return data ? data.map((item) => item.toJSON()) : [];
+            return data;
           },
         };
       } else {
@@ -258,8 +257,7 @@ function getGraphQLSchemaFromWaterline() {
           description: `fetch ${collectionName} index`,
           type: new graphql.GraphQLList(CollectionType),
           async resolve(parent, args) {
-            const data = await collection.find();
-            return data ? data.map((item) => item.toJSON()) : [];
+            return await collection.find();
           },
         }
         : {
@@ -281,13 +279,12 @@ function getGraphQLSchemaFromWaterline() {
           },
           type: new graphql.GraphQLList(CollectionType),
           async resolve(parent, args) {
-            const data = await collection
+            return await collection
               .find()
               .where(args.filter)
               .skip(args.offset)
               .limit(args.limit)
               .sort(args.sort);
-            return data ? data.map((item) => item.toJSON()) : [];
           },
         };
 
@@ -303,8 +300,7 @@ function getGraphQLSchemaFromWaterline() {
         },
         type: CollectionType,
         async resolve(parent, args) {
-          const data = await collection.findOne(args);
-          return data ? data.toJSON() : null;
+          return await collection.findOne(args);
         },
       };
 

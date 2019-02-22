@@ -10,6 +10,7 @@ const UserAccount = new graphql.GraphQLObjectType({
     ...User.collection.graphql.fields,
     role: { type: graphql.GraphQLString },
     email: { type: graphql.GraphQLString },
+    email_verified: { type: graphql.GraphQLBoolean },
   }),
 });
 
@@ -21,11 +22,7 @@ module.exports = () => ({
         return UserAccount;
       },
       async resolve(parent, args, req) {
-        return {
-          role: req.user.role,
-          email: req.user.email,
-          ...req.user.toJSON(),
-        };
+        return User.collection.toAccount(req.user);
       },
     },
   },
