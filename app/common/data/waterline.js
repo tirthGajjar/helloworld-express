@@ -10,6 +10,7 @@ const { promisify } = require('util');
 
 const Waterline = require('waterline');
 const WaterlineUtils = require('waterline-utils');
+
 const MemoryAdapter = require('sails-disk');
 const MongoAdapter = require('sails-mongo');
 
@@ -20,7 +21,7 @@ const path = require('path');
 
 let ontology = null;
 
-let models = {};
+let models = null;
 
 /**
  * setup
@@ -30,14 +31,14 @@ let models = {};
 async function setup() {
   Logger.info('setup ...');
 
-  const modelsByIdentity = {};
+  models = module.exports.models = {};
+
   glob.sync('app/**/*.model.js').forEach((filename) => {
     Logger.info('loading', filename);
     const model = require(path.resolve(filename));
     if (model.definition) {
       DataUtils.prepareModelDefinition(model);
       DataUtils.prepareModelHelpers(model);
-      modelsByIdentity[model.definition.identity] = model;
       models[model.definition.tableName] = model;
     }
   });
@@ -63,8 +64,8 @@ async function setup() {
       // },
     },
 
-    models: Object.entries(modelsByIdentity).reduce(
-      (acc, [identity, model]) => ({ ...acc, [identity]: model.definition }),
+    models: Object.values(models).reduce(
+      (acc, model) => ({ ...acc, [model.definition.identity]: model.definition }),
       {},
     ),
 
@@ -87,11 +88,11 @@ async function setup() {
 
   ontology = module.exports.ontology = await promisify(Waterline.start)(config);
 
-  Object.entries(ontology.collections).forEach(([identity, collection]) => {
-    if (!modelsByIdentity[identity]) {
+  Object.values(ontology.collections).forEach((collection) => {
+    if (!models[collection.tableName]) {
       return;
     }
-    modelsByIdentity[identity].collection = collection;
+    models[collection.tableName].collection = collection;
   });
 
   if (CONFIG.IS_CORE && process.env.MIGRATE !== 'safe') {
@@ -146,7 +147,7 @@ async function teardown() {
 
       ontology = module.exports.ontology = null;
 
-      models = module.exports.models = {};
+      models = module.exports.models = null;
 
       if (err) {
         reject(err);
