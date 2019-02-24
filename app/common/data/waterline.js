@@ -35,11 +35,11 @@ async function setup() {
 
   glob.sync('app/**/*.model.js').forEach((filename) => {
     Logger.info('loading', filename);
-    const model = require(path.resolve(filename));
-    if (model.definition) {
-      DataUtils.prepareModelDefinition(model);
-      DataUtils.prepareModelHelpers(model);
-      models[model.definition.tableName] = model;
+    const Model = require(path.resolve(filename));
+    if (Model.definition) {
+      DataUtils.prepareModelDefinition(Model);
+      DataUtils.prepareModelHelpers(Model);
+      models[Model.definition.tableName] = Model;
     }
   });
 
@@ -65,7 +65,7 @@ async function setup() {
     },
 
     models: Object.values(models).reduce(
-      (acc, model) => ({ ...acc, [model.definition.identity]: model.definition }),
+      (acc, Model) => ({ ...acc, [Model.definition.identity]: Model.definition }),
       {},
     ),
 
@@ -111,13 +111,13 @@ async function setup() {
 
   if (CONFIG.IS_CORE) {
     await Promise.all(
-      Object.values(models).map(async (model) => {
-        if (!model.collection.onCollectionReady) {
+      Object.values(models).map(async (Model) => {
+        if (!Model.collection.onCollectionReady) {
           return;
         }
         const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
-        const nativeCollection = nativeClient.collection(model.collection.tableName);
-        await model.collection.onCollectionReady(model, nativeCollection);
+        const nativeCollection = nativeClient.collection(Model.collection.tableName);
+        await Model.collection.onCollectionReady(Model, nativeCollection);
       }),
     );
   }
