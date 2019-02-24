@@ -26,6 +26,10 @@ const DEFAULTS = {
  */
 let schema = null;
 
+/**
+ * GraphQL types
+ */
+
 const RawType = new graphql.GraphQLScalarType({
   name: 'Raw',
   serialize: (value) => value,
@@ -334,14 +338,14 @@ function getGraphQLSchemaFromWaterline() {
 }
 
 /**
+ * setup
+ *
  * @returns {Promise}
  */
 async function setup() {
   Logger.info('setup ...');
 
-  schema = getGraphQLSchemaFromWaterline();
-
-  module.exports.schema = schema;
+  schema = module.exports.schema = getGraphQLSchemaFromWaterline();
 
   Logger.info('setup done');
 
@@ -349,17 +353,21 @@ async function setup() {
 }
 
 /**
+ * teardown
+ *
  * @returns {Promise}
  */
 async function teardown() {
   Logger.info('teardown ...');
 
-  module.exports.schema = null;
+  schema = module.exports.schema = null;
 
   Logger.info('teardown done');
 }
 
 /**
+ * clear
+ *
  * @returns {Promise}
  */
 async function clear() {}

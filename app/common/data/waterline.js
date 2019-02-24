@@ -2,9 +2,9 @@
 
 /** @module common/data/waterline */
 
-const CONFIG = require('@/common/config');
-
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
+
+const CONFIG = require('@/common/config');
 
 const { promisify } = require('util');
 
@@ -20,8 +20,13 @@ const path = require('path');
 
 let ontology = null;
 
-const models = {};
+let models = {};
 
+/**
+ * setup
+ *
+ * @returns {Promise}
+ */
 async function setup() {
   Logger.info('setup ...');
 
@@ -80,7 +85,7 @@ async function setup() {
     },
   };
 
-  ontology = await promisify(Waterline.start)(config);
+  ontology = module.exports.ontology = await promisify(Waterline.start)(config);
 
   Object.entries(ontology.collections).forEach(([identity, collection]) => {
     if (!modelsByIdentity[identity]) {
@@ -88,10 +93,6 @@ async function setup() {
     }
     modelsByIdentity[identity].collection = collection;
   });
-
-  module.exports.ontology = ontology;
-
-  module.exports.models = models;
 
   if (CONFIG.IS_CORE && process.env.MIGRATE !== 'safe') {
     Logger.info('migrate...');
@@ -125,6 +126,11 @@ async function setup() {
   return ontology;
 }
 
+/**
+ * teardown
+ *
+ * @returns {Promise}
+ */
 async function teardown() {
   return new Promise((resolve, reject) => {
     Logger.info('teardown ...');
@@ -138,13 +144,9 @@ async function teardown() {
     ontology.teardown((err) => {
       Logger.info('teardown done', err || '');
 
-      ontology = null;
+      ontology = module.exports.ontology = null;
 
-      module.exports.ontology = null;
-
-      ontology = models;
-
-      module.exports.models = null;
+      models = module.exports.models = {};
 
       if (err) {
         reject(err);
@@ -155,6 +157,11 @@ async function teardown() {
   });
 }
 
+/**
+ * clear
+ *
+ * @returns {Promise}
+ */
 async function clear() {
   const nativeClient = ontology.datastores.mongo.adapter.datastores.mongo.manager;
   await nativeClient.dropDatabase();

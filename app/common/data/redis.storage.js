@@ -17,7 +17,7 @@ async function setup() {
   return new Promise((resolve, reject) => {
     Logger.info('setup ...');
 
-    client = Redis.createClient(CONFIG.REDIS_STORAGE_URI);
+    client = module.exports.client = Redis.createClient(CONFIG.REDIS_STORAGE_URI);
 
     client.on('error', reject);
 
@@ -27,8 +27,6 @@ async function setup() {
       RedisCommands.list.forEach((command) => {
         client[command] = promisify(client[command]).bind(client);
       });
-
-      module.exports.client = client;
 
       resolve(client);
     });
@@ -48,9 +46,7 @@ async function teardown() {
     client.quit((err) => {
       Logger.info('teardown done', err || '');
 
-      client = null;
-
-      module.exports.client = null;
+      client = module.exports.client = null;
 
       if (err) {
         reject(err);
