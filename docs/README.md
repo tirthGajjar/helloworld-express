@@ -76,7 +76,7 @@ Data is managed by [waterline](http://waterlinejs.org/).
 
 Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
 
-- a job is defined in a `*.job.js` file within a module or under `app/shared/job`. it should export a `queue` instance, a `processor` function
+- a job is defined in a `*.job.js` file within a module or under `app/shared/job`. it should export a `queue` instance, a `process` function
 - a job runs within `app-job` component
 - a job is initiated from any components using on of the following methods
 

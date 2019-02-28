@@ -44,12 +44,12 @@ async function teardown() {
       if (job.setup) {
         await job.setup();
       }
-      if (Array.isArray(job.processor)) {
-        job.processor.forEach((processor) => {
-          job.queue.process(processor.name, processor.concurrency || 1, processor.processor);
+      if (Array.isArray(job.process)) {
+        job.process.forEach((process) => {
+          job.queue.process(process.name, process.concurrency || 1, process.process);
         });
       } else {
-        job.queue.process('*', job.concurrency || 1, job.processor);
+        job.queue.process('*', job.concurrency || 1, job.process);
       }
 
       job.queue

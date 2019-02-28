@@ -6,6 +6,8 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 const { spawn } = require('child_process');
 
+const CONFIG = require('@/common/config');
+
 const Data = require('@/common/data');
 const DataUtils = require('@/common/data/utils');
 
@@ -48,11 +50,15 @@ function setupWithRunningApp(mode) {
     let started = false;
 
     app.stdout.on('data', (data) => {
-      if (data.toString().includes('ready on port') && !started) {
+      if (!started && data.toString().includes(`ready on port ${CONFIG.PORT}`)) {
         started = true;
-        next();
+        setTimeout(() => next(), 1000);
       }
     });
+  });
+
+  beforeEach((next) => {
+    setTimeout(() => next(), 1000);
   });
 
   afterAll(async (next) => {

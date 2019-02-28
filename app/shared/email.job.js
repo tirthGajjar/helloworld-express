@@ -45,7 +45,7 @@ async function setup() {
   });
 }
 
-async function processor(job) {
+async function process(job) {
   const context = {
     ...TEMPLATE_CONTEXT_DEFAULTS,
     subject: job.data.subject,
@@ -70,5 +70,5 @@ module.exports = {
   name,
   queue,
   setup,
-  processor,
+  process,
 };
