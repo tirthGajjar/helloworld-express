@@ -50,7 +50,7 @@ function setupWithRunningApp(mode) {
     let started = false;
 
     app.stdout.on('data', (data) => {
-      if (!started && data.toString().includes(`ready on port ${CONFIG.PORT}`)) {
+      if (!started && data.toString().includes(`ready on port ${CONFIG.API_PORT}`)) {
         started = true;
         setTimeout(() => next(), 1000);
       }

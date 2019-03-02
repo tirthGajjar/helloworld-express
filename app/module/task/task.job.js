@@ -12,7 +12,7 @@ const queue = new Queue(name, CONFIG.REDIS_JOB_URI);
 
 const concurrency = 1;
 
-async function process(job) {
+async function processor(job) {
   Logger.debug('processing', job.id, job.data);
 }
 
@@ -20,5 +20,5 @@ module.exports = {
   name,
   queue,
   concurrency,
-  process,
+  processor,
 };
