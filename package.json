@@ -54,10 +54,10 @@
   },
   "devDependencies": {
     "babel-eslint": "~10.0.1",
-    "eslint": "~5.14.1",
+    "eslint": "~5.15.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "~2.16.0",
-    "jest": "~24.1.0",
+    "jest": "~24.3.1",
     "jsdoc": "~3.5.5",
     "nodemon": "~1.18.10",
     "pm2": "~3.3.1",
