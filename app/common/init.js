@@ -37,7 +37,7 @@ const fs = require('fs');
 
 [`.env.${process.env.NODE_ENV}.local`, `.env.${process.env.NODE_ENV}`, '.env.local', '.env'].forEach((filename) => {
   if (fs.existsSync(filename)) {
-    dotenv.load({
+    dotenv.config({
       path: filename,
     });
   }
