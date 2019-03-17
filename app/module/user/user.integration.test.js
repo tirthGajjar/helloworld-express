@@ -11,26 +11,26 @@ const CONFIG = require('@/common/config');
 
 // const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-describe('Account integration test', () => {
-  describe('/account', () => {
+describe('User integration test', () => {
+  describe('/user', () => {
     setupWithRunningApp('seed');
 
     const DATA = {};
 
-    DATA.CLIENT_ACCOUNT = {
+    DATA.CLIENT = {
       email: 'client@starter.emiketic.com',
     };
 
     const CACHE = {};
 
     beforeAll(async () => {
-      CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT_ACCOUNT.email, CONST.ROLE.CLIENT);
+      CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT.email, CONST.ROLE.CLIENT);
     });
 
-    testUnauthenticatedFetch('GET /account should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/account`));
+    testUnauthenticatedFetch('GET /user should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/user`));
 
-    test('GET /account should succeed with authenticated access', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/account`, {
+    test('GET /user should succeed with authenticated access', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/user`, {
         headers: {
           Authorization: `Bearer ${CACHE.client.access_token}`,
         },

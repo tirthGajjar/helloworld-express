@@ -11,7 +11,7 @@ const AUTH_JWT_SECRET = process.env.AUTH_JWT_SECRET || 'secret';
 const AUTH_JWT_EXPIRATION = process.env.AUTH_JWT_EXPIRATION || (30 * CONST.DURATION_DAY) / CONST.DURATION_SECOND; // in seconds, @TODO move to config? or param?
 
 const User = require('./User.model');
-const Client = require('../account/Client.model');
+const Client = require('../user/Client.model');
 
 const SALT_ROUNDS = 8;
 
@@ -91,7 +91,7 @@ function extractAccessTokenFromRequest(req) {
   return token;
 }
 
-async function createAdministratorAccount({ user: user_data, client: client_data }) {
+async function createAdministratorUser({ user: user_data, client: client_data }) {
   user_data = user_data || {};
   client_data = client_data || {};
 
@@ -134,7 +134,7 @@ async function createAdministratorAccount({ user: user_data, client: client_data
   };
 }
 
-async function createClientAccount({ user: user_data, client: client_data }) {
+async function createClientUser({ user: user_data, client: client_data }) {
   user_data = user_data || {};
   client_data = client_data || {};
 
@@ -183,6 +183,6 @@ module.exports = {
   generateAccessToken,
   validateAccessToken,
   extractAccessTokenFromRequest,
-  createAdministratorAccount,
-  createClientAccount,
+  createAdministratorUser,
+  createClientUser,
 };

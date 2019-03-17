@@ -58,23 +58,23 @@ router.post('/auth/login', async (req, res) => {
   res.send({
     access_token,
     audience,
-    user: User.collection.toAccount(user),
+    user: User.collection.toUserRecord(user),
   });
 });
 
 router.post('/auth/signup', async (req, res) => {
-  const account = await AuthService.createClientAccount({
+  const record = await AuthService.createClientUser({
     user: req.body.user,
     client: req.body.client,
   });
 
-  const { user } = account;
+  const { user } = record;
 
   const access_token = await AuthService.generateAccessToken(user);
 
   res.send({
     access_token,
-    user: User.collection.toAccount(user),
+    user: User.collection.toUserRecord(user),
   });
 });
 
@@ -145,5 +145,53 @@ router.post('/auth/password-reset/perform', async (req, res) => {
 });
 
 router.get('/auth/check', withAuthenticatedUser, async (req, res) => {
+  res.send({});
+});
+
+router.post('/auth/change-email', withAuthenticatedUser, async (req, res) => {
+  const payload = req.body;
+
+  const existingUser = await User.collection.findOne({
+    email: payload.email,
+  });
+
+  if (!existingUser) {
+    throw new ERROR.NotFoundError();
+  }
+
+  const user = await User.collection.updateOne(
+    {
+      id: req.user.id,
+    },
+    {
+      email: payload.email,
+    },
+  );
+
+  // @TODO send validation email
+
+  res.send({
+    user,
+  });
+});
+
+router.post('/auth/change-password', withAuthenticatedUser, async (req, res) => {
+  const { password, newPassword } = req.body;
+
+  const isIdentical = await AuthService.comparePassword(password, req.user.password);
+
+  if (!isIdentical) {
+    throw new ERROR.InvalidCredentialsError();
+  }
+  const encryptedNewPassword = await AuthService.encryptPassword(newPassword);
+
+  await User.collection.updateOne(
+    {
+      id: req.user.id,
+    },
+    {
+      password: encryptedNewPassword,
+    },
+  );
   res.send({});
 });

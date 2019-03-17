@@ -104,21 +104,21 @@ describe('Authentication', () => {
     });
   });
 
-  describe('Account creation', () => {
+  describe('User creation', () => {
     setupWithData();
 
-    test('createAdministratorAccount() should fail with invalid payload', async () => {
+    test('createAdministratorUser() should fail with invalid payload', async () => {
       const payload = {
         user: {},
         client: {},
       };
       try {
-        await AuthService.createAdministratorAccount(payload);
+        await AuthService.createAdministratorUser(payload);
       } catch (error) {
         expect(error.name).toBe('ValidationError');
       }
     });
-    test('createAdministratorAccount() should succeed with valid payload', async () => {
+    test('createAdministratorUser() should succeed with valid payload', async () => {
       const payload = {
         user: {
           password: 'password',
@@ -127,7 +127,7 @@ describe('Authentication', () => {
         },
         client: {},
       };
-      const result = await AuthService.createAdministratorAccount(payload);
+      const result = await AuthService.createAdministratorUser(payload);
       delete payload.user.password;
       expect(result).toMatchObject(payload);
       expect(result.user.id).toBeDefined();
@@ -136,18 +136,18 @@ describe('Authentication', () => {
       expect(result.user._client).toBe(result.client.id);
     });
 
-    test('createClientAccount() should fail with invalid payload', async () => {
+    test('createClientUser() should fail with invalid payload', async () => {
       const payload = {
         user: {},
         client: {},
       };
       try {
-        await AuthService.createClientAccount(payload);
+        await AuthService.createClientUser(payload);
       } catch (error) {
         expect(error.name).toBe('ValidationError');
       }
     });
-    test('createClientAccount() should succeed with valid payload', async () => {
+    test('createClientUser() should succeed with valid payload', async () => {
       const payload = {
         user: {
           password: 'password',
@@ -157,7 +157,7 @@ describe('Authentication', () => {
         },
         client: {},
       };
-      const result = await AuthService.createClientAccount(payload);
+      const result = await AuthService.createClientUser(payload);
       delete payload.user.password;
       expect(result).toMatchObject(payload);
       expect(result.user.id).toBeDefined();

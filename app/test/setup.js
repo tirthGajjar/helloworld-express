@@ -13,7 +13,7 @@ const DataUtils = require('@/common/data/utils');
 
 function setupWithData(mode) {
   beforeAll(async () => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
 
     if (mode === 'seed') {
       await DataUtils.seed();

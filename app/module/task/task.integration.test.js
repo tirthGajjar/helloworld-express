@@ -17,7 +17,7 @@ describe('Task integration test', () => {
 
     const DATA = {};
 
-    DATA.CLIENT_ACCOUNT = {
+    DATA.CLIENT = {
       email: 'client@starter.emiketic.com',
     };
 
@@ -29,7 +29,7 @@ describe('Task integration test', () => {
     const CACHE = {};
 
     beforeAll(async () => {
-      CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT_ACCOUNT.email, CONST.ROLE.CLIENT);
+      CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT.email, CONST.ROLE.CLIENT);
     });
 
     testUnauthenticatedFetch('GET /task should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/task'`));

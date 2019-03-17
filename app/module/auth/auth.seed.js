@@ -5,9 +5,9 @@ const Logger = require('@/common/logger').createLogger($filepath(__filename));
 const AuthService = require('./auth.service');
 
 module.exports = async () => {
-  let account;
+  let record;
 
-  account = await AuthService.createAdministratorAccount({
+  record = await AuthService.createAdministratorUser({
     user: {
       password: 'password',
       email: 'admin@starter.emiketic.com',
@@ -17,9 +17,9 @@ module.exports = async () => {
     client: {},
   });
 
-  Logger.debug(account);
+  Logger.debug(record);
 
-  account = await AuthService.createClientAccount({
+  record = await AuthService.createClientUser({
     user: {
       password: 'password',
       email: 'client@starter.emiketic.com',
@@ -29,10 +29,10 @@ module.exports = async () => {
     client: {},
   });
 
-  Logger.debug(account);
+  Logger.debug(record);
 
   for (let i = 1; i < 10; i++) {
-    account = await AuthService.createAdministratorAccount({
+    record = await AuthService.createAdministratorUser({
       user: {
         password: 'password',
         email: `admin+${i}@starter.emiketic.com`,
@@ -41,7 +41,7 @@ module.exports = async () => {
       client: {},
     });
 
-    account = await AuthService.createClientAccount({
+    record = await AuthService.createClientUser({
       user: {
         password: 'password',
         email: `client+${i}@starter.emiketic.com`,

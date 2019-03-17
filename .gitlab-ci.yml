@@ -1,8 +1,9 @@
-
 stages:
   - prepare
   - lint
   - test
+  - build
+  - deploy
 
 image: node:10
 
@@ -64,3 +65,36 @@ test:integration:
     - export REDIS_CACHE_URI=redis://redis:6379/11
     - export REDIS_JOB_URI=redis://redis:6379/12
     - npm run test:integration
+
+build:
+  image: gitlab/dind
+  services:
+  - docker:dind
+  stage: build
+  only:
+    - wip
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - docker version
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  tags:
+    - docker
+  image: emiketic/essentials
+  only:
+    - wip
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh ; chmod 700 ~/.ssh
+    - ssh-keyscan ${DEPLOY_SSH_TARGET#*@} > ~/.ssh/known_hosts ; chmod 644 ~/.ssh/known_hosts
+    - ssh "${DEPLOY_SSH_TARGET}" "cd /app/emiketic-starter-express/ && docker-compose pull && docker-compose up -d && exit"

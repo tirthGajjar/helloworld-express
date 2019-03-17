@@ -24,6 +24,7 @@ module.exports = async () => {
       // _owner: SharedUtils.getRandomArrayItem(DATA.User).id,
       _owner: DATA.User[0].id,
       // _manager_s: SharedUtils.getRandomArrayItemSet(DATA.User).map((item) => item.id),
+      done: true,
     })
     .fetch();
 

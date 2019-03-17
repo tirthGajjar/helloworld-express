@@ -7,7 +7,7 @@ const CONST = require('@/common/const');
 const ERROR = require('@/common/error');
 
 const User = require('./User.model');
-const Client = require('../account/Client.model');
+const Client = require('../user/Client.model');
 
 const AuthService = require('./auth.service');
 

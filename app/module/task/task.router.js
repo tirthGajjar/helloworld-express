@@ -11,11 +11,11 @@ const Task = require('./Task.model');
 const router = express.Router();
 
 module.exports = {
-  prefix: '/',
+  prefix: '',
   router,
 };
 
-router.use(withAuthenticatedUser);
+router.use('/task', withAuthenticatedUser);
 
 // @TODO validate `task_id` route param: if value is not a uuid, throw 404 status
 
@@ -63,6 +63,8 @@ router.post('/task/create', async (req, res) => {
     throw new ERROR.ValidationError(null, null, { issues });
   }
 
+  // record._owner = req.user.id;
+
   const data = await Task.collection.create(record).fetch();
 
   res.send({
@@ -97,7 +99,3 @@ router.post('/task/:task_id/delete', async (req, res) => {
 
   res.send({});
 });
-
-// POST /task/:task_id/mark-done
-
-// POST /task/:task_id/mark-undone

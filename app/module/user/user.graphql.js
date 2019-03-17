@@ -4,8 +4,8 @@ const graphql = require('graphql');
 
 const User = require('../auth/User.model');
 
-const UserAccount = new graphql.GraphQLObjectType({
-  name: 'UserAccount',
+const UserRecord = new graphql.GraphQLObjectType({
+  name: 'UserRecord',
   fields: () => ({
     ...User.collection.graphql.fields,
     role: { type: graphql.GraphQLString },
@@ -16,13 +16,13 @@ const UserAccount = new graphql.GraphQLObjectType({
 
 module.exports = () => ({
   queries: {
-    account: {
-      description: 'fetch account',
+    user: {
+      description: 'fetch user',
       get type() {
-        return UserAccount;
+        return UserRecord;
       },
       async resolve(parent, args, req) {
-        return User.collection.toAccount(req.user);
+        return User.collection.toUserRecord(req.user);
       },
     },
   },

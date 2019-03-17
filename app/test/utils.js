@@ -8,15 +8,15 @@ const User = require('@/module/auth/User.model');
 const AuthService = require('@/module/auth/auth.service');
 
 async function getAuthenticatedUserByEmail(email, audience) {
-  const account = {};
-  account.user = await User.collection.findOne({ email });
-  if (!account.user) {
+  const record = {};
+  record.user = await User.collection.findOne({ email });
+  if (!record.user) {
     throw new Error('User not found');
   }
-  account.access_token = await AuthService.generateAccessToken(account.user, audience);
-  account.audience = audience;
-  account.user = User.collection.toAccount(account.user);
-  return JSON.parse(JSON.stringify(account));
+  record.access_token = await AuthService.generateAccessToken(record.user, audience);
+  record.audience = audience;
+  record.user = User.collection.toUserRecord(record.user);
+  return JSON.parse(JSON.stringify(record));
 }
 
 // async function getAuthenticatedUserByEmail(email, audience) {

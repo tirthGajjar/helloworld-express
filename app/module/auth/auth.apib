@@ -65,8 +65,8 @@
 + Response 400 (application/json)
 
         {
-            "code": "AccountEmailExists",
-            "message": "An account with the provided email address already exists. Please try password reset."
+            "code": "EmailExists",
+            "message": "Email address already exists. Please try password reset."
         }
 
 
@@ -113,6 +113,72 @@
     + Headers
 
             Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+
+
+### Change password [POST /auth/change-passwemaord]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+            }
+
++ Response 200 (application/json)
+
+        {
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+### Change email [POST /auth/change-email]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+            }
 
 + Response 200 (application/json)
 

@@ -97,7 +97,7 @@ const definition = {
   //   return record;
   // },
 
-  toAccount(user) {
+  toUserRecord(user) {
     return {
       role: user.role,
       email: user.email,

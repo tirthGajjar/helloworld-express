@@ -30,7 +30,7 @@ describe('Authentication', () => {
 
     const DATA = {};
 
-    DATA.CLIENT_ACCOUNT = {
+    DATA.CLIENT = {
       user: {
         password: 'password',
         email: 'client@starter.emiketic.com',
@@ -65,8 +65,8 @@ describe('Authentication', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: DATA.CLIENT_ACCOUNT.user,
-          client: DATA.CLIENT_ACCOUNT.account,
+          user: DATA.CLIENT.user,
+          client: DATA.CLIENT.client,
         }),
       });
       expect(response.status).toBe(200);
@@ -74,7 +74,7 @@ describe('Authentication', () => {
       expect(result.access_token).toBeDefined();
       expect(result.user).toBeDefined();
       expect(result.user.password).toBeUndefined();
-      expect(result.user.email).toBe(DATA.CLIENT_ACCOUNT.user.email);
+      expect(result.user.email).toBe(DATA.CLIENT.user.email);
       CACHE.client = result;
     });
 
@@ -101,8 +101,8 @@ describe('Authentication', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: DATA.CLIENT_ACCOUNT.user.email,
-          password: DATA.CLIENT_ACCOUNT.user.password,
+          username: DATA.CLIENT.user.email,
+          password: DATA.CLIENT.user.password,
         }),
       });
       expect(response.status).toBe(200);
