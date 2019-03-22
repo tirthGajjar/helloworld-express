@@ -16,7 +16,7 @@ const UserRecord = new graphql.GraphQLObjectType({
 
 module.exports = () => ({
   queries: {
-    user: {
+    my_user: {
       description: 'fetch user',
       get type() {
         return UserRecord;

@@ -15,7 +15,7 @@ const ERROR = require('@/common/error');
 
 const Data = require('@/common/data');
 
-const { withAuthenticatedUser } = require('@/module/auth/auth.middleware');
+const { withAuthenticatedUser, withRoleRestriction } = require('@/module/auth/auth.middleware');
 
 let app = null;
 let http = null;
@@ -60,10 +60,19 @@ async function setup() {
   // Handle JSON
   app.use(express.json({}));
 
+  // Secure access
+
+  app.use('/any', withAuthenticatedUser);
+
+  app.use(['/user', '/common'], withAuthenticatedUser);
+
+  app.use('/client', withAuthenticatedUser, withRoleRestriction[CONST.ROLE.CLIENT]);
+
+  app.use('/admin', withAuthenticatedUser, withRoleRestriction[CONST.ROLE.ADMIN]);
+
   // Load graphql
   app.use(
     '/any/graphql',
-    withAuthenticatedUser,
     express_graphql({
       schema: Data.graphql.schema,
       graphiql: process.env.NODE_ENV === 'development',

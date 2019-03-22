@@ -11,11 +11,9 @@ const User = require('../auth/User.model');
 const router = express.Router();
 
 module.exports = {
-  prefix: '',
   router,
 };
 
-router.use('/user', withAuthenticatedUser);
 
 router.get('/user', withUserAsClient, async (req, res) => {
   const { audience, user, client } = req;
