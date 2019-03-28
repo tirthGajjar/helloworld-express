@@ -9,6 +9,8 @@ const express_graphql = require('express-graphql');
 const glob = require('glob');
 const path = require('path');
 
+const CONST = require('@/common/const');
+
 const CONFIG = require('@/common/config');
 
 const ERROR = require('@/common/error');

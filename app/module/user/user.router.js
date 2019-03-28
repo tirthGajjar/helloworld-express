@@ -14,7 +14,6 @@ module.exports = {
   router,
 };
 
-
 router.get('/user', withUserAsClient, async (req, res) => {
   const { audience, user, client } = req;
 

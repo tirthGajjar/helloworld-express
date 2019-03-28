@@ -15,8 +15,6 @@ module.exports = {
   router,
 };
 
-router.use('/task', withAuthenticatedUser);
-
 // @TODO validate `task_id` route param: if value is not a uuid, throw 404 status
 
 // router.param('task_id', (req, res, next, id) => {
@@ -28,7 +26,7 @@ router.use('/task', withAuthenticatedUser);
 //   next();
 // });
 
-router.get('/task', async (req, res) => {
+router.get('/client/task', withAuthenticatedUser, async (req, res) => {
   const data = await Task.collection.find().where({
     _owner: req.user.id,
   });
@@ -38,7 +36,7 @@ router.get('/task', async (req, res) => {
   });
 });
 
-router.get('/task/:task_id', async (req, res) => {
+router.get('/client/task/:task_id', withAuthenticatedUser, async (req, res) => {
   const data = await Task.collection.findOne(req.params.task_id);
 
   if (!data) {
@@ -50,7 +48,7 @@ router.get('/task/:task_id', async (req, res) => {
   });
 });
 
-router.post('/task/create', async (req, res) => {
+router.post('/client/task/create', withAuthenticatedUser, async (req, res) => {
   const [record, issues] = Task.helpers.validate(
     {
       ...req.body.data,
@@ -72,7 +70,7 @@ router.post('/task/create', async (req, res) => {
   });
 });
 
-router.post('/task/:task_id/edit', async (req, res) => {
+router.post('/client/task/:task_id/edit', withAuthenticatedUser, async (req, res) => {
   const [record, issues] = Task.helpers.validate(req.body.data);
 
   if (issues.length) {
@@ -90,7 +88,7 @@ router.post('/task/:task_id/edit', async (req, res) => {
   });
 });
 
-router.post('/task/:task_id/delete', async (req, res) => {
+router.post('/client/task/:task_id/delete', withAuthenticatedUser, async (req, res) => {
   const data = await Task.collection.archiveOne(req.params.task_id);
 
   if (!data) {
