@@ -87,7 +87,7 @@ function getGraphQLSchemaFromWaterline() {
       },
       type: graphql.GraphQLString,
       resolve(parent, args) {
-        return `Hello World!`;
+        return 'Hello World!';
       },
     },
   };
