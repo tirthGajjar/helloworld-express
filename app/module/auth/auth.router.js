@@ -159,14 +159,9 @@ router.post('/auth/change-email', withAuthenticatedUser, async (req, res) => {
     throw new ERROR.NotFoundError();
   }
 
-  const user = await User.collection.updateOne(
-    {
-      id: req.user.id,
-    },
-    {
-      email: payload.email,
-    },
-  );
+  const user = await User.collection.updateOne(req.user.id, {
+    email: payload.email,
+  });
 
   // @TODO send validation email
 
@@ -183,15 +178,12 @@ router.post('/auth/change-password', withAuthenticatedUser, async (req, res) => 
   if (!isIdentical) {
     throw new ERROR.InvalidCredentialsError();
   }
+
   const encryptedNewPassword = await AuthService.encryptPassword(newPassword);
 
-  await User.collection.updateOne(
-    {
-      id: req.user.id,
-    },
-    {
-      password: encryptedNewPassword,
-    },
-  );
+  await User.collection.updateOne(req.user.id, {
+    password: encryptedNewPassword,
+  });
+  
   res.send({});
 });
