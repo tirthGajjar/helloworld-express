@@ -46,7 +46,7 @@
     "redis": "~2.8.0",
     "sails-disk": "~1.1.0",
     "sails-mongo": "~1.0.1",
-    "helloworld-lib": "git+https://github.com/emiketic/helloworld-lib.git#0.10.0",
+    "helloworld-lib": "git+https://github.com/emiketic/helloworld-lib.git#0.11.0",
     "uuid": "~3.3.2",
     "waterline": "~0.13.6"
   },
