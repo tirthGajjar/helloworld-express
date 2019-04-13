@@ -184,6 +184,6 @@ router.post('/auth/change-password', withAuthenticatedUser, async (req, res) => 
   await User.collection.updateOne(req.user.id, {
     password: encryptedNewPassword,
   });
-  
+
   res.send({});
 });
