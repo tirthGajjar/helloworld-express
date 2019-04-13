@@ -1,6 +1,6 @@
 'use strict';
 
-const { EventEmitter } = require('starter-lib/dist/common/events');
+const { EventEmitter } = require('helloworld-lib/dist/common/events');
 
 const EVENT = new EventEmitter();
 

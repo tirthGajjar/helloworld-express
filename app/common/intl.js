@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('starter-lib/dist/common/intl');
+module.exports = require('helloworld-lib/dist/common/intl');

@@ -10,7 +10,7 @@ module.exports = async () => {
   record = await AuthService.createAdministratorUser({
     user: {
       password: 'password',
-      email: 'admin@starter.emiketic.com',
+      email: 'admin@helloworld.emiketic.com',
       name: 'Administrator',
       picture_uri: 'https://randomuser.me/api/portraits/lego/1.jpg',
     },
@@ -22,7 +22,7 @@ module.exports = async () => {
   record = await AuthService.createClientUser({
     user: {
       password: 'password',
-      email: 'client@starter.emiketic.com',
+      email: 'client@helloworld.emiketic.com',
       name: 'Client',
       picture_uri: 'https://randomuser.me/api/portraits/lego/2.jpg',
     },
@@ -35,7 +35,7 @@ module.exports = async () => {
     record = await AuthService.createAdministratorUser({
       user: {
         password: 'password',
-        email: `admin+${i}@starter.emiketic.com`,
+        email: `admin+${i}@helloworld.emiketic.com`,
         name: `Administrator ${i}`,
       },
       client: {},
@@ -44,7 +44,7 @@ module.exports = async () => {
     record = await AuthService.createClientUser({
       user: {
         password: 'password',
-        email: `client+${i}@starter.emiketic.com`,
+        email: `client+${i}@helloworld.emiketic.com`,
         name: `Client ${i}`,
         picture_uri: `https://randomuser.me/api/portraits/${i % 2 === 0 ? 'women' : 'men'}/1${i}.jpg`,
       },

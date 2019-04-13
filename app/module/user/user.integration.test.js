@@ -18,7 +18,7 @@ describe('User integration test', () => {
     const DATA = {};
 
     DATA.CLIENT = {
-      email: 'client@starter.emiketic.com',
+      email: 'client@helloworld.emiketic.com',
     };
 
     const CACHE = {};

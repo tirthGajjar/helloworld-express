@@ -63,7 +63,7 @@ const CONFIG = require('./config');
 
 const Logger = require('./logger');
 
-const PREFIX = 'Starter';
+const PREFIX = 'HelloWorld';
 
 Logger.setup(PREFIX);
 

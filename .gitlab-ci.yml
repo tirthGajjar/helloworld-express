@@ -97,4 +97,4 @@ deploy:
     - echo "$DEPLOY_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh ; chmod 700 ~/.ssh
     - ssh-keyscan ${DEPLOY_SSH_TARGET#*@} > ~/.ssh/known_hosts ; chmod 644 ~/.ssh/known_hosts
-    - ssh "${DEPLOY_SSH_TARGET}" "cd /app/emiketic-starter-express/ && docker-compose pull && docker-compose up -d && exit"
+    - ssh "${DEPLOY_SSH_TARGET}" "cd /app/helloworld-express/ && docker-compose pull && docker-compose up -d && exit"

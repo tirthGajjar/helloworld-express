@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('starter-lib/dist/node/polyfill');
+module.exports = require('helloworld-lib/dist/node/polyfill');
