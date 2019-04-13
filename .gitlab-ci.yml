@@ -83,11 +83,8 @@ deploy:
   stage: deploy
   tags:
     - deploy:helloworld-express
-  image: emiketic/essentials
   only:
     - master
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - cd /app/helloworld-express/
-    - docker-compose pull
-    - docker-compose up -d
+    - ./scripts/deploy.sh
