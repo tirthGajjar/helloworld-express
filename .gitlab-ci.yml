@@ -67,34 +67,27 @@ test:integration:
     - npm run test:integration
 
 build:
+  stage: build
   image: gitlab/dind
   services:
-  - docker:dind
-  stage: build
+    - docker:dind
   only:
-    - wip
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - master
   script:
-    - docker version
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:latest .
     - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
 
 deploy:
   stage: deploy
-  dependencies:
-    - build
   tags:
-    - docker
+    - deploy:helloworld-express
   image: emiketic/essentials
   only:
-    - wip
+    - master
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$DEPLOY_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh ; chmod 700 ~/.ssh
-    - ssh-keyscan ${DEPLOY_SSH_TARGET#*@} > ~/.ssh/known_hosts ; chmod 644 ~/.ssh/known_hosts
-    - ssh "${DEPLOY_SSH_TARGET}" "cd /app/helloworld-express/ && docker-compose pull && docker-compose up -d && exit"
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - cd /app/helloworld-express/
+    - docker-compose pull
+    - docker-compose up -d
