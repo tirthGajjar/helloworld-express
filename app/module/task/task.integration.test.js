@@ -12,7 +12,7 @@ const CONFIG = require('@/common/config');
 // const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
 describe('Task integration test', () => {
-  describe('/task', () => {
+  describe('/client/task', () => {
     setupWithRunningApp('seed');
 
     const DATA = {};
@@ -32,10 +32,10 @@ describe('Task integration test', () => {
       CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT.email, CONST.ROLE.CLIENT);
     });
 
-    testUnauthenticatedFetch('GET /task should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/task'`));
+    testUnauthenticatedFetch('GET /client/task should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/client/task'`));
 
-    test('GET /task', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/task`, {
+    test('GET /client/task', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/client/task`, {
         headers: {
           Authorization: `Bearer ${CACHE.client.access_token}`,
         },
