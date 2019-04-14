@@ -79,9 +79,9 @@ build:
 deploy:
   stage: deploy
   tags:
-    - deploy:helloworld-express
+    - deploy:helloworld
   only:
     - master
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - ./scripts/deploy.sh /app/$CI_PROJECT_NAME
+    - ./scripts/deploy.sh /app/helloworld-express
