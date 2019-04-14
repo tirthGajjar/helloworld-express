@@ -71,21 +71,17 @@ build:
   image: gitlab/dind
   services:
     - docker:dind
-  only:
-    - master
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:latest
-    - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 deploy:
   stage: deploy
   tags:
-    - deploy:helloworld-express
+    - deploy:$CI_PROJECT_NAME
   only:
     - master
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - ./scripts/deploy.sh
+    - ./scripts/deploy.sh /app/$CI_PROJECT_NAME
