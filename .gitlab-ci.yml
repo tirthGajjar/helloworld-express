@@ -79,7 +79,7 @@ build:
 deploy:
   stage: deploy
   tags:
-    - deploy:$CI_PROJECT_NAME
+    - deploy:helloworld-express
   only:
     - master
   script:
