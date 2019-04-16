@@ -70,6 +70,15 @@ router.post('/auth/signup', async (req, res) => {
 
   const { user } = record;
 
+  EmailJob.queue.add({
+    to: user.email,
+    subject: 'Welcome to Hello World',
+    template: 'app/module/auth/signup-welcome',
+    templateContext: {
+      continue_url: `${CONFIG.CLIENT_APP_URL}/signup/perform?token=12346789`,
+    },
+  });
+
   const access_token = await AuthService.generateAccessToken(user);
 
   res.send({
