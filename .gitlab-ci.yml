@@ -20,7 +20,7 @@ install:
   script:
     - npm install --unsafe-perm
 
-lint:critical:
+lint-critical:
   stage: lint
   tags:
     - docker
