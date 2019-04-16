@@ -84,5 +84,4 @@ deploy:
   only:
     - master
   script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - ./scripts/deploy.sh /app/helloworld-express
+    - ./scripts/deploy.sh
