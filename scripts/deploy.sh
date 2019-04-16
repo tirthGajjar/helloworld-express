@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -xeo pipefail
 
-DEPLOY_PATH=$1
-
 if [ -z "$DEPLOY_PATH" ] || [ ! -d "$DEPLOY_PATH" ] ; then
   exit 1
 fi
