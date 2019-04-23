@@ -1,9 +1,7 @@
 
-# Group User
+# Group Profile
 
-Manage user account.
-
-### Retrieve user [GET /self/profile]
+### Retrieve user profile [GET /self/profile]
 
 + Request
 
@@ -29,14 +27,7 @@ Manage user account.
             "message": "Not authenticated"
         }
 
-+ Response 403 (application/json)
-
-        {
-            "code": "Unauthorized",
-            "message": "Not authorized"
-        }
-
-### Edit user [POST /self/profile/edit]
+### Edit user profile [POST /self/profile/edit]
 
 + Request
 
@@ -60,11 +51,4 @@ Manage user account.
         {
             "code": "Unauthenticated",
             "message": "Not authenticated"
-        }
-
-+ Response 403 (application/json)
-
-        {
-            "code": "Unauthorized",
-            "message": "Not authorized"
         }

@@ -1,8 +1,6 @@
 
 # Group Task
 
-CRUD API.
-
 ### Retrieve index [GET /client/task]
 
 + Request
@@ -47,7 +45,6 @@ CRUD API.
             }
         }
 
-
 ### Create task [POST /client/task/create]
 
 + Request
@@ -75,7 +72,6 @@ CRUD API.
                 "done": false
             }
         }
-
 
 ### Edit task [POST /client/task/{task_id}/edit]
 
@@ -109,6 +105,12 @@ CRUD API.
             }
         }
 
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
 
 ### Delete task [POST /client/task/{task_id}/delete]
 
@@ -127,8 +129,14 @@ CRUD API.
         {
         }
 
++ Response 403 (application/json)
 
-### Mark as done [POST /client/task/{task_id}/mark-done]
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+
+### Mark task as done [POST /client/task/{task_id}/done]
 
 + Parameters
 
@@ -156,8 +164,15 @@ CRUD API.
             }
         }
 
++ Response 403 (application/json)
 
-### Mark as undone [POST /client/task/{task_id}/mark-undone]
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+
+
+### Mark task as undone [POST /client/task/{task_id}/undone]
 
 + Parameters
 
@@ -183,4 +198,11 @@ CRUD API.
                 "title": "do something...",
                 "done": false
             }
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
         }

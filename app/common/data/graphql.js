@@ -11,6 +11,8 @@ const graphql = require('graphql');
 
 const DataWaterline = require('./waterline');
 
+const GraphQLTypes = require('./graphql.types');
+
 const DEFAULTS = {
   graphql_settings: {
     exclude: false,
@@ -30,24 +32,6 @@ let schema = null;
  * GraphQL types
  */
 
-const RawType = new graphql.GraphQLScalarType({
-  name: 'Raw',
-  serialize: (value) => value,
-  parseValue: (value) => value,
-  parseLiteral(ast) {
-    return ast.value;
-  },
-});
-
-const JSONType = new graphql.GraphQLScalarType({
-  name: 'JSON',
-  serialize: (value) => value,
-  parseValue: (value) => value,
-  parseLiteral(ast) {
-    return ast.value;
-  },
-});
-
 function getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, attributeConfig) {
   const result = {};
 
@@ -58,9 +42,9 @@ function getGraphqlFieldFromWaterlineAttribute(collectionName, attributeName, at
   } else if (attributeConfig.type === 'boolean') {
     result.type = graphql.GraphQLBoolean;
   } else if (attributeConfig.type === 'json') {
-    result.type = JSONType;
+    result.type = GraphQLTypes.JSON;
   } else if (attributeConfig.type === 'ref') {
-    result.type = RawType;
+    result.type = GraphQLTypes.Raw;
   } else {
     return;
   }

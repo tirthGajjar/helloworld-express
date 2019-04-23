@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module common/TemporaryDataStore */
+/** @module common/TransientDataStore */
 
 const DataRedisStorage = require('./data/redis.storage');
 

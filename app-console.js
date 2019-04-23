@@ -39,7 +39,7 @@ context.DataUtils = require('@/common/data/utils');
 
 context.PermanentDataStore = require('@/common/PermanentDataStore.service');
 
-context.TemporaryDataStore = require('@/common/TemporaryDataStore.service');
+context.TransientDataStore = require('@/common/TransientDataStore.service');
 
 async function setup() {
   await Data.setup();

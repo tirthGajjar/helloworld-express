@@ -19,7 +19,7 @@ const EmailJob = require('@/shared/email.job');
 const AuthService = require('./auth.service');
 
 const DataUtils = require('@/common/data/utils');
-const TemporaryDataStore = require('@/common/TemporaryDataStore.service');
+const TransientDataStore = require('@/common/TransientDataStore.service');
 
 const router = express.Router();
 
@@ -108,7 +108,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
       email,
     };
 
-    await TemporaryDataStore.storeWithExpiry(`password-reset:${token}`, tokenPayload, (3 * CONST.DURATION_DAY) / 1000);
+    await TransientDataStore.storeWithExpiry(`password-reset:${token}`, tokenPayload, (3 * CONST.DURATION_DAY) / 1000);
 
     EmailJob.queue.add({
       to: email,
@@ -126,7 +126,7 @@ router.post('/auth/password-reset/initiate', async (req, res) => {
 router.post('/auth/password-reset/perform', async (req, res) => {
   const { token, password } = req.body;
 
-  const tokenPayload = await TemporaryDataStore.retrieve(`password-reset:${token}`);
+  const tokenPayload = await TransientDataStore.retrieve(`password-reset:${token}`);
 
   if (tokenPayload === null) {
     throw new ERROR.InvalidRequestError(); // @TODO better code and message
@@ -143,7 +143,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
     },
   );
 
-  await TemporaryDataStore.clear(`password-reset:${token}`);
+  await TransientDataStore.clear(`password-reset:${token}`);
 
   EmailJob.queue.add({
     to: user.email,

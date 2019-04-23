@@ -1,6 +1,27 @@
 
 # Group Authentication
 
+
+### Check access token validity [GET /auth/check]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+        }
+
++ Response 401 (application/json)
+
+        {
+            "code": "Unauthenticated",
+            "message": "Not authenticated"
+        }
+
 ### Log in [POST /auth/login{?audience}]
 
 + Parameters
@@ -105,35 +126,6 @@
             }
         }
 
-
-### Check access token validity [GET /auth/check]
-
-+ Request
-
-    + Headers
-
-            Authorization: Bearer {{ACCESS_TOKEN}}
-
-+ Response 200 (application/json)
-
-        {
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "code": "Unauthenticated",
-            "message": "Not authenticated"
-        }
-
-+ Response 403 (application/json)
-
-        {
-            "code": "Unauthorized",
-            "message": "Not authorized"
-        }
-
-
 ### Change password [POST /auth/change-passwemaord]
 
 + Request
@@ -160,12 +152,6 @@
             "message": "Not authenticated"
         }
 
-+ Response 403 (application/json)
-
-        {
-            "code": "Unauthorized",
-            "message": "Not authorized"
-        }
 ### Change email [POST /auth/change-email]
 
 + Request
@@ -192,9 +178,3 @@
             "message": "Not authenticated"
         }
 
-+ Response 403 (application/json)
-
-        {
-            "code": "Unauthorized",
-            "message": "Not authorized"
-        }
