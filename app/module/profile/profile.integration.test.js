@@ -11,8 +11,8 @@ const CONFIG = require('@/common/config');
 
 // const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-describe('User integration test', () => {
-  describe('/user', () => {
+describe('Profile integration test', () => {
+  describe('/self/profile', () => {
     setupWithRunningApp('seed');
 
     const DATA = {};
@@ -27,10 +27,10 @@ describe('User integration test', () => {
       CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT.email, CONST.ROLE.CLIENT);
     });
 
-    testUnauthenticatedFetch('GET /user should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/user`));
+    testUnauthenticatedFetch('GET /self/profile should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/self/profile`));
 
-    test('GET /user should succeed with authenticated access', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/user`, {
+    test('GET /self/profile should succeed with authenticated access', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/self/profile`, {
         headers: {
           Authorization: `Bearer ${CACHE.client.access_token}`,
         },

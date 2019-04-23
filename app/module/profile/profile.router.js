@@ -12,7 +12,7 @@ module.exports = {
   router,
 };
 
-router.get('/user', withUserAsClient, async (req, res) => {
+router.get('/self/profile', withUserAsClient, async (req, res) => {
   const { audience, user, client } = req;
 
   res.send({
@@ -22,7 +22,7 @@ router.get('/user', withUserAsClient, async (req, res) => {
   });
 });
 
-router.post('/user/edit', async (req, res) => {
+router.post('/self/profile/edit', async (req, res) => {
   const { name, picture_uri } = req.body;
 
   const user = await User.collection.updateOne(req.user.id, {

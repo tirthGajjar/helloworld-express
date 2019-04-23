@@ -66,7 +66,7 @@ async function setup() {
 
   app.use('/any', withAuthenticatedUser);
 
-  app.use(['/user', '/common'], withAuthenticatedUser);
+  app.use('/self', withAuthenticatedUser);
 
   app.use('/client', withAuthenticatedUser, withRoleRestriction[CONST.ROLE.CLIENT]);
 

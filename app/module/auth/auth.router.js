@@ -28,6 +28,10 @@ module.exports = {
   router,
 };
 
+router.get('/auth/check', withAuthenticatedUser, async (req, res) => {
+  res.send({});
+});
+
 router.post('/auth/login', async (req, res) => {
   let { username, password } = req.body;
 
@@ -150,10 +154,6 @@ router.post('/auth/password-reset/perform', async (req, res) => {
     },
   });
 
-  res.send({});
-});
-
-router.get('/auth/check', withAuthenticatedUser, async (req, res) => {
   res.send({});
 });
 
