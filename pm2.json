@@ -5,7 +5,7 @@
       "script": "./app-core.js",
       "exec_mode": "fork",
       "watch": true,
-      "autorestart": false
+      "autorestart": true
     },
     {
       "name": "app-api",
@@ -13,7 +13,7 @@
       "exec_mode": "cluster",
       "instances": 1,
       "watch": true,
-      "autorestart": false
+      "autorestart": true
     },
     {
       "name": "app-job",
@@ -21,7 +21,7 @@
       "exec_mode": "cluster",
       "instances": 1,
       "watch": true,
-      "autorestart": false
+      "autorestart": true
     }
   ]
 }

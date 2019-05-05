@@ -12,14 +12,14 @@ app
 │   └── data
 │   └── job
 ├── module
-│   └── sample
-│       ├── sample.router.js
-│       ├── Sample.model.js
-│       ├── sample.job.js
-│       ├── sample.script.js
-│       ├── sample.seed.js
-│       ├── sample.unit.test.js
-│       ├── sample.integration.test.js
+│   └── task
+│       ├── task.router.js
+│       ├── Task.model.js
+│       ├── task.job.js
+│       ├── task.script.js
+│       ├── task.seed.js
+│       ├── task.spec.test.js
+│       ├── task.unit.test.js
 │       └── utils.js
 └── test
     └── setup.js
@@ -110,7 +110,7 @@ Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
 Both unit and integration testing use [Jest](https://jestjs.io/).
 
 - a unit test suite id defined in a `*.unit.test.js` file within a module
-- an integration test suite id defined in a `*.integration.test.js` file within a module
+- an integration test suite id defined in a `*.spec.test.js` file within a module
 
 **References**
 

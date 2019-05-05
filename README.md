@@ -86,13 +86,13 @@ npm run test
 npm run test:unit
 
 # run integration tests
-npm run test:integration
+npm run test:spec
 
 # run unit tests for specific module
 npm run test:any -- '/task/*.unit.test.'
 
 # run integration tests for specific module
-npm run test:any -- '/task/*.integration.test.'
+npm run test:any -- '/task/*.spec.test.'
 
 # run specific test
 npm run test:any -- app/module/task/task.unit.test.js
