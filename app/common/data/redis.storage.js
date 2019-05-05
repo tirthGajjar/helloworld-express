@@ -11,59 +11,58 @@ const RedisCommands = require('redis-commands');
 
 const { promisify } = require('util');
 
-let client = null;
+class DataRedisStorage {
+  constructor() {
+    this.client = null;
+  }
 
-async function setup() {
-  return new Promise((resolve, reject) => {
-    Logger.info('setup ...');
+  setup() {
+    return new Promise((resolve, reject) => {
+      Logger.info('setup ...');
 
-    client = module.exports.client = Redis.createClient(CONFIG.REDIS_STORAGE_URI);
+      this.client = Redis.createClient(CONFIG.REDIS_STORAGE_URI);
 
-    client.on('error', reject);
+      this.client.on('error', reject);
 
-    client.on('ready', () => {
-      Logger.info('setup done');
+      this.client.on('ready', () => {
+        Logger.info('setup done');
 
-      RedisCommands.list.forEach((command) => {
-        client[command] = promisify(client[command]).bind(client);
+        RedisCommands.list.forEach((command) => {
+          this.client[command] = promisify(this.client[command]).bind(this.client);
+        });
+
+        resolve(this.client);
       });
-
-      resolve(client);
     });
-  });
-}
+  }
 
-async function teardown() {
-  return new Promise((resolve, reject) => {
-    Logger.info('teardown ...');
+  teardown() {
+    return new Promise((resolve, reject) => {
+      Logger.info('teardown ...');
 
-    if (!client) {
-      Logger.info('teardown done');
-      resolve();
-      return;
-    }
-
-    client.quit((err) => {
-      Logger.info('teardown done', err || '');
-
-      client = module.exports.client = null;
-
-      if (err) {
-        reject(err);
-      } else {
+      if (!this.client) {
+        Logger.info('teardown done');
         resolve();
+        return;
       }
+
+      this.client.quit((err) => {
+        Logger.info('teardown done', err || '');
+
+        this.client = null;
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
-  });
+  }
+
+  clear() {
+    return this.client.flushdb();
+  }
 }
 
-async function clear() {
-  return client.flushdb();
-}
-
-module.exports = {
-  setup,
-  teardown,
-  clear,
-  client,
-};
+module.exports = new DataRedisStorage();

@@ -12,13 +12,13 @@ module.exports = async () => {
     return;
   }
 
-  const FILES = glob.sync('app/**/*.initialize.js');
+  const FILES = glob.sync('app/**/*.bootstrap.js');
 
   await Promise.all(
     FILES.map(async (filename) => {
       Logger.info('loading', filename);
-      const initialize = require(path.resolve(filename));
-      await initialize();
+      const bootstrap = require(path.resolve(filename));
+      await bootstrap();
     }),
   );
 };

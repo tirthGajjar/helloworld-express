@@ -11,72 +11,77 @@ const DataGraphql = require('./graphql');
 const DataRedisStorage = require('./redis.storage');
 const DataRedisCache = require('./redis.cache');
 
-const initialize = require('./initialize');
+const bootstrap = require('../../bootstrap');
 
-/**
- * setup
- *
- * @returns {Promise}
- */
-async function setup() {
-  Logger.info('setup ...');
-
-  await Promise.all([
-    DataWaterline.setup().then(() => DataGraphql.setup()),
-    DataRedisStorage.setup(),
-    DataRedisCache.setup(),
-  ]);
-
-  module.exports.waterline = DataWaterline;
-  module.exports.graphql = DataGraphql;
-  module.exports.redisStorage = DataRedisStorage;
-  module.exports.redisCache = DataRedisCache;
-
-  await initialize();
-
-  EVENT.emit('data-ready', module.exports);
-
-  Logger.info('setup done');
-}
-
-/**
- * teardown
- *
- * @returns {Promise}
- */
-async function teardown() {
-  Logger.info('teardown ...');
-
-  await Promise.all([
-    DataWaterline.teardown(),
-    DataGraphql.teardown(),
-    DataRedisStorage.teardown(),
-    DataRedisCache.teardown(),
-  ]);
-
-  module.exports.waterline = null;
-  module.exports.graphql = null;
-  module.exports.redisStorage = null;
-  module.exports.redisCache = null;
-
-  Logger.info('teardown done');
-}
-
-/**
- * clear
- *
- * @returns {Promise}
- */
-async function clear() {
-  if (process.env.NODE_ENV === 'production') {
-    return;
+class Data {
+  constructor() {
+    this.Waterline = null;
+    this.Graphql = null;
+    this.RedisStorage = null;
+    this.RedisCache = null;
   }
 
-  await Promise.all([DataWaterline.clear(), DataGraphql.clear(), DataRedisStorage.clear(), DataRedisCache.clear()]);
+  /**
+   * setup
+   *
+   * @returns {Promise}
+   */
+  async setup() {
+    Logger.info('setup ...');
+
+    await Promise.all([
+      DataWaterline.setup().then(() => DataGraphql.setup()),
+      DataRedisStorage.setup(),
+      DataRedisCache.setup(),
+    ]);
+
+    this.Waterline = DataWaterline;
+    this.Graphql = DataGraphql;
+    this.RedisStorage = DataRedisStorage;
+    this.RedisCache = DataRedisCache;
+
+    await bootstrap();
+
+    EVENT.emit('data-ready', module.exports);
+
+    Logger.info('setup done');
+  }
+
+  /**
+   * teardown
+   *
+   * @returns {Promise}
+   */
+  async teardown() {
+    Logger.info('teardown ...');
+
+    await Promise.all([
+      DataWaterline.teardown(),
+      DataGraphql.teardown(),
+      DataRedisStorage.teardown(),
+      DataRedisCache.teardown(),
+    ]);
+
+    this.Waterline = null;
+    this.Graphql = null;
+    this.RedisStorage = null;
+    this.RedisCache = null;
+
+    Logger.info('teardown done');
+  }
+
+  /**
+   * clear
+   *
+   * @returns {Promise}
+   */
+  async clear() {
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+
+    await Promise.all([DataWaterline.clear(), DataGraphql.clear(), DataRedisStorage.clear(), DataRedisCache.clear()]);
+  }
 }
 
-module.exports = {
-  setup,
-  teardown,
-  clear,
-};
+module.exports = new Data();

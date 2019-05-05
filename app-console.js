@@ -58,7 +58,7 @@ async function teardown() {
 
     let appConsole = null;
 
-    Object.assign(context, Data.waterline.models);
+    Object.assign(context, Data.Waterline.models);
 
     context.Job = Job;
 
