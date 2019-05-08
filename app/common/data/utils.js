@@ -93,6 +93,10 @@ function prepareModelDefinition(model) {
     result.attributes_to_strip_in_json = [];
   }
 
+  if (!result.attributes_to_strip_in_graphql) {
+    result.attributes_to_strip_in_graphql = [];
+  }
+
   const {
     beforeCreate,
     afterCreate,

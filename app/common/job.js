@@ -1,9 +1,10 @@
 'use strict';
 
-const glob = require('glob');
 const path = require('path');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
+
+const APP_CONFIG = require('../../app-config');
 
 class Job {
   constructor() {
@@ -13,7 +14,7 @@ class Job {
   async setup() {
     Logger.info('setup ...');
 
-    glob.sync('app/**/*.job.js').forEach((filename) => {
+    APP_CONFIG.JOB_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const job = require(path.resolve(filename));
       this.queues[job.name] = job.queue;

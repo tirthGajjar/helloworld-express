@@ -11,7 +11,7 @@ const DataGraphql = require('./graphql');
 const DataRedisStorage = require('./redis.storage');
 const DataRedisCache = require('./redis.cache');
 
-const bootstrap = require('../../bootstrap');
+const bootstrap = require('../bootstrap');
 
 class Data {
   constructor() {

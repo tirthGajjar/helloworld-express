@@ -6,9 +6,6 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const glob = require('glob');
-const path = require('path');
-
 const EVENT = require('@/common/events');
 
 const Data = require('@/common/data');
@@ -29,10 +26,7 @@ async function teardown() {
     Logger.info('initiating ...');
     await setup();
 
-    glob.sync('app/**/*.core.js').forEach((filename) => {
-      Logger.info('loading', filename);
-      require(path.resolve(filename));
-    });
+    // run something here
 
     Logger.info('ready');
     process.nextTick(() => EVENT.emit('core-ready'));

@@ -6,7 +6,6 @@ const express = require('express');
 require('express-async-errors');
 const express_graphql = require('express-graphql');
 
-const glob = require('glob');
 const path = require('path');
 
 const CONST = require('@/common/const');
@@ -16,6 +15,8 @@ const CONFIG = require('@/common/config');
 const ERROR = require('@/common/error');
 
 const Data = require('@/common/data');
+
+const APP_CONFIG = require('../../app-config');
 
 const { withAuthenticatedUser, withRoleRestriction } = require('@/module/auth/auth.middleware');
 
@@ -75,6 +76,9 @@ class Express {
 
     app.use('/admin', withAuthenticatedUser, withRoleRestriction[CONST.ROLE.ADMIN]);
 
+    // Status check
+    app.get('/check', (req, res) => res.send({ status: 'ok' }));
+
     // Load graphql
     app.use(
       '/any/graphql',
@@ -85,7 +89,7 @@ class Express {
     );
 
     // Load routers
-    glob.sync('app/**/*router.js').forEach((filename) => {
+    APP_CONFIG.ROUTER_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const item = require(path.resolve(filename));
       app.use(item.prefix || '/', item.router);

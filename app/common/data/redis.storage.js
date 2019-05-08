@@ -1,6 +1,6 @@
 'use strict';
 
-/** @module common/data/redisStorage */
+/** @module common/data/redis.storage */
 
 const CONFIG = require('@/common/config');
 

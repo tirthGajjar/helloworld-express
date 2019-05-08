@@ -16,8 +16,9 @@ const MongoAdapter = require('sails-mongo');
 
 const DataUtils = require('./utils');
 
-const glob = require('glob');
 const path = require('path');
+
+const APP_CONFIG = require('../../../app-config');
 
 class DataWaterline {
   constructor() {
@@ -35,7 +36,7 @@ class DataWaterline {
 
     this.models = {};
 
-    glob.sync('app/**/*.model.js').forEach((filename) => {
+    APP_CONFIG.DATA_MODEL_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const Model = require(path.resolve(filename));
       if (Model.definition) {

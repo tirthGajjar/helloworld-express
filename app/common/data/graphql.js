@@ -4,12 +4,13 @@
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const glob = require('glob');
 const path = require('path');
 
 const graphql = require('graphql');
 
 const DataWaterline = require('./waterline');
+
+const APP_CONFIG = require('../../../app-config');
 
 const GraphQLTypes = require('./graphql.types');
 
@@ -113,6 +114,10 @@ class DataGraphql {
       const collectionName = collection.tableName;
 
       const collectionFields = Object.entries(collection.attributes).reduce((acc, [attributeName, attributeConfig]) => {
+        if (collection.attributes_to_strip_in_graphql.includes(attributeName)) {
+          return acc;
+        }
+
         if (collection.attributes_to_strip_in_json.includes(attributeName)) {
           return acc;
         }
@@ -297,7 +302,7 @@ class DataGraphql {
       }
     });
 
-    glob.sync('app/**/*.graphql.js').forEach((filename) => {
+    APP_CONFIG.GRAPHQL_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const graphqlDefinition = require(path.resolve(filename))();
       Object.assign(queries, graphqlDefinition.queries || {});

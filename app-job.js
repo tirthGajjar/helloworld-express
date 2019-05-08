@@ -6,8 +6,9 @@ require('@/common/init');
 
 const Logger = require('@/common/logger').createLogger($filepath(__filename));
 
-const glob = require('glob');
 const path = require('path');
+
+const APP_CONFIG = require('./app-config');
 
 const EVENT = require('@/common/events');
 
@@ -29,18 +30,11 @@ async function teardown() {
     Logger.info('initiating ...');
     await setup();
 
-    let jobs = process.env.JOBS || 'app/**/*.job.js';
-
-    jobs = jobs
-      .split(',')
-      .reduce((acc, item) => [...acc, ...(item.indexOf('*') !== '-1' ? glob.sync(item) : [item])], []);
-
-    jobs = Array.from(new Set(jobs));
-
-    jobs.forEach(async (filename) => {
+    APP_CONFIG.JOB_RUNNER_FILES.forEach(async (filename) => {
       Logger.info('loading', filename);
       const job = require(path.resolve(filename));
       Logger.debug('job', job.name);
+
       if (job.setup) {
         await job.setup();
       }

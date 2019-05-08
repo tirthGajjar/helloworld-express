@@ -33,17 +33,7 @@ async function teardown() {
     await setup();
     Logger.info('processing ...');
 
-    const FILES = APP_CONFIG.SEED;
-
-    // await Promise.all(
-    //   FILES.map(async (filename) => {
-    //     Logger.info('loading', filename);
-    //     const seed = require(path.resolve(filename));
-    //     await seed();
-    //   }),
-    // );
-
-    for (const filename of FILES) {
+    for (const filename of APP_CONFIG.SEED_FILES) {
       Logger.info('loading', filename);
       const seed = require(path.resolve(filename));
       await seed();
