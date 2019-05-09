@@ -21,6 +21,7 @@ const DEFAULTS = {
     count: true,
     index: true,
     item: true,
+    custom_types: null,
   },
 };
 
@@ -61,7 +62,7 @@ class DataGraphql {
     return result;
   }
 
-  getGraphQLSchemaFromWaterline() {
+  generateGraphQLFromWaterline() {
     const { ontology } = DataWaterline;
 
     const queries = {
@@ -300,6 +301,10 @@ class DataGraphql {
 
         queries[query.name] = query;
       }
+
+      if (collection.graphql_settings.custom_types) {
+        collection.graphql.custom_types = collection.graphql_settings.custom_types(collection);
+      }
     });
 
     APP_CONFIG.GRAPHQL_FILES.forEach((filename) => {
@@ -321,10 +326,12 @@ class DataGraphql {
       fields: () => mutations,
     });
 
-    return new graphql.GraphQLSchema({
+    const schema = new graphql.GraphQLSchema({
       query,
       mutation,
     });
+
+    return schema;
   }
 
   /**
@@ -335,7 +342,7 @@ class DataGraphql {
   async setup() {
     Logger.info('setup ...');
 
-    this.schema = this.getGraphQLSchemaFromWaterline();
+    this.schema = this.generateGraphQLFromWaterline();
 
     Logger.info('setup done');
 

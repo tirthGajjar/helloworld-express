@@ -1,5 +1,7 @@
 'use strict';
 
+const graphql = require('graphql');
+
 const CONST = require('@/common/const');
 
 const DataMixin = require('@/common/data/mixin');
@@ -76,6 +78,22 @@ const definition = {
     count: false,
     index: false,
     item: false,
+    custom_types(collection) {
+      return {
+        UserRecord: new graphql.GraphQLObjectType({
+          name: 'UserRecord',
+          fields: () => ({
+            ...collection.graphql.fields,
+            role: { type: graphql.GraphQLString },
+            email: { type: graphql.GraphQLString },
+            email_verified: { type: graphql.GraphQLBoolean },
+            phone: { type: graphql.GraphQLString },
+            phone_verified: { type: graphql.GraphQLBoolean },
+            passcode: { type: graphql.GraphQLBoolean },
+          }),
+        }),
+      };
+    },
   },
 
   async onCollectionReady(Model, nativeCollection) {
