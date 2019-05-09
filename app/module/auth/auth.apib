@@ -22,6 +22,13 @@
             "message": "Not authenticated"
         }
 
++ Response 403 (application/json)
+
+        {
+            "code": "Unauthorized",
+            "message": "Not authorized"
+        }
+
 ### Log in [POST /auth/login{?audience}]
 
 + Parameters
@@ -145,13 +152,6 @@
         {
         }
 
-+ Response 401 (application/json)
-
-        {
-            "code": "Unauthenticated",
-            "message": "Not authenticated"
-        }
-
 ### Change email [POST /auth/change-email]
 
 + Request
@@ -170,11 +170,3 @@
 
         {
         }
-
-+ Response 401 (application/json)
-
-        {
-            "code": "Unauthenticated",
-            "message": "Not authenticated"
-        }
-

@@ -73,7 +73,7 @@ class DataGraphql {
         },
         type: graphql.GraphQLString,
         resolve(parent, args) {
-          return 'Hello World!';
+          return `Hello ${args.name || 'World'}!`;
         },
       },
     };
