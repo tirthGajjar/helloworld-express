@@ -36,7 +36,7 @@ class DataWaterline {
 
     this.models = {};
 
-    APP_CONFIG.DATA_MODEL_FILES.forEach((filename) => {
+    APP_CONFIG.DATA_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const Model = require(path.resolve(filename));
       if (Model.definition) {

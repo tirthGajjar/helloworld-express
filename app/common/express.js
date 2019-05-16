@@ -89,7 +89,7 @@ class Express {
     );
 
     // Load routers
-    APP_CONFIG.ROUTER_FILES.forEach((filename) => {
+    APP_CONFIG.API_FILES.forEach((filename) => {
       Logger.info('loading', filename);
       const item = require(path.resolve(filename));
       app.use(item.prefix || '/', item.router);

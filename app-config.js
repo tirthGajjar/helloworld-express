@@ -2,9 +2,9 @@
 
 const glob = require('glob');
 
-const DATA_MODEL_FILES = [...new Set([...glob.sync('app/**/*.model.js')])];
+const DATA_FILES = [...new Set([...glob.sync('app/**/*.model.js')])];
 
-const ROUTER_FILES = [...new Set([...glob.sync('app/**/*.router.js')])];
+const API_FILES = [...new Set([...glob.sync('app/**/*.api.js')])];
 
 const GRAPHQL_FILES = [...new Set([...glob.sync('app/**/*.graphql.js')])];
 
@@ -23,8 +23,8 @@ const BOOTSTRAP_FILES = [...new Set([...glob.sync('app/**/*.bootstrap.js')])];
 const SEED_FILES = [...new Set(['app/module/auth/auth.seed.js', ...glob.sync('app/**/*.seed.js')])];
 
 module.exports = {
-  DATA_MODEL_FILES,
-  ROUTER_FILES,
+  DATA_FILES,
+  API_FILES,
   GRAPHQL_FILES,
   JOB_FILES,
   JOB_RUNNER_FILES,

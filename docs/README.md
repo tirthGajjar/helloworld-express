@@ -13,7 +13,7 @@ app
 │   └── job
 ├── module
 │   └── task
-│       ├── task.router.js
+│       ├── task.api.js
 │       ├── Task.model.js
 │       ├── task.job.js
 │       ├── task.script.js
