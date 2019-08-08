@@ -33,7 +33,7 @@ function customToJSON(Modal, record) {
       if (key === 'id' || key === '_id') {
         return acc;
       }
-      if (Modal.definition.attributes_to_strip_in_json.includes(key)) {
+      if (Modal.definition.attributes_ignored_in_output.includes(key)) {
         return acc;
       }
       // if (key.startsWith('_')) {
@@ -81,7 +81,7 @@ function validate(Model, data, strictMode = false) {
   }
 
   data = Object.entries(data).reduce(
-    (acc, [field, value]) => (Model.definition.attributes_to_strip_in_validation.includes(field) ? { ...acc } : { ...acc, [field]: value }),
+    (acc, [field, value]) => (Model.definition.attributes_ignored_in_input.includes(field) ? { ...acc } : { ...acc, [field]: value }),
     {},
   );
 

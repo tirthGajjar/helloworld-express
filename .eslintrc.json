@@ -1,5 +1,6 @@
 {
-  "extends": "airbnb-base",
+  "root": true,
+  "extends": ["eslint:recommended", "airbnb-base"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -7,14 +8,26 @@
   },
   "env": {
     "es6": true,
-    "browser": true,
     "node": true
   },
   "rules": {
+    "max-len": ["warn", { "code": 120 }],
     "arrow-parens": ["warn", "always"],
-    "camelcase": ["warn"]
+    "arrow-body-style": "off",
+    "camelcase": "warn",
+    "no-underscore-dangle": "warn",
+    "no-param-reassign": "warn",
+    "no-unused-vars": "warn",
+    "class-methods-use-this": "warn",
+    "prefer-destructuring": "warn",
+    "prefer-const": "warn",
+    "no-shadow": "warn",
+    "no-empty": "warn",
+    "import/prefer-default-export": "off",
+    "import/no-cycle": "warn"
   },
   "globals": {
+    "fetch": true,
     "$filepath": true,
     "$jobname": true
   }

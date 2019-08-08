@@ -2,11 +2,11 @@
 
 /* eslint-env jest */
 
-// const Logger = require('@/common/logger').createLogger($filepath(__filename));
+// const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const { setupWithData } = require('@/test/setup');
+const { setupWithData } = require('~/test/setup');
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
 const AuthService = require('./auth.service');
 

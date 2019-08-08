@@ -7,15 +7,13 @@ if (process.env.NODE_ENV === 'production') {
 process.env.INSTANCE_ID = 'core';
 process.env.MIGRATE = 'drop';
 
-require('@/common/init');
+require('~/common/init');
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const path = require('path');
+const EVENT = require('~/common/events');
 
-const EVENT = require('@/common/events');
-
-const Data = require('@/common/data');
+const Data = require('~/common/data');
 
 const APP_CONFIG = require('../app-config');
 
@@ -23,8 +21,8 @@ async function setup() {
   await Data.setup();
 }
 
-async function teardown() {
-  await Data.teardown();
+async function shutdown() {
+  await Data.shutdown();
 }
 
 (async () => {
@@ -33,9 +31,12 @@ async function teardown() {
     await setup();
     Logger.info('processing ...');
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const filename of APP_CONFIG.SEED_FILES) {
       Logger.info('loading', filename);
-      const seed = require(path.resolve(filename));
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      const seed = require(filename);
+      // eslint-disable-next-line no-await-in-loop
       await seed();
     }
 
@@ -47,4 +48,4 @@ async function teardown() {
   }
 })();
 
-EVENT.once('shutdown', teardown);
+EVENT.once('shutdown', shutdown);

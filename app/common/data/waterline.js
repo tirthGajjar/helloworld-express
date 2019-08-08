@@ -2,21 +2,19 @@
 
 /** @module common/data/waterline */
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
-const CONFIG = require('@/common/config');
-
 const { promisify } = require('util');
 
 const Waterline = require('waterline');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const WaterlineUtils = require('waterline-utils');
 
 const MemoryAdapter = require('sails-disk');
 const MongoAdapter = require('sails-mongo');
 
-const DataUtils = require('./utils');
+const CONFIG = require('~/common/config');
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const path = require('path');
+const DataUtils = require('./utils');
 
 const APP_CONFIG = require('../../../app-config');
 
@@ -36,9 +34,10 @@ class DataWaterline {
 
     this.models = {};
 
-    APP_CONFIG.DATA_FILES.forEach((filename) => {
+    APP_CONFIG.MODEL_FILES.forEach((filename) => {
       Logger.info('loading', filename);
-      const Model = require(path.resolve(filename));
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      const Model = require(filename);
       if (Model.definition) {
         DataUtils.prepareModelDefinition(Model);
         DataUtils.prepareModelHelpers(Model);
@@ -92,9 +91,16 @@ class DataWaterline {
     this.ontology = await promisify(Waterline.start)(config);
 
     Object.values(this.ontology.collections).forEach((collection) => {
+      const { manager } = this.ontology.datastores[collection.datastore].adapter.datastores[collection.datastore];
+
+      collection.nativeManager = manager;
+
+      collection.nativeCollection = manager.collection(collection.tableName);
+
       if (!this.models[collection.tableName]) {
         return;
       }
+
       this.models[collection.tableName].collection = collection;
     });
 
@@ -115,12 +121,11 @@ class DataWaterline {
     if (CONFIG.IS_CORE) {
       await Promise.all(
         Object.values(this.models).map(async (Model) => {
-          if (!Model.collection.onCollectionReady) {
+          if (!Model.collection.onReady) {
             return;
           }
-          const nativeClient = this.ontology.datastores.mongo.adapter.datastores.mongo.manager;
-          const nativeCollection = nativeClient.collection(Model.collection.tableName);
-          await Model.collection.onCollectionReady(Model, nativeCollection);
+
+          await Model.collection.onReady();
         }),
       );
     }
@@ -131,22 +136,22 @@ class DataWaterline {
   }
 
   /**
-   * teardown
+   * shutdown
    *
    * @returns {Promise}
    */
-  teardown() {
+  shutdown() {
     return new Promise((resolve, reject) => {
-      Logger.info('teardown ...');
+      Logger.info('shutdown ...');
 
       if (!this.ontology) {
-        Logger.info('teardown done');
+        Logger.info('shutdown done');
         resolve();
         return;
       }
 
       this.ontology.teardown((err) => {
-        Logger.info('teardown done', err || '');
+        Logger.info('shutdown done', err || '');
 
         this.ontology = null;
 

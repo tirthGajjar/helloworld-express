@@ -11,14 +11,19 @@ const CONFIG = require('~/common/config');
 
 // const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-describe('Profile integration test', () => {
-  describe('/self/profile', () => {
+describe('Post integration test', () => {
+  describe('/client/post', () => {
     setupWithRunningApp('seed');
 
     const DATA = {};
 
     DATA.CLIENT = {
-      email: 'client@helloworld.emiketic.com',
+      email: 'client@helloworld.nader.tech',
+    };
+
+    DATA.CREATE_RECORD = {
+      title: 'Test Record',
+      image_uri: '...',
     };
 
     const CACHE = {};
@@ -27,18 +32,17 @@ describe('Profile integration test', () => {
       CACHE.client = await getAuthenticatedUserByEmail(DATA.CLIENT.email, CONST.ROLE.CLIENT);
     });
 
-    testUnauthenticatedFetch('GET /self/profile should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/self/profile`));
+    testUnauthenticatedFetch('GET /client/post should fail with unauthenticated access', () => fetch(`${CONFIG.API_ENDPOINT}/client/post'`));
 
-    test('GET /self/profile should succeed with authenticated access', async () => {
-      const response = await fetch(`${CONFIG.API_ENDPOINT}/self/profile`, {
+    test('GET /client/post', async () => {
+      const response = await fetch(`${CONFIG.API_ENDPOINT}/client/post`, {
         headers: {
           Authorization: `Bearer ${CACHE.client.access_token}`,
         },
       });
-      expect(response.status).toBe(200);
+      expect(response.ok).toBe(true);
       const result = await response.json();
-      expect(result.audience).toBe(CONST.AUDIENCE.CLIENT);
-      expect(result.user).toMatchObject(CACHE.client.user);
+      expect(result.data.length).toBe(2);
     });
   });
 });

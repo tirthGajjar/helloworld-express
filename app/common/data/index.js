@@ -2,9 +2,9 @@
 
 /** @module common/data */
 
-const EVENT = require('@/common/events');
+const EVENT = require('~/common/events');
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
 const DataWaterline = require('./waterline');
 const DataGraphql = require('./graphql');
@@ -48,18 +48,18 @@ class Data {
   }
 
   /**
-   * teardown
+   * shutdown
    *
    * @returns {Promise}
    */
-  async teardown() {
-    Logger.info('teardown ...');
+  async shutdown() {
+    Logger.info('shutdown ...');
 
     await Promise.all([
-      DataWaterline.teardown(),
-      DataGraphql.teardown(),
-      DataRedisStorage.teardown(),
-      DataRedisCache.teardown(),
+      DataWaterline.shutdown(),
+      DataGraphql.shutdown(),
+      DataRedisStorage.shutdown(),
+      DataRedisCache.shutdown(),
     ]);
 
     this.Waterline = null;
@@ -67,7 +67,7 @@ class Data {
     this.RedisStorage = null;
     this.RedisCache = null;
 
-    Logger.info('teardown done');
+    Logger.info('shutdown done');
   }
 
   /**

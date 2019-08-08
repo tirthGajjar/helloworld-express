@@ -2,23 +2,23 @@
 
 process.env.INSTANCE_ID = 'core';
 
-require('@/common/init');
+require('~/common/init');
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const EVENT = require('@/common/events');
+const EVENT = require('~/common/events');
 
-const Data = require('@/common/data');
-const Job = require('@/common/job');
+const Data = require('~/common/data');
+const Job = require('~/common/job');
 
 async function setup() {
   await Data.setup();
   await Job.setup();
 }
 
-async function teardown() {
-  await Job.teardown();
-  await Data.teardown();
+async function shutdown() {
+  await Job.shutdown();
+  await Data.shutdown();
 }
 
 (async () => {
@@ -36,4 +36,4 @@ async function teardown() {
   }
 })();
 
-EVENT.once('shutdown', teardown);
+EVENT.once('shutdown', shutdown);

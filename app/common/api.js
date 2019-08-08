@@ -1,26 +1,25 @@
 'use strict';
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
 const express = require('express');
 require('express-async-errors');
 const express_graphql = require('express-graphql');
+const morgan = require('morgan');
 
-const path = require('path');
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const CONFIG = require('@/common/config');
+const CONFIG = require('~/common/config');
 
-const ERROR = require('@/common/error');
+const ERROR = require('~/common/error');
 
-const Data = require('@/common/data');
+const Data = require('~/common/data');
 
 const APP_CONFIG = require('../../app-config');
 
-const { withAuthenticatedUser, withRoleRestriction } = require('@/module/auth/auth.middleware');
+const { withAuthenticatedUser, withRoleRestriction } = require('~/module/auth/auth.middleware');
 
-class Express {
+class API {
   constructor() {
     this.app = null;
     this.http = null;
@@ -31,16 +30,16 @@ class Express {
 
     const app = express();
 
-    // Enable proxy trust
+    // enable proxy trust
     app.enable('trust proxy');
 
-    // Showing stack errors
+    // show stack errors
     app.set('showStackError', true);
 
-    // Enable logger (morgan)
-    app.use(require('morgan')(process.env.LOGGER_FORMAT || 'dev'));
+    // enable logger (morgan)
+    app.use(morgan(process.env.LOGGER_FORMAT || 'dev'));
 
-    // Enable CORS in development
+    // enable CORS in development
     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
       app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
@@ -51,22 +50,23 @@ class Express {
         );
 
         if (req.method === 'OPTIONS') {
-          return res.sendStatus(204);
+          res.sendStatus(204);
+          return;
         }
 
         next();
       });
     }
 
-    // Delay response in development
+    // delay response in development
     if (process.env.NODE_ENV === 'development') {
       app.use((req, res, next) => setTimeout(() => next(), 1000));
     }
 
-    // Handle JSON
+    // handle JSON
     app.use(express.json({}));
 
-    // Secure access
+    // secure access
 
     app.use('/any', withAuthenticatedUser);
 
@@ -79,7 +79,7 @@ class Express {
     // Status check
     app.get('/check', (req, res) => res.send({ status: 'ok' }));
 
-    // Load graphql
+    // load graphql
     app.use(
       '/any/graphql',
       express_graphql({
@@ -88,14 +88,15 @@ class Express {
       }),
     );
 
-    // Load routers
+    // load routers
     APP_CONFIG.API_FILES.forEach((filename) => {
       Logger.info('loading', filename);
-      const item = require(path.resolve(filename));
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      const item = require(filename);
       app.use(item.prefix || '/', item.router);
     });
 
-    // Handle errors
+    // handle errors
     app.use((err, req, res, next) => {
       console.error(err);
 
@@ -117,26 +118,27 @@ class Express {
       });
     });
 
-    const http = app.listen(CONFIG.API_PORT);
-
     this.app = app;
-    this.http = http;
+  }
+
+  async run() {
+    this.http = this.app.listen(CONFIG.API_PORT);
 
     Logger.info(`ready on port ${CONFIG.API_PORT}`);
   }
 
-  teardown() {
+  shutdown() {
     return new Promise((resolve, reject) => {
-      Logger.info('teardown ...');
+      Logger.info('shutdown ...');
 
       if (!this.http) {
-        Logger.info('teardown done');
+        Logger.info('shutdown done');
         resolve();
         return;
       }
 
       this.http.close((err) => {
-        Logger.info('teardown done', err || '');
+        Logger.info('shutdown done', err || '');
 
         this.app = null;
         this.http = null;
@@ -151,4 +153,4 @@ class Express {
   }
 }
 
-module.exports = new Express();
+module.exports = new API();

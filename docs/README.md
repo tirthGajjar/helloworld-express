@@ -12,14 +12,14 @@ app
 │   └── data
 │   └── job
 ├── module
-│   └── task
-│       ├── task.api.js
-│       ├── Task.model.js
-│       ├── task.job.js
-│       ├── task.script.js
-│       ├── task.seed.js
-│       ├── task.spec.test.js
-│       ├── task.unit.test.js
+│   └── post
+│       ├── post.api.js
+│       ├── Post.model.js
+│       ├── post.job.js
+│       ├── post.script.js
+│       ├── post.seed.js
+│       ├── post.spec.test.js
+│       ├── post.unit.test.js
 │       └── utils.js
 └── test
     └── setup.js
@@ -81,7 +81,7 @@ Jobs are managed by [Bull](https://github.com/OptimalBits/bull)
 - a job is initiated from any components using on of the following methods
 
   ```javascript
-  const Job = require('@/common/job');
+  const Job = require('~/common/job');
 
   Job.queues.JOB_NAME.add({
     /* ... */

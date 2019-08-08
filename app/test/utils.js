@@ -2,10 +2,10 @@
 
 /* eslint-env jest */
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const User = require('@/module/auth/User.model');
-const AuthService = require('@/module/auth/auth.service');
+const User = require('~/module/auth/User.model');
+const AuthService = require('~/module/auth/auth.service');
 
 async function getAuthenticatedUserByEmail(email, audience) {
   const record = {};

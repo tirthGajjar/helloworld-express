@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN npm install --production --unsafe-perm
 
-ENV PORT=5000
-EXPOSE $PORT
+ENV API_PORT=5000
+EXPOSE $API_PORT
 
 CMD pm2-runtime app-api.js

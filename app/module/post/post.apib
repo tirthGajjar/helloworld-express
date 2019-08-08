@@ -1,0 +1,123 @@
+
+# Group Post
+
+### Retrieve index [GET /client/post]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "data": [{
+                "id": "ID",
+                "title": "Title #1",
+                "body": "..."
+            }, {
+                "id": "ID",
+                "title": "Title #2",
+                "body": "..."
+            }]
+        }
+
+### Retrieve item [GET /client/post/{post_id}]
+
++ Parameters
+
+    + post_id: `ID` (id) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "ID",
+                "title": "Title #1",
+                "body": "..."
+            }
+        }
+
+### Create post [POST /client/post/create]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "title": "Title #1",
+                    "body": "..."
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "ID",
+                "title": "Title #1",
+                "body": "..."
+            }
+        }
+
+### Edit post [POST /client/post/{post_id}/edit]
+
++ Parameters
+
+    + post_id: `ID` (id) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "title": "Title #1",
+                    "body": "..."
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "ID",
+                "title": "Title #1",
+                "body": "..."
+            }
+        }
+
+### Delete post [POST /client/post/{post_id}/delete]
+
++ Parameters
+
+    + post_id: `ID` (id) - item id.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {{ACCESS_TOKEN}}
+
++ Response 200 (application/json)
+
+        {
+        }

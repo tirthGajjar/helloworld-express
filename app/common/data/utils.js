@@ -2,8 +2,6 @@
 
 /** @module common/data/utils */
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
 const { spawn } = require('child_process');
 
 const { promisify } = require('util');
@@ -11,7 +9,9 @@ const { promisify } = require('util');
 const uuidv1 = require('uuid/v1');
 const uuidv4 = require('uuid/v4');
 
-const { EventEmitter } = require('@/common/events');
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
+
+const { EventEmitter } = require('~/common/events');
 
 const DataMixin = require('./mixin');
 
@@ -85,16 +85,16 @@ function prepareModelDefinition(model) {
     config.autoMigrations = config.autoMigrations || {};
   });
 
-  if (!result.attributes_to_strip_in_validation) {
-    result.attributes_to_strip_in_validation = [];
+  if (!result.attributes_ignored_in_input) {
+    result.attributes_ignored_in_input = [];
   }
 
-  if (!result.attributes_to_strip_in_json) {
-    result.attributes_to_strip_in_json = [];
+  if (!result.attributes_ignored_in_output) {
+    result.attributes_ignored_in_output = [];
   }
 
-  if (!result.attributes_to_strip_in_graphql) {
-    result.attributes_to_strip_in_graphql = [];
+  if (!result.attributes_ignored_in_graphql) {
+    result.attributes_ignored_in_graphql = [];
   }
 
   const {

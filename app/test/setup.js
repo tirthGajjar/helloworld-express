@@ -2,14 +2,14 @@
 
 /* eslint-env jest */
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
 const { spawn } = require('child_process');
 
-const CONFIG = require('@/common/config');
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const Data = require('@/common/data');
-const DataUtils = require('@/common/data/utils');
+const CONFIG = require('~/common/config');
+
+const Data = require('~/common/data');
+const DataUtils = require('~/common/data/utils');
 
 function setupWithData(mode) {
   beforeAll(async () => {
@@ -25,7 +25,7 @@ function setupWithData(mode) {
   });
 
   afterAll(async (next) => {
-    await Data.teardown();
+    await Data.shutdown();
     next();
   });
 }
@@ -62,7 +62,7 @@ function setupWithRunningApp(mode) {
   });
 
   afterAll(async (next) => {
-    await Data.teardown();
+    await Data.shutdown();
     app.on('exit', () => next());
     app.kill('SIGINT');
   });

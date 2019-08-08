@@ -2,9 +2,9 @@
 
 /** @module common/auth/middleware */
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const ERROR = require('@/common/error');
+const ERROR = require('~/common/error');
 
 const User = require('./User.model');
 const Client = require('../profile/Client.model');

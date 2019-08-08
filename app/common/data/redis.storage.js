@@ -2,14 +2,14 @@
 
 /** @module common/data/redis.storage */
 
-const CONFIG = require('@/common/config');
-
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
 const Redis = require('redis');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const RedisCommands = require('redis-commands');
 
 const { promisify } = require('util');
+
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
+const CONFIG = require('~/common/config');
 
 class DataRedisStorage {
   constructor() {
@@ -36,18 +36,18 @@ class DataRedisStorage {
     });
   }
 
-  teardown() {
+  shutdown() {
     return new Promise((resolve, reject) => {
-      Logger.info('teardown ...');
+      Logger.info('shutdown ...');
 
       if (!this.client) {
-        Logger.info('teardown done');
+        Logger.info('shutdown done');
         resolve();
         return;
       }
 
       this.client.quit((err) => {
-        Logger.info('teardown done', err || '');
+        Logger.info('shutdown done', err || '');
 
         this.client = null;
 

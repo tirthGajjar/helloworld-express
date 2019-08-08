@@ -2,16 +2,16 @@
 
 process.env.INSTANCE_ID = 'console';
 
-require('@/common/init');
-
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+require('~/common/init');
 
 const repl = require('repl');
 
-const EVENT = require('@/common/events');
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const Data = require('@/common/data');
-const Job = require('@/common/job');
+const EVENT = require('~/common/events');
+
+const Data = require('~/common/data');
+const Job = require('~/common/job');
 
 const context = {};
 
@@ -19,36 +19,36 @@ context.fetch = global.fetch;
 
 context.Logger = Logger;
 
-context.app = require('@/common/express');
+context.API = require('~/common/api');
 
-context.CONFIG = require('@/common/config');
+context.CONFIG = require('~/common/config');
 
 context.EVENT = EVENT;
 
-context.CONST = require('@/common/const');
+context.CONST = require('~/common/const');
 
-context.ERROR = require('@/common/error');
+context.ERROR = require('~/common/error');
 
-context.VALIDATE = require('@/common/validate');
+context.VALIDATE = require('~/common/validate');
 
-context.SANITIZE = require('@/common/sanitize');
+context.SANITIZE = require('~/common/sanitize');
 
 context.Data = Data;
 
-context.DataUtils = require('@/common/data/utils');
+context.DataUtils = require('~/common/data/utils');
 
-context.PermanentDataStore = require('@/common/PermanentDataStore.service');
+context.PermanentDataStore = require('~/common/PermanentDataStore.service');
 
-context.TransientDataStore = require('@/common/TransientDataStore.service');
+context.TransientDataStore = require('~/common/TransientDataStore.service');
 
 async function setup() {
   await Data.setup();
   await Job.setup();
 }
 
-async function teardown() {
-  await Job.teardown();
-  await Data.teardown();
+async function shutdown() {
+  await Job.shutdown();
+  await Data.shutdown();
 }
 
 (async () => {
@@ -94,4 +94,4 @@ async function teardown() {
   }
 })();
 
-EVENT.once('shutdown', teardown);
+EVENT.once('shutdown', shutdown);

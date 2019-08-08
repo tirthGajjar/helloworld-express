@@ -2,7 +2,7 @@
 
 /** @module common/PermanentDataStore */
 
-const Store = require('@/module/shared/store.model');
+const Store = require('~/module/shared/store.model');
 
 /**
  * retrieve `key` from mongo store

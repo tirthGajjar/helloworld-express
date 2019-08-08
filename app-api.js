@@ -2,32 +2,35 @@
 
 process.env.INSTANCE_ID = process.env.INSTANCE_ID || `api-${process.env.NODE_APP_INSTANCE || '0'}`;
 
-require('@/common/init');
+require('~/common/init');
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
-const EVENT = require('@/common/events');
+const EVENT = require('~/common/events');
 
-const Data = require('@/common/data');
-const Job = require('@/common/job');
-const Express = require('@/common/express');
+const Data = require('~/common/data');
+const Job = require('~/common/job');
+const API = require('~/common/api');
 
 async function setup() {
   await Data.setup();
   await Job.setup();
-  await Express.setup();
+  await API.setup();
 }
 
-async function teardown() {
-  await Express.teardown();
-  await Job.teardown();
-  await Data.teardown();
+async function shutdown() {
+  await API.shutdown();
+  await Job.shutdown();
+  await Data.shutdown();
 }
 
 (async () => {
   try {
     Logger.info('initiating ...');
     await setup();
+
+    await API.run();
+
     Logger.info('ready');
     process.nextTick(() => EVENT.emit('api-ready'));
   } catch (error) {
@@ -36,4 +39,4 @@ async function teardown() {
   }
 })();
 
-EVENT.once('shutdown', teardown);
+EVENT.once('shutdown', shutdown);

@@ -1,6 +1,6 @@
 'use strict';
 
-const SANITIZE = { ...require('helloworld-lib/dist/common/sanitize') };
+const SANITIZE = require('helloworld-lib/dist/common/sanitize');
 
 module.exports = SANITIZE;
 

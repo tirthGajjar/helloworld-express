@@ -3,7 +3,7 @@
 module.exports = {
   testMatch: ['<rootDir>/app/**/*.test.js'],
   setupFiles: ['<rootDir>/jest.setup.js'],
-  bail: true,
+  // bail: 1,
   verbose: true,
   testURL: 'http://localhost/',
 };

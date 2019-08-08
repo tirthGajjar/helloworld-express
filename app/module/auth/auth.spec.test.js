@@ -2,14 +2,14 @@
 
 /* eslint-env jest */
 
-const { setupWithRunningApp } = require('@/test/setup');
-const { testUnauthenticatedFetch, testUnauthorizedFetch } = require('@/test/utils');
+const { setupWithRunningApp } = require('~/test/setup');
+const { testUnauthenticatedFetch, testUnauthorizedFetch } = require('~/test/utils');
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const CONFIG = require('@/common/config');
+const CONFIG = require('~/common/config');
 
-// const Logger = require('@/common/logger').createLogger($filepath(__filename));
+// const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
 describe('Authentication', () => {
   describe('client scenario', () => {

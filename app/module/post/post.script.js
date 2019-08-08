@@ -1,6 +1,10 @@
 'use strict';
 
-process.env.INSTANCE_ID = process.env.INSTANCE_ID || `job-${process.env.NODE_APP_INSTANCE || '0'}`;
+if (process.env.NODE_ENV === 'production') {
+  process.exit(0);
+}
+
+process.env.INSTANCE_ID = 'script';
 
 require('~/common/init');
 
@@ -10,6 +14,8 @@ const EVENT = require('~/common/events');
 
 const Data = require('~/common/data');
 const Job = require('~/common/job');
+
+const Post = require('./Post.model');
 
 async function setup() {
   await Data.setup();
@@ -23,13 +29,17 @@ async function shutdown() {
 
 (async () => {
   try {
-    Logger.info('initiating ...');
+    Logger.debug('initiating ...');
     await setup();
+    Logger.debug('processing ...');
 
-    await Job.run();
+    const records = await Post.collection.find().where({});
 
-    Logger.info('ready');
-    process.nextTick(() => EVENT.emit('job-ready'));
+    Logger.debug(records);
+    Logger.debug(JSON.stringify(records, null, 2));
+
+    Logger.debug('done');
+    EVENT.emit('shutdown');
   } catch (error) {
     Logger.error(error.message, JSON.stringify(error, null, 2), error.stack);
     EVENT.emit('shutdown', 1);

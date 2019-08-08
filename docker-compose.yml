@@ -1,7 +1,6 @@
 version: '2.3'
 
 services:
-
   helloworld-core:
     build: .
     container_name: helloworld-core

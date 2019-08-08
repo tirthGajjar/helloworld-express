@@ -1,6 +1,8 @@
 'use strict';
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
+/* eslint-disable no-await-in-loop */
+
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
 const AuthService = require('./auth.service');
 
@@ -31,7 +33,7 @@ module.exports = async () => {
 
   Logger.debug(record);
 
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i < 10; i += 1) {
     record = await AuthService.createAdministratorUser({
       user: {
         password: 'password',

@@ -17,9 +17,9 @@ A boilerplate and reference implementation for Node.js backend built with Expres
 
 - modular setup with some convention over configuration
   - `*.model.js` for data models
-  - `*seed.js` for data seed
+  - `*.seed.js` for data seed
   - `*.job.js` for Bull' job definition
-  - `*router.js` for express' routing
+  - `*.api.js` for express' routing
 - manages data with Waterline
 - auto-exposes Waterline schema as GraphQL
 - enables temporary (backed by Redis) and permanent (backed by MongoDB) data key-value storage
@@ -89,11 +89,11 @@ npm run test:unit
 npm run test:spec
 
 # run unit tests for specific module
-npm run test:any -- '/task/*.unit.test.'
+npm run test:any -- '/post/*.unit.test.'
 
 # run integration tests for specific module
-npm run test:any -- '/task/*.spec.test.'
+npm run test:any -- '/post/*.spec.test.'
 
 # run specific test
-npm run test:any -- app/module/task/task.unit.test.js
+npm run test:any -- app/module/post/post.unit.test.js
 ```

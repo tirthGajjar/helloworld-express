@@ -4,22 +4,22 @@ const express = require('express');
 
 const { withAuthenticatedUser } = require('./auth.middleware');
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const ERROR = require('@/common/error');
+const ERROR = require('~/common/error');
 
-const CONFIG = require('@/common/config');
+const CONFIG = require('~/common/config');
 
-const SANITIZE = require('@/common/sanitize');
+const SANITIZE = require('~/common/sanitize');
 
 const User = require('./User.model');
 
-const EmailJob = require('@/shared/email.job');
+const EmailJob = require('~/shared/email.job');
 
 const AuthService = require('./auth.service');
 
-const DataUtils = require('@/common/data/utils');
-const TransientDataStore = require('@/common/TransientDataStore.service');
+const DataUtils = require('~/common/data/utils');
+const TransientDataStore = require('~/common/TransientDataStore.service');
 
 const router = express.Router();
 
@@ -148,7 +148,7 @@ router.post('/auth/password-reset/perform', async (req, res) => {
   EmailJob.queue.add({
     to: user.email,
     subject: 'Password Reset Confirmation',
-    template: 'app/module/auth/password-reset-done',
+    template: 'app/module/auth/password-reset-complete',
     templateContext: {
       user: user.toJSON(),
     },

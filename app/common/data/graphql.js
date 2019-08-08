@@ -2,11 +2,9 @@
 
 /** @module common/data/graphql */
 
-const Logger = require('@/common/logger').createLogger($filepath(__filename));
-
-const path = require('path');
-
 const graphql = require('graphql');
+
+const Logger = require('~/common/logger').createLogger($filepath(__filename));
 
 const DataWaterline = require('./waterline');
 
@@ -49,7 +47,7 @@ class DataGraphql {
     } else if (attributeConfig.type === 'ref') {
       result.type = GraphQLTypes.Raw;
     } else {
-      return;
+      return null;
     }
 
     // if (attributeConfig.validations && attributeConfig.validations.isIn) {
@@ -115,11 +113,11 @@ class DataGraphql {
       const collectionName = collection.tableName;
 
       const collectionFields = Object.entries(collection.attributes).reduce((acc, [attributeName, attributeConfig]) => {
-        if (collection.attributes_to_strip_in_graphql.includes(attributeName)) {
+        if (collection.attributes_ignored_in_output.includes(attributeName)) {
           return acc;
         }
 
-        if (collection.attributes_to_strip_in_json.includes(attributeName)) {
+        if (collection.attributes_ignored_in_graphql.includes(attributeName)) {
           return acc;
         }
 
@@ -134,8 +132,8 @@ class DataGraphql {
             get type() {
               return ontology.collections[attributeConfig.model].graphql.type;
             },
-            async resolve(parent) {
-              return await ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
+            resolve(parent) {
+              return ontology.collections[attributeConfig.model].findOne(parent[attributeName]);
             },
           };
         } else if (
@@ -224,8 +222,8 @@ class DataGraphql {
             name: `${collectionName}Count`,
             description: `fetch ${collectionName} count`,
             type: graphql.GraphQLInt,
-            async resolve(parent, args) {
-              return await collection.count();
+            resolve(parent, args) {
+              return collection.count();
             },
           }
           : {
@@ -237,8 +235,8 @@ class DataGraphql {
               },
             },
             type: graphql.GraphQLInt,
-            async resolve(parent, args) {
-              return await collection.count().where(args.filter);
+            resolve(parent, args) {
+              return collection.count().where(args.filter);
             },
           };
 
@@ -251,8 +249,8 @@ class DataGraphql {
             name: `${collectionName}Index`,
             description: `fetch ${collectionName} index`,
             type: new graphql.GraphQLList(CollectionType),
-            async resolve(parent, args) {
-              return await collection.find();
+            resolve(parent, args) {
+              return collection.find();
             },
           }
           : {
@@ -273,8 +271,8 @@ class DataGraphql {
               },
             },
             type: new graphql.GraphQLList(CollectionType),
-            async resolve(parent, args) {
-              return await collection
+            resolve(parent, args) {
+              return collection
                 .find()
                 .where(args.filter)
                 .skip(args.offset)
@@ -294,8 +292,8 @@ class DataGraphql {
             [collection.primaryKey]: { type: graphql.GraphQLID },
           },
           type: CollectionType,
-          async resolve(parent, args) {
-            return await collection.findOne(args);
+          resolve(parent, args) {
+            return collection.findOne(args);
           },
         };
 
@@ -309,7 +307,8 @@ class DataGraphql {
 
     APP_CONFIG.GRAPHQL_FILES.forEach((filename) => {
       Logger.info('loading', filename);
-      const graphqlDefinition = require(path.resolve(filename))();
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      const graphqlDefinition = require(filename)();
       Object.assign(queries, graphqlDefinition.queries || {});
       Object.assign(mutations, graphqlDefinition.mutations || {});
     });
@@ -350,16 +349,16 @@ class DataGraphql {
   }
 
   /**
-   * teardown
+   * shutdown
    *
    * @returns {Promise}
    */
-  async teardown() {
-    Logger.info('teardown ...');
+  async shutdown() {
+    Logger.info('shutdown ...');
 
     this.schema = null;
 
-    Logger.info('teardown done');
+    Logger.info('shutdown done');
   }
 
   /**
@@ -367,7 +366,9 @@ class DataGraphql {
    *
    * @returns {Promise}
    */
-  async clear() {}
+  async clear() {
+    // nothing to clear
+  }
 }
 
 module.exports = new DataGraphql();

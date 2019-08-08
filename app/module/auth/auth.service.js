@@ -3,9 +3,9 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const ERROR = require('@/common/error');
+const ERROR = require('~/common/error');
 
 const AUTH_JWT_SECRET = process.env.AUTH_JWT_SECRET || 'secret';
 const AUTH_JWT_EXPIRATION = process.env.AUTH_JWT_EXPIRATION || (30 * CONST.DURATION_DAY) / CONST.DURATION_SECOND; // in seconds, @TODO move to config? or param?
@@ -70,8 +70,8 @@ async function validateAccessToken(token, audience = CONST.ROLE.CLIENT) {
   });
 }
 
-const AUTH_HEADER_BEARER = /^Bearer\ /g;
-const AUTH_HEADER_JWT = /^JWT\ /g;
+const AUTH_HEADER_BEARER = /^Bearer /g;
+const AUTH_HEADER_JWT = /^JWT /g;
 
 function extractAccessTokenFromRequest(req) {
   let token;

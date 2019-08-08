@@ -2,7 +2,7 @@
 
 /** @module common/error */
 
-const ERROR = { ...require('helloworld-lib/dist/common/error') };
+const ERROR = require('helloworld-lib/dist/common/error');
 
 module.exports = ERROR;
 

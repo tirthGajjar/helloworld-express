@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 /*
  * Load polyfills
  */
@@ -10,21 +12,26 @@ require('./polyfill');
  * Define global relative file path helper
  */
 
-const FILENAME_PREFIX_LENGTH = require('path').normalize(`${__dirname}/../..`).length + 1;
+const FILENAME_PREFIX_LENGTH = path.normalize(`${__dirname}/../..`).length + 1;
 
 const JOBNAME_PREFIX_LENGTH = FILENAME_PREFIX_LENGTH + 4;
 
-global.$filepath = function (filename) {
+function $filepath(filename) {
   return filename.slice(FILENAME_PREFIX_LENGTH, -3);
-};
+}
 
-global.$jobname = function (filename) {
+function $jobname(filename) {
   return filename
     .slice(JOBNAME_PREFIX_LENGTH, -7)
     .replace(/^module\//, '')
     .replace(/^shared\/job\//, 'shared/')
     .replace(/\//g, '$');
-};
+}
+
+Object.assign(global, {
+  $filepath,
+  $jobname,
+});
 
 /*
  * Load environment variables

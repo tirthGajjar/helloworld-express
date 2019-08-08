@@ -2,9 +2,9 @@
 
 const graphql = require('graphql');
 
-const CONST = require('@/common/const');
+const CONST = require('~/common/const');
 
-const DataMixin = require('@/common/data/mixin');
+const DataMixin = require('~/common/data/mixin');
 
 const definition = {
   identity: 'user',
@@ -59,20 +59,20 @@ const definition = {
       model: 'client',
     },
 
-    _task_s: {
-      collection: 'task',
+    _post_s: {
+      collection: 'post',
       via: '_owner',
     },
 
-    // _managed_task_s: {
-    //   collection: 'task',
+    // _managed_post_s: {
+    //   collection: 'post',
     //   via: '_manager_s',
     // },
   },
 
-  attributes_to_strip_in_validation: ['password', 'role', 'email_verified'],
+  attributes_ignored_in_input: ['password', 'role', 'email_verified'],
 
-  attributes_to_strip_in_json: ['password', 'role', 'email', 'email_verified'],
+  attributes_ignored_in_output: ['password', 'role', 'email', 'email_verified'],
 
   graphql_settings: {
     count: false,
@@ -96,11 +96,11 @@ const definition = {
     },
   },
 
-  async onCollectionReady(Model, nativeCollection) {
-    await nativeCollection.ensureIndex({
+  async onReady() {
+    await this.nativeCollection.ensureIndex({
       email: 1,
     });
-    await nativeCollection.ensureIndex({
+    await this.nativeCollection.ensureIndex({
       name: 1,
     });
   },
